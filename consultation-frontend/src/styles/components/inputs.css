@@ -1,0 +1,482 @@
+/* ===============================================
+   INPUT COMPONENT SYSTEM
+   Modern, accessible, and consistent form inputs
+   =============================================== */
+
+@layer components {
+  /* ===============================================
+     BASE INPUT
+     =============================================== */
+  .input {
+    display: block;
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-primary);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    transition: all 0.2s ease-in-out;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  .input:disabled {
+    background-color: var(--gray-50);
+    color: var(--gray-500);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .input::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+
+  .input:focus::placeholder {
+    color: var(--gray-400);
+  }
+
+  /* ===============================================
+     INPUT SIZES
+     =============================================== */
+  .input-xs {
+    padding: var(--space-1-5) var(--space-2);
+    font-size: var(--text-xs);
+    min-height: 1.5rem;
+  }
+
+  .input-sm {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    min-height: 2rem;
+  }
+
+  .input-base {
+    padding: var(--space-3) var(--space-4);
+    min-height: 2.5rem;
+  }
+
+  .input-lg {
+    padding: var(--space-4) var(--space-5);
+    font-size: var(--text-base);
+    min-height: 3rem;
+  }
+
+  .input-xl {
+    padding: var(--space-5) var(--space-6);
+    font-size: var(--text-lg);
+    min-height: 3.5rem;
+  }
+
+  /* ===============================================
+     INPUT VARIANTS
+     =============================================== */
+  .input-outline {
+    background-color: transparent;
+    border: 2px solid var(--border-primary);
+  }
+
+  .input-outline:focus {
+    border-color: var(--primary-500);
+    background-color: var(--bg-surface);
+  }
+
+  .input-filled {
+    background-color: var(--gray-100);
+    border: 1px solid transparent;
+  }
+
+  .input-filled:focus {
+    background-color: var(--bg-surface);
+    border-color: var(--primary-500);
+  }
+
+  .input-flush {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid var(--border-primary);
+    border-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .input-flush:focus {
+    border-bottom-color: var(--primary-500);
+    box-shadow: none;
+  }
+
+  /* ===============================================
+     INPUT STATES
+     =============================================== */
+  .input-error {
+    border-color: var(--error-500);
+  }
+
+  .input-error:focus {
+    border-color: var(--error-500);
+    box-shadow: 0 0 0 3px var(--error-100);
+  }
+
+  .input-success {
+    border-color: var(--success-500);
+  }
+
+  .input-success:focus {
+    border-color: var(--success-500);
+    box-shadow: 0 0 0 3px var(--success-100);
+  }
+
+  .input-warning {
+    border-color: var(--warning-500);
+  }
+
+  .input-warning:focus {
+    border-color: var(--warning-500);
+    box-shadow: 0 0 0 3px var(--warning-100);
+  }
+
+  /* ===============================================
+     INPUT GROUPS
+     =============================================== */
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .input-group .input {
+    border-radius: 0;
+    border-right-width: 0;
+  }
+
+  .input-group .input:first-child {
+    border-top-left-radius: var(--radius-lg);
+    border-bottom-left-radius: var(--radius-lg);
+  }
+
+  .input-group .input:last-child {
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    border-right-width: 1px;
+  }
+
+  .input-group .input:only-child {
+    border-radius: var(--radius-lg);
+    border-right-width: 1px;
+  }
+
+  .input-group-addon {
+    display: flex;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--gray-100);
+    border: 1px solid var(--border-primary);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+
+  .input-group-addon:first-child {
+    border-top-left-radius: var(--radius-lg);
+    border-bottom-left-radius: var(--radius-lg);
+    border-right-width: 0;
+  }
+
+  .input-group-addon:last-child {
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    border-left-width: 0;
+  }
+
+  .input-group-button {
+    display: flex;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--primary-600);
+    color: white;
+    border: 1px solid var(--primary-600);
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .input-group-button:first-child {
+    border-top-left-radius: var(--radius-lg);
+    border-bottom-left-radius: var(--radius-lg);
+    border-right-width: 0;
+  }
+
+  .input-group-button:last-child {
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    border-left-width: 0;
+  }
+
+  .input-group-button:hover {
+    background-color: var(--primary-700);
+    border-color: var(--primary-700);
+  }
+
+  /* ===============================================
+     LABELS
+     =============================================== */
+  .label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    line-height: var(--leading-normal);
+  }
+
+  .label-required::after {
+    content: ' *';
+    color: var(--error-500);
+  }
+
+  .label-optional::after {
+    content: ' (optional)';
+    color: var(--text-muted);
+    font-weight: var(--font-normal);
+  }
+
+  .label-sm {
+    font-size: var(--text-xs);
+    margin-bottom: var(--space-1);
+  }
+
+  .label-lg {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-3);
+  }
+
+  /* ===============================================
+     FORM GROUPS
+     =============================================== */
+  .form-group {
+    margin-bottom: var(--space-6);
+  }
+
+  .form-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .form-group-sm {
+    margin-bottom: var(--space-4);
+  }
+
+  .form-group-lg {
+    margin-bottom: var(--space-8);
+  }
+
+  /* ===============================================
+     HELP TEXT
+     =============================================== */
+  .help-text {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-1);
+    line-height: var(--leading-normal);
+  }
+
+  .help-text-error {
+    color: var(--error-600);
+  }
+
+  .help-text-success {
+    color: var(--success-600);
+  }
+
+  .help-text-warning {
+    color: var(--warning-600);
+  }
+
+  /* ===============================================
+     TEXTAREA
+     =============================================== */
+  .textarea {
+    display: block;
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-primary);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    transition: all 0.2s ease-in-out;
+    resize: vertical;
+    min-height: 6rem;
+    font-family: inherit;
+  }
+
+  .textarea:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  .textarea:disabled {
+    background-color: var(--gray-50);
+    color: var(--gray-500);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+
+  .textarea:focus::placeholder {
+    color: var(--gray-400);
+  }
+
+  /* ===============================================
+     SELECT
+     =============================================== */
+  .select {
+    display: block;
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-primary);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right var(--space-3) center;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    padding-right: var(--space-10);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  .select:disabled {
+    background-color: var(--gray-50);
+    color: var(--gray-500);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  /* ===============================================
+     CHECKBOX & RADIO
+     =============================================== */
+  .checkbox,
+  .radio {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  .checkbox-input,
+  .radio-input {
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-base);
+    background-color: var(--bg-surface);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .radio-input {
+    border-radius: 50%;
+  }
+
+  .checkbox-input:checked,
+  .radio-input:checked {
+    background-color: var(--primary-600);
+    border-color: var(--primary-600);
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-7.5 7.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6 10.293l7.146-7.147a.5.5 0 0 1 .708.708z'/%3e%3c/svg%3e");
+    background-size: 0.75rem;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .radio-input:checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+  }
+
+  .checkbox-input:focus,
+  .radio-input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  .checkbox-input:disabled,
+  .radio-input:disabled {
+    background-color: var(--gray-100);
+    border-color: var(--gray-300);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .checkbox-label,
+  .radio-label {
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .checkbox-label:disabled,
+  .radio-label:disabled {
+    color: var(--text-muted);
+    cursor: not-allowed;
+  }
+
+  /* ===============================================
+     RESPONSIVE INPUTS
+     =============================================== */
+  @media (max-width: 640px) {
+    .input-responsive {
+      font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .input-group {
+      flex-direction: column;
+    }
+
+    .input-group .input,
+    .input-group .input-group-addon,
+    .input-group .input-group-button {
+      border-radius: var(--radius-lg);
+      border-width: 1px;
+    }
+
+    .input-group .input:not(:last-child),
+    .input-group .input-group-addon:not(:last-child),
+    .input-group .input-group-button:not(:last-child) {
+      border-bottom-width: 0;
+    }
+  }
+}

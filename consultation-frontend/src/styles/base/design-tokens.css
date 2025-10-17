@@ -1,0 +1,229 @@
+/* ===============================================
+   WATCHTHIS APPLE REDESIGN - DESIGN TOKENS
+   Neutral white/gray palette with blue accents
+   =============================================== */
+
+:root {
+  /* ===============================================
+     APPLE-STYLE COLOR PALETTE
+     =============================================== */
+  
+  /* Primary Blue (Apple-style accent) */
+  --apple-blue: #0071E3;
+  --apple-blue-hover: #0077ED;
+  --apple-blue-active: #006EDB;
+  
+  /* Neutral Grays (Main palette) */
+  --neutral-white: #FFFFFF;
+  --neutral-50: #FAFAFA;
+  --neutral-100: #F5F5F7;
+  --neutral-200: #E8E8ED;
+  --neutral-300: #D2D2D7;
+  --neutral-400: #AEAEB2;
+  --neutral-500: #86868B;
+  --neutral-600: #6E6E73;
+  --neutral-700: #515154;
+  --neutral-800: #3A3A3C;
+  --neutral-900: #1D1D1F;
+  --neutral-black: #000000;
+  
+  /* Text Colors */
+  --text-primary: #1D1D1F;
+  --text-secondary: #6E6E73;
+  --text-tertiary: #86868B;
+  --text-on-dark: #F5F5F7;
+  
+  /* Background Colors */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F5F5F7;
+  --bg-tertiary: #FAFAFA;
+  --bg-dark: #1D1D1F;
+  
+  /* Border Colors */
+  --border-light: #D2D2D7;
+  --border-medium: #AEAEB2;
+  --border-focus: #0071E3;
+  
+  /* Semantic Colors */
+  --success: #34C759;
+  --warning: #FF9F0A;
+  --error: #FF3B30;
+  
+  /* ===============================================
+     APPLE-STYLE SHADOWS
+     =============================================== */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.15);
+  
+  /* ===============================================
+     APPLE-STYLE SPACING (8px base)
+     =============================================== */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+  
+  /* ===============================================
+     APPLE-STYLE TYPOGRAPHY
+     =============================================== */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Menlo', monospace;
+  
+  /* Font Sizes */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 21px;
+  --text-2xl: 28px;
+  --text-3xl: 40px;
+  --text-4xl: 48px;
+  --text-5xl: 64px;
+  --text-6xl: 80px;
+  
+  /* Font Weights */
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* Line Heights */
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+  
+  /* ===============================================
+     APPLE-STYLE BORDER RADIUS
+     =============================================== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+  
+  /* ===============================================
+     APPLE-STYLE TRANSITIONS
+     =============================================== */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ===============================================
+     BLUR EFFECTS
+     =============================================== */
+  --blur-sm: blur(8px);
+  --blur-md: blur(16px);
+  --blur-lg: blur(24px);
+}
+
+/* ===============================================
+   APPLE-STYLE UTILITY CLASSES
+   =============================================== */
+
+/* Clean Card Styles */
+.apple-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+}
+
+.apple-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Clean Button Base */
+.apple-button {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.apple-button-primary {
+  background: var(--apple-blue);
+  color: white;
+}
+
+.apple-button-primary:hover {
+  background: var(--apple-blue-hover);
+}
+
+.apple-button-secondary {
+  background: var(--neutral-100);
+  color: var(--text-primary);
+}
+
+.apple-button-secondary:hover {
+  background: var(--neutral-200);
+}
+
+/* Glass Effect (for header) */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* Section Spacing */
+.apple-section {
+  padding: var(--space-4xl) var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .apple-section {
+    padding: var(--space-4xl) var(--space-xl);
+  }
+}
+
+/* Text Styles */
+.apple-heading-1 {
+  font-size: var(--text-6xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.apple-heading-2 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.apple-heading-3 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+}
+
+.apple-body {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+}
+
+.apple-body-sm {
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+

@@ -61,6 +61,18 @@ Nx Console is an editor extension that enriches your developer experience. It le
 
 [Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
+## Project Documentation
+
+### Backend Services
+- **[AI Backend Service](./AI_BACKEND_SERVICE.md)** - AI chat service with multi-language support
+- **[Translation Service](./TRANSLATION_SERVICE.md)** - Backend translation service documentation
+- **[AI Assistant Setup](./AI_SETUP.md)** - Frontend AI setup guide
+
+### Configuration
+- **[Email Setup](./EMAIL_SETUP.md)** - EmailJS configuration
+- **[Firebase Setup](./FIREBASE_EMAIL_SETUP.md)** - Firebase email configuration
+- **[Environment Setup](./ENVIRONMENT_SETUP.md)** - Environment variables guide
+
 ## Useful links
 
 Learn more:
@@ -69,6 +81,19 @@ Learn more:
 - [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 - [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 - [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+## 📚 Project Documentation
+
+### AI System
+- [AI System Status](AI_SYSTEM_STATUS.md) - Trenutni status i konfiguracija
+- [Gemini Setup Guide](GEMINI_SETUP.md) - Besplatni Google Gemini AI
+- [OpenAI Setup Guide](OPENAI_SETUP_QUICK.md) - Premium OpenAI integracija
+
+### Services
+- [Email Setup](EMAIL_SETUP.md) - EmailJS konfiguracija
+- [Firebase Setup](FIREBASE_EMAIL_SETUP.md) - Firebase email servis
+
+---
 
 And join the Nx community:
 - [Discord](https://go.nx.dev/community)

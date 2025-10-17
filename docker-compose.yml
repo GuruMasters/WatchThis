@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # Backend service
+  backend:
+    build:
+      context: .
+      dockerfile: consultation-backend/Dockerfile
+    container_name: watchthis-backend
+    ports:
+      - "3088:3088"
+    environment:
+      - NODE_ENV=production
+      - PORT=3088
+      - FRONTEND_URL=http://localhost
+    env_file:
+      - consultation-backend/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3088', (r) => r.statusCode === 200 ? process.exit(0) : process.exit(1))"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - watchthis-network
+
+  # Frontend service
+  frontend:
+    build:
+      context: .
+      dockerfile: consultation-frontend/Dockerfile
+    container_name: watchthis-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      - watchthis-network
+
+networks:
+  watchthis-network:
+    driver: bridge
+

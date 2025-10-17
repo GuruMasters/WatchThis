@@ -1,0 +1,258 @@
+/* ===============================================
+   MODERN CSS RESET
+   Clean, modern reset for consistent cross-browser styling
+   =============================================== */
+
+@layer base {
+  /* ===============================================
+     BOX SIZING & RESET
+     =============================================== */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ===============================================
+     HTML & BODY
+     =============================================== */
+  html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    tab-size: 4;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ===============================================
+     TYPOGRAPHY ELEMENTS
+     =============================================== */
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  /* ===============================================
+     FORM ELEMENTS
+     =============================================== */
+  button, input, optgroup, select, textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+  }
+
+  button, select {
+    text-transform: none;
+  }
+
+  button, [type='button'], [type='reset'], [type='submit'] {
+    -webkit-appearance: button;
+    background-color: transparent;
+    background-image: none;
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  input, textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+
+  input::placeholder, textarea::placeholder {
+    opacity: 1;
+    color: var(--text-muted);
+  }
+
+  /* ===============================================
+     LINKS
+     =============================================== */
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  /* ===============================================
+     MEDIA ELEMENTS
+     =============================================== */
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ===============================================
+     LISTS
+     =============================================== */
+  ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ===============================================
+     TABLES
+     =============================================== */
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  /* ===============================================
+     FOCUS STYLES
+     =============================================== */
+  :focus {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* ===============================================
+     SELECTION
+     =============================================== */
+  ::selection {
+    background-color: var(--primary-100);
+    color: var(--primary-900);
+  }
+
+  ::-moz-selection {
+    background-color: var(--primary-100);
+    color: var(--primary-900);
+  }
+
+  /* ===============================================
+     SCROLLBAR STYLING
+     =============================================== */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: var(--radius-full);
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--gray-100);
+  }
+
+  /* ===============================================
+     ACCESSIBILITY IMPROVEMENTS
+     =============================================== */
+  
+  /* Reduced motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --border-primary: var(--gray-400);
+      --border-secondary: var(--gray-500);
+    }
+  }
+
+  /* ===============================================
+     PRINT STYLES
+     =============================================== */
+  @media print {
+    *, *::before, *::after {
+      background: transparent !important;
+      color: black !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
+
+    a, a:visited {
+      text-decoration: underline;
+    }
+
+    a[href]::after {
+      content: " (" attr(href) ")";
+    }
+
+    abbr[title]::after {
+      content: " (" attr(title) ")";
+    }
+
+    pre {
+      white-space: pre-wrap !important;
+    }
+
+    pre, blockquote {
+      border: 1px solid #999;
+      page-break-inside: avoid;
+    }
+
+    thead {
+      display: table-header-group;
+    }
+
+    tr, img {
+      page-break-inside: avoid;
+    }
+
+    p, h2, h3 {
+      orphans: 3;
+      widows: 3;
+    }
+
+    h2, h3 {
+      page-break-after: avoid;
+    }
+  }
+}

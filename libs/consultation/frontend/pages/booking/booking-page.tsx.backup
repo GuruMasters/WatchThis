@@ -1,0 +1,720 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '../../components/ui/button';
+import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { emailService } from '../../../../../consultation-frontend/src/services/emailService';
+
+/**
+ * APPLE REDESIGN - Booking Page
+ * Clean wizard flow with minimal Apple styling
+ */
+
+export const BookingPage: React.FC = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    company: '',
+    service: '',
+    budget: '',
+    timeline: '',
+    message: '',
+    preferredDate: '',
+    preferredTime: ''
+  });
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const services = [
+    { id: 'web-development', name: 'Web Development' },
+    { id: 'mobile-apps', name: 'Mobile Apps' },
+    { id: 'digital-marketing', name: 'Digital Marketing' },
+    { id: 'consulting', name: 'Business Consulting' },
+    { id: 'maintenance', name: 'Support & Maintenance' }
+  ];
+
+  const budgetRanges = [
+    '$5,000 - $15,000',
+    '$15,000 - $50,000',
+    '$50,000 - $100,000',
+    '$100,000+'
+  ];
+
+  const timelines = [
+    '1-2 months',
+    '3-6 months',
+    '6-12 months',
+    '12+ months'
+  ];
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      // Step 1: Save to backend (Firestore)
+      const backendResponse = await fetch('http://localhost:3088/email/booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!backendResponse.ok) {
+        throw new Error(`Backend error: ${backendResponse.status}`);
+      }
+
+      // Step 2: Send email via EmailJS
+      const emailSuccess = await emailService.sendConsultationEmail(formData);
+      
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Error submitting booking:', error);
+      setSubmitError('Greška prilikom slanja zahteva. Molimo pokušajte ponovo.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '14px 16px',
+    fontSize: '17px',
+    border: '1px solid #D2D2D7',
+    borderRadius: '8px',
+    outline: 'none',
+    transition: 'all 0.2s ease',
+    background: '#FFFFFF',
+    color: '#1D1D1F',
+    fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif'
+  };
+
+  if (isSubmitted) {
+    return (
+      <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+        <section style={{
+          padding: '120px 24px',
+          textAlign: 'center'
+        }}>
+          <div style={{
+            maxWidth: '600px',
+            margin: '0 auto'
+          }}>
+            <div style={{
+              width: '80px',
+              height: '80px',
+              background: '#34C759',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 32px'
+            }}>
+              <CheckCircle style={{ width: '48px', height: '48px', color: '#FFFFFF' }} />
+              </div>
+              
+            <h1 style={{
+              fontSize: 'clamp(32px, 5vw, 48px)',
+              fontWeight: 600,
+              lineHeight: 1.2,
+              color: '#1D1D1F',
+              marginBottom: '16px',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+            }}>
+              Booking Confirmed!
+            </h1>
+            
+            <p style={{
+              fontSize: '18px',
+              lineHeight: 1.6,
+              color: '#6E6E73',
+              marginBottom: '40px'
+            }}>
+              Thank you for booking a consultation with us. We'll send you a confirmation email shortly with all the details.
+            </p>
+
+            <div style={{
+              display: 'flex',
+              gap: '16px',
+              justifyContent: 'center',
+              flexWrap: 'wrap'
+            }}>
+              <Link to="/" style={{ textDecoration: 'none' }}>
+                <Button variant="primary" size="lg">
+                  Back to Home
+                </Button>
+              </Link>
+              <Link to="/services" style={{ textDecoration: 'none' }}>
+                <Button variant="ghost" size="lg">
+                  View Services
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        </div>
+    );
+  }
+
+  return (
+    <div style={{ background: '#FFFFFF' }}>
+      {/* Hero */}
+      <section style={{
+        padding: '120px 24px 60px',
+        textAlign: 'center',
+        borderBottom: '1px solid #D2D2D7'
+      }}>
+        <div style={{
+          maxWidth: '800px',
+          margin: '0 auto'
+        }}>
+          <h1 style={{
+            fontSize: 'clamp(40px, 6vw, 64px)',
+            fontWeight: 600,
+            lineHeight: 1.1,
+            letterSpacing: '-0.015em',
+            color: '#1D1D1F',
+            marginBottom: '24px',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+          }}>
+            Book a Consultation
+          </h1>
+          
+          <p style={{
+            fontSize: 'clamp(18px, 2vw, 21px)',
+            lineHeight: 1.6,
+            color: '#6E6E73'
+          }}>
+            Schedule a call with our team to discuss your project and how we can help you achieve your goals.
+          </p>
+        </div>
+      </section>
+
+      {/* Booking Form */}
+      <section style={{
+        padding: '80px 24px',
+        background: '#F5F5F7'
+      }}>
+        <div style={{
+          maxWidth: '800px',
+          margin: '0 auto'
+        }}>
+          <div style={{
+            padding: '48px',
+            background: '#FFFFFF',
+            borderRadius: '18px',
+            border: '1px solid #D2D2D7'
+          }}>
+            {submitError && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '14px 16px',
+                background: '#FFE5E5',
+                border: '1px solid #FF3B30',
+                borderRadius: '8px',
+                color: '#1D1D1F',
+                marginBottom: '24px'
+              }}>
+                <AlertCircle style={{ width: '20px', height: '20px', color: '#FF3B30', flexShrink: 0 }} />
+                <p style={{ fontSize: '15px', margin: 0 }}>{submitError}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '24px'
+            }}>
+                {/* Personal Information */}
+              <div>
+                <h2 style={{
+                  fontSize: '24px',
+                  fontWeight: 600,
+                  color: '#1D1D1F',
+                  marginBottom: '20px',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+                }}>
+                  Personal Information
+                </h2>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '16px',
+                  marginBottom: '16px'
+                }}>
+                  <div>
+                    <label htmlFor="firstName" style={{
+                      display: 'block',
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: '#1D1D1F',
+                      marginBottom: '8px'
+                    }}>
+                      First Name <span style={{ color: '#FF3B30' }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                      required
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = '#0071E3';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#D2D2D7';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="lastName" style={{
+                      display: 'block',
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: '#1D1D1F',
+                      marginBottom: '8px'
+                    }}>
+                      Last Name <span style={{ color: '#FF3B30' }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                      required
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = '#0071E3';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#D2D2D7';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '16px'
+                }}>
+                  <div>
+                    <label htmlFor="email" style={{
+                      display: 'block',
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: '#1D1D1F',
+                      marginBottom: '8px'
+                    }}>
+                      Email <span style={{ color: '#FF3B30' }}>*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                      required
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = '#0071E3';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#D2D2D7';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="phone" style={{
+                      display: 'block',
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: '#1D1D1F',
+                      marginBottom: '8px'
+                    }}>
+                      Phone
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = '#0071E3';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#D2D2D7';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '16px' }}>
+                  <label htmlFor="company" style={{
+                    display: 'block',
+                    fontSize: '15px',
+                    fontWeight: 500,
+                    color: '#1D1D1F',
+                    marginBottom: '8px'
+                  }}>
+                    Company
+                  </label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    style={inputStyle}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = '#0071E3';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = '#D2D2D7';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Project Details */}
+              <div>
+                <h2 style={{
+                  fontSize: '24px',
+                  fontWeight: 600,
+                  color: '#1D1D1F',
+                  marginBottom: '20px',
+                  paddingTop: '20px',
+                  borderTop: '1px solid #D2D2D7',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+                }}>
+                  Project Details
+                </h2>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '16px',
+                  marginBottom: '16px'
+                }}>
+                <div>
+                    <label htmlFor="service" style={{
+                      display: 'block',
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: '#1D1D1F',
+                      marginBottom: '8px'
+                    }}>
+                      Service <span style={{ color: '#FF3B30' }}>*</span>
+                  </label>
+                    <select
+                      id="service"
+                          name="service"
+                      value={formData.service}
+                          onChange={handleInputChange}
+                      style={inputStyle}
+                      required
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = '#0071E3';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#D2D2D7';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      <option value="">Select a service</option>
+                      {services.map(service => (
+                        <option key={service.id} value={service.id}>{service.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="budget" style={{
+                      display: 'block',
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: '#1D1D1F',
+                      marginBottom: '8px'
+                    }}>
+                      Budget
+                    </label>
+                    <select
+                      id="budget"
+                      name="budget"
+                      value={formData.budget}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = '#0071E3';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#D2D2D7';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      <option value="">Select budget range</option>
+                      {budgetRanges.map(range => (
+                        <option key={range} value={range}>{range}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '16px',
+                  marginBottom: '16px'
+                }}>
+                  <div>
+                    <label htmlFor="timeline" style={{
+                      display: 'block',
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: '#1D1D1F',
+                      marginBottom: '8px'
+                    }}>
+                      Timeline
+                    </label>
+                    <select
+                      id="timeline"
+                      name="timeline"
+                      value={formData.timeline}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = '#0071E3';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#D2D2D7';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      <option value="">Select timeline</option>
+                      {timelines.map(timeline => (
+                        <option key={timeline} value={timeline}>{timeline}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="preferredDate" style={{
+                      display: 'block',
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: '#1D1D1F',
+                      marginBottom: '8px'
+                    }}>
+                      Preferred Date
+                    </label>
+                    <input
+                      type="date"
+                      id="preferredDate"
+                      name="preferredDate"
+                      value={formData.preferredDate}
+                      onChange={handleInputChange}
+                      style={inputStyle}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = '#0071E3';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#D2D2D7';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="message" style={{
+                    display: 'block',
+                    fontSize: '15px',
+                    fontWeight: 500,
+                    color: '#1D1D1F',
+                    marginBottom: '8px'
+                  }}>
+                    Project Description
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={6}
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    style={{
+                      ...inputStyle,
+                      resize: 'vertical',
+                      minHeight: '120px'
+                    }}
+                    placeholder="Tell us about your project..."
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = '#0071E3';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 113, 227, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = '#D2D2D7';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  ></textarea>
+                </div>
+                  </div>
+
+              {/* Submit */}
+              <div style={{
+                paddingTop: '20px',
+                borderTop: '1px solid #D2D2D7'
+              }}>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  variant="primary"
+                  size="lg"
+                  style={{ width: '100%' }}
+                >
+                    {isSubmitting ? (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Loader2 style={{ width: '20px', height: '20px', animation: 'spin 1s linear infinite' }} />
+                      Submitting...
+                    </div>
+                  ) : (
+                    'Book Consultation'
+                  )}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      </div>
+  );
+};
+
+export default BookingPage;
+
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Sending...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Calendar className="w-5 h-5" />
+                        <span>SCHEDULE <span style={{ color: '#111111' }}>CONSULTATION</span></span>
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </div>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="mt-4">
+            {/* Why Choose Us */}
+            <div className="glass-card p-6 bg-white/90 border border-gray-200 shadow-lg rounded-2xl hover:shadow-2xl transition-all duration-300" style={{ marginBottom: '4rem' }}>
+              <h3 className="text-xl font-bold text-gray-900 mb-4" style={{ fontFamily: "'Anton', 'Inter', sans-serif" }}>WHY CHOOSE US?</h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>EXPERT TEAM</h4>
+                    <p className="text-sm text-gray-600" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>10+ years of experience in digital transformation</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center flex-shrink-0">
+                    <Target className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>PROVEN RESULTS</h4>
+                    <p className="text-sm text-gray-600" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>120% average ROI improvement for our clients</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>FAST RESPONSE</h4>
+                    <p className="text-sm text-gray-600" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>We respond to all inquiries within 24 hours</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Info */}
+            <div className="glass-card p-6 bg-white/90 border border-gray-200 shadow-lg rounded-2xl hover:shadow-2xl transition-all duration-300" style={{ marginBottom: '4rem' }}>
+              <h3 className="text-xl font-bold mb-4" style={{ fontFamily: "'Anton', 'Inter', sans-serif", color: '#111111' }}>NEED HELP?</h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-primary-600" />
+                  <span className="text-sm text-gray-600" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>hello@consultationpro.com</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-primary-600" />
+                  <span className="text-sm text-gray-600" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>+1 (555) 123-4567</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Free Consultation */}
+            <div className="glass-card p-6 bg-gradient-to-br from-primary-50 to-secondary-50 border border-primary-200 shadow-lg rounded-2xl hover:shadow-2xl transition-all duration-300">
+              <div className="text-center">
+                <div className="w-12 h-12 mx-auto mb-4 bg-gradient-primary rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold mb-2" style={{ fontFamily: "'Anton', 'Inter', sans-serif", color: '#111111' }}>FREE CONSULTATION</h3>
+                <p className="text-sm text-gray-600 mb-4" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>
+                  Get expert advice on your project with no obligation. We'll provide valuable insights and recommendations.
+                </p>
+                <div className="text-xs text-gray-500" style={{ fontFamily: "'Century Gothic', 'Inter', sans-serif" }}>
+                  * No hidden fees or commitments
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Kraća strelica u donjem delu stranice */}
+        <Scribble variant="arrow-down" bottom={2} right={27} width={100} rotateDeg={15} />
+      </div>
+      </SectionAngle>
+    </PageLayout>
+  );
+};
+
+export default BookingPage;

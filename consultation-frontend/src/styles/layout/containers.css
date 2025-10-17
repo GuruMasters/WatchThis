@@ -1,0 +1,420 @@
+/* ===============================================
+   CONTAINER SYSTEM
+   Responsive containers and layout utilities
+   =============================================== */
+
+@layer components {
+  /* ===============================================
+     CONTAINER BASE
+     =============================================== */
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  /* ===============================================
+     CONTAINER SIZES
+     =============================================== */
+  .container-sm {
+    max-width: 640px;
+  }
+
+  .container-md {
+    max-width: 768px;
+  }
+
+  .container-lg {
+    max-width: 1024px;
+  }
+
+  .container-xl {
+    max-width: 1280px;
+  }
+
+  .container-2xl {
+    max-width: 1536px;
+  }
+
+  .container-full {
+    max-width: none;
+  }
+
+  /* ===============================================
+     CONTAINER RESPONSIVE PADDING
+     =============================================== */
+  .container-padding-sm {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+
+  .container-padding-md {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .container-padding-lg {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+
+  .container-padding-xl {
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+
+  /* ===============================================
+     SECTION SPACING
+     =============================================== */
+  .section {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-16);
+  }
+
+  .section-sm {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
+  }
+
+  .section-lg {
+    padding-top: var(--space-24);
+    padding-bottom: var(--space-24);
+  }
+
+  .section-xl {
+    padding-top: var(--space-32);
+    padding-bottom: var(--space-32);
+  }
+
+  /* ===============================================
+     SECTION VARIANTS
+     =============================================== */
+  .section-primary {
+    background-color: var(--primary-600);
+    color: white;
+  }
+
+  .section-secondary {
+    background-color: var(--gray-100);
+  }
+
+  .section-surface {
+    background-color: var(--bg-surface);
+  }
+
+  .section-muted {
+    background-color: var(--bg-secondary);
+  }
+
+  /* ===============================================
+     LAYOUT UTILITIES
+     =============================================== */
+  .layout-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .layout-center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+  }
+
+  .layout-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .layout-stack-sm {
+    gap: var(--space-2);
+  }
+
+  .layout-stack-lg {
+    gap: var(--space-6);
+  }
+
+  .layout-stack-xl {
+    gap: var(--space-8);
+  }
+
+  .layout-inline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .layout-inline-sm {
+    gap: var(--space-2);
+  }
+
+  .layout-inline-lg {
+    gap: var(--space-6);
+  }
+
+  .layout-inline-xl {
+    gap: var(--space-8);
+  }
+
+  /* ===============================================
+     RESPONSIVE CONTAINERS
+     =============================================== */
+  @media (min-width: 640px) {
+    .container {
+      padding-left: var(--space-6);
+      padding-right: var(--space-6);
+    }
+
+    .container-padding-sm {
+      padding-left: var(--space-4);
+      padding-right: var(--space-4);
+    }
+
+    .container-padding-md {
+      padding-left: var(--space-6);
+      padding-right: var(--space-6);
+    }
+
+    .container-padding-lg {
+      padding-left: var(--space-8);
+      padding-right: var(--space-8);
+    }
+
+    .container-padding-xl {
+      padding-left: var(--space-12);
+      padding-right: var(--space-12);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: var(--space-8);
+      padding-right: var(--space-8);
+    }
+
+    .container-padding-sm {
+      padding-left: var(--space-6);
+      padding-right: var(--space-6);
+    }
+
+    .container-padding-md {
+      padding-left: var(--space-8);
+      padding-right: var(--space-8);
+    }
+
+    .container-padding-lg {
+      padding-left: var(--space-12);
+      padding-right: var(--space-12);
+    }
+
+    .container-padding-xl {
+      padding-left: var(--space-16);
+      padding-right: var(--space-16);
+    }
+  }
+
+  /* ===============================================
+     RESPONSIVE SECTIONS
+     =============================================== */
+  @media (max-width: 640px) {
+    .section {
+      padding-top: var(--space-8);
+      padding-bottom: var(--space-8);
+    }
+
+    .section-lg {
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-12);
+    }
+
+    .section-xl {
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-16);
+    }
+  }
+
+  /* ===============================================
+     RESPONSIVE LAYOUTS
+     =============================================== */
+  @media (max-width: 768px) {
+    .layout-inline {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-2);
+    }
+
+    .layout-inline-sm {
+      gap: var(--space-1);
+    }
+
+    .layout-inline-lg {
+      gap: var(--space-3);
+    }
+
+    .layout-inline-xl {
+      gap: var(--space-4);
+    }
+  }
+
+  /* ===============================================
+     CONTAINER WITH MAX WIDTH
+     =============================================== */
+  .container-narrow {
+    max-width: 42rem; /* 672px */
+  }
+
+  .container-wide {
+    max-width: 80rem; /* 1280px */
+  }
+
+  .container-full-width {
+    max-width: none;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  /* ===============================================
+     CONTAINER WITH BACKGROUND
+     =============================================== */
+  .container-bg {
+    background-color: var(--bg-surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .container-bg-elevated {
+    background-color: var(--bg-surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .container-bg-muted {
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-xl);
+  }
+
+  /* ===============================================
+     CONTAINER WITH BORDER
+     =============================================== */
+  .container-border {
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+  }
+
+  .container-border-thick {
+    border: 2px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+  }
+
+  .container-border-primary {
+    border: 1px solid var(--primary-300);
+    border-radius: var(--radius-xl);
+  }
+
+  /* ===============================================
+     CONTAINER OVERFLOW
+     =============================================== */
+  .container-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .container-scroll-vertical {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .container-scroll-both {
+    overflow: auto;
+  }
+
+  .container-hidden {
+    overflow: hidden;
+  }
+
+  /* ===============================================
+     CONTAINER POSITIONING
+     =============================================== */
+  .container-relative {
+    position: relative;
+  }
+
+  .container-absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .container-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+  }
+
+  .container-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  /* ===============================================
+     CONTAINER Z-INDEX
+     =============================================== */
+  .container-z-0 { z-index: 0; }
+  .container-z-10 { z-index: 10; }
+  .container-z-20 { z-index: 20; }
+  .container-z-30 { z-index: 30; }
+  .container-z-40 { z-index: 40; }
+  .container-z-50 { z-index: 50; }
+
+  /* ===============================================
+     CONTAINER ACCESSIBILITY
+     =============================================== */
+  .container-focusable {
+    outline: none;
+  }
+
+  .container-focusable:focus {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+  }
+
+  .container-focusable:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* ===============================================
+     CONTAINER PRINT STYLES
+     =============================================== */
+  @media print {
+    .container {
+      max-width: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .container-bg,
+    .container-bg-elevated,
+    .container-bg-muted {
+      background: white;
+      box-shadow: none;
+    }
+
+    .container-border,
+    .container-border-thick,
+    .container-border-primary {
+      border: 1px solid #000;
+    }
+  }
+}

@@ -1,0 +1,332 @@
+/* ===============================================
+   MODERN SECTION SYSTEM
+   Flexible, responsive, and beautiful section layouts
+   =============================================== */
+
+/* Base section */
+.section {
+  padding: 4rem 0;
+  position: relative;
+}
+
+.section-sm {
+  padding: 2rem 0;
+}
+
+.section-lg {
+  padding: 6rem 0;
+}
+
+.section-xl {
+  padding: 8rem 0;
+}
+
+/* Section with background */
+.section-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 129, 197, 0.05) 0%, rgba(251, 195, 20, 0.05) 100%);
+  pointer-events: none;
+}
+.wt-watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.12);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  mix-blend-mode: overlay;
+}
+
+.wt-diagonal-top {
+  position: relative;
+}
+.wt-diagonal-top::before {
+  content: '';
+  position: absolute;
+  top: -8vw;
+  left: 0;
+  right: 0;
+  height: 8vw;
+  background: inherit;
+  transform: skewY(-6deg);
+  transform-origin: 100% 100%;
+}
+.wt-diagonal-bottom {
+  position: relative;
+}
+.wt-diagonal-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -8vw;
+  left: 0;
+  right: 0;
+  height: 8vw;
+  background: inherit;
+  transform: skewY(6deg);
+  transform-origin: 0 0;
+}
+
+/* Section container */
+.section-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section-container-sm {
+  max-width: 800px;
+}
+
+.section-container-lg {
+  max-width: 1400px;
+}
+
+.section-container-xl {
+  max-width: 1600px;
+}
+
+.section-container-full {
+  max-width: none;
+  padding: 0;
+}
+
+/* Section header */
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: var(--font-size-fluid-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  line-height: var(--leading-tight);
+}
+
+.section-subtitle {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 60ch;
+  margin: 0 auto;
+}
+
+.section-description {
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  line-height: var(--leading-normal);
+  max-width: 50ch;
+  margin: 0.5rem auto 0;
+}
+
+/* Section content */
+.section-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Section footer */
+.section-footer {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+/* Hero section */
+.hero {
+  padding: 8rem 0 6rem;
+  background: linear-gradient(135deg, var(--gradient-primary) 0%, var(--gradient-secondary) 100%);
+  color: var(--text-inverse);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 60ch;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: var(--font-black);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: var(--text-xl);
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  line-height: var(--leading-relaxed);
+}
+
+.hero-description {
+  font-size: var(--text-lg);
+  margin-bottom: 2.5rem;
+  opacity: 0.8;
+  line-height: var(--leading-relaxed);
+}
+
+/* Feature section */
+.features {
+  background: var(--bg-secondary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  background: var(--bg-surface);
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.feature-card:hover {
+  transform: translateY(-0.25rem);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-200);
+}
+
+.feature-icon {
+  width: 3rem;
+  height: 3rem;
+  background: var(--gradient-primary);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  color: white;
+}
+
+.feature-title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.feature-description {
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+/* CTA section */
+.cta-section {
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+  text-align: center;
+}
+
+.cta-title {
+  font-size: var(--font-size-fluid-xl);
+  font-weight: var(--font-bold);
+  margin-bottom: 1rem;
+}
+
+.cta-description {
+  font-size: var(--text-lg);
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+/* Content sections */
+.content-section {
+  padding: 4rem 0;
+}
+
+.content-section-alt {
+  background: var(--bg-secondary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .section {
+    padding: 3rem 0;
+  }
+
+  .section-lg {
+    padding: 4rem 0;
+  }
+
+  .section-xl {
+    padding: 5rem 0;
+  }
+
+  .hero {
+    padding: 4rem 0 3rem;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    padding: 1.5rem;
+  }
+}
+
+/* Section dividers */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--border-primary) 50%, transparent 100%);
+  margin: 2rem 0;
+}
+
+.section-divider-accent {
+  background: linear-gradient(90deg, transparent 0%, var(--primary-300) 50%, transparent 100%);
+}

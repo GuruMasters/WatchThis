@@ -1,0 +1,40 @@
+// Trebaš zameniti liniju 415-467 sa ovim kodom:
+
+  /**
+   * Vraća fallback odgovore bazirane na kontekstu poruke
+   */
+  private async getFallbackResponse(message: string, language: string): Promise<string> {
+    // Analiza intenta pomoću NLP tehnike
+    const analysis = this.analyzeIntent(message);
+    
+    this.logger.log(`Intent analysis: ${analysis.intent} (confidence: ${analysis.confidence.toFixed(2)})`);
+    if (Object.keys(analysis.entities).length > 0) {
+      this.logger.log(`Extracted entities: ${JSON.stringify(analysis.entities)}`);
+    }
+
+    // Generiši kontekstualni odgovor korišćenjem NLP analize
+    const fallbackText = this.generateContextualResponse(
+      analysis.intent,
+      analysis.confidence,
+      analysis.entities,
+      message
+    );
+
+    // Prevođenje fallback odgovora ako je potrebno
+    if (language !== 'en') {
+      try {
+        const translated = await this.translationService.translateText({
+          text: fallbackText,
+          targetLanguage: language,
+          sourceLanguage: 'en'
+        });
+        return translated.translatedText;
+      } catch (error) {
+        this.logger.error('Fallback translation failed, returning English', error);
+        return fallbackText;
+      }
+    }
+
+    return fallbackText;
+  }
+

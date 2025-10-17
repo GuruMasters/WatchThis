@@ -1,0 +1,224 @@
+/* ===============================================
+   ADAPTIVE RESPONSIVE SYSTEM
+   Fluid, flexible, and future-proof responsive design
+   =============================================== */
+
+/* Container queries for modern responsive design */
+@container (max-width: 768px) {
+  .card {
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: var(--text-sm);
+  }
+}
+
+@container (max-width: 480px) {
+  .section {
+    padding: 2rem 0;
+  }
+
+  .hero {
+    padding: 3rem 0;
+  }
+}
+
+/* Responsive typography scale */
+@media (max-width: 1200px) {
+  .display-2xl {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .display-2xl {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+
+  .display-xl {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .display-2xl {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .display-xl {
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+
+  .hero-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+}
+
+/* Fluid spacing system */
+.spacing-fluid-xs { padding: clamp(0.5rem, 1vw, 1rem); }
+.spacing-fluid-sm { padding: clamp(0.75rem, 1.5vw, 1.5rem); }
+.spacing-fluid-md { padding: clamp(1rem, 2vw, 2rem); }
+.spacing-fluid-lg { padding: clamp(1.5rem, 3vw, 3rem); }
+.spacing-fluid-xl { padding: clamp(2rem, 4vw, 4rem); }
+
+/* Responsive grid system */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.grid-responsive-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.5rem);
+}
+
+.grid-responsive-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+/* Responsive flex utilities */
+.flex-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+@media (min-width: 768px) {
+  .flex-responsive {
+    flex-direction: row;
+  }
+}
+
+.flex-responsive-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+/* Responsive text alignment */
+.text-responsive-left {
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .text-responsive-center {
+    text-align: center;
+  }
+}
+
+/* Responsive margins and padding */
+.m-responsive {
+  margin: clamp(1rem, 2vw, 2rem);
+}
+
+.p-responsive {
+  padding: clamp(1rem, 2vw, 2rem);
+}
+
+.mx-responsive {
+  margin-left: clamp(0.5rem, 1vw, 1rem);
+  margin-right: clamp(0.5rem, 1vw, 1rem);
+}
+
+.my-responsive {
+  margin-top: clamp(0.5rem, 1vw, 1rem);
+  margin-bottom: clamp(0.5rem, 1vw, 1rem);
+}
+
+.px-responsive {
+  padding-left: clamp(0.5rem, 1vw, 1rem);
+  padding-right: clamp(0.5rem, 1vw, 1rem);
+}
+
+.py-responsive {
+  padding-top: clamp(0.5rem, 1vw, 1rem);
+  padding-bottom: clamp(0.5rem, 1vw, 1rem);
+}
+
+/* Responsive border radius */
+.rounded-responsive {
+  border-radius: clamp(0.25rem, 0.5vw, 0.5rem);
+}
+
+.rounded-responsive-lg {
+  border-radius: clamp(0.5rem, 1vw, 1rem);
+}
+
+/* Responsive shadows */
+.shadow-responsive {
+  box-shadow: 0 clamp(2px, 0.5vw, 4px) clamp(4px, 1vw, 8px) rgba(0, 0, 0, clamp(0.05, 0.01vw, 0.1));
+}
+
+.shadow-responsive-lg {
+  box-shadow: 0 clamp(4px, 1vw, 8px) clamp(8px, 2vw, 16px) rgba(0, 0, 0, clamp(0.1, 0.02vw, 0.15));
+}
+
+/* Responsive hover effects */
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift-responsive:hover {
+    transform: translateY(clamp(-2px, -0.5vw, -4px));
+  }
+
+  .hover-scale-responsive:hover {
+    transform: scale(clamp(1.02, 1.005vw, 1.05));
+  }
+}
+
+/* Responsive focus styles */
+.focus-responsive:focus-visible {
+  outline: clamp(2px, 0.5vw, 3px) solid var(--primary-500);
+  outline-offset: clamp(2px, 0.5vw, 4px);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card {
+    border: 2px solid var(--text-primary);
+  }
+
+  .btn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .hover-lift,
+  .hover-scale,
+  .btn-press {
+    transition: none;
+  }
+
+  .hover-lift:hover,
+  .hover-scale:hover {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .section {
+    padding: 1rem 0;
+    page-break-inside: avoid;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid var(--text-primary);
+  }
+}

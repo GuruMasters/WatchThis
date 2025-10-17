@@ -1,0 +1,559 @@
+/* ===============================================
+   ACCESSIBILITY UTILITIES
+   WCAG 2.1 compliant accessibility utilities
+   =============================================== */
+
+@layer utilities {
+  /* ===============================================
+     SCREEN READER ONLY
+     =============================================== */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .not-sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  /* ===============================================
+     FOCUS STYLES
+     =============================================== */
+  .focus\:ring:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  .focus\:ring-2:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--primary-500);
+  }
+
+  .focus\:ring-4:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--primary-100);
+  }
+
+  .focus\:ring-inset:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: inset 0 0 0 2px var(--primary-500);
+  }
+
+  .focus\:ring-primary:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  .focus\:ring-secondary:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--secondary-100);
+  }
+
+  .focus\:ring-success:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--success-100);
+  }
+
+  .focus\:ring-warning:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--warning-100);
+  }
+
+  .focus\:ring-error:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--error-100);
+  }
+
+  .focus\:ring-info:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--info-100);
+  }
+
+  .focus\:ring-offset-0:focus {
+    outline-offset: 0;
+  }
+
+  .focus\:ring-offset-1:focus {
+    outline-offset: 1px;
+  }
+
+  .focus\:ring-offset-2:focus {
+    outline-offset: 2px;
+  }
+
+  .focus\:ring-offset-4:focus {
+    outline-offset: 4px;
+  }
+
+  /* ===============================================
+     FOCUS VISIBLE
+     =============================================== */
+  .focus\:ring:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .focus-visible\:ring:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  .focus-visible\:ring-2:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--primary-500);
+  }
+
+  .focus-visible\:ring-4:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--primary-100);
+  }
+
+  /* ===============================================
+     FOCUS WITHIN
+     =============================================== */
+  .focus-within\:ring:focus-within {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  .focus-within\:ring-2:focus-within {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--primary-500);
+  }
+
+  .focus-within\:ring-4:focus-within {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--primary-100);
+  }
+
+  /* ===============================================
+     SKIP LINKS
+     =============================================== */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--primary-600);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: var(--radius-base);
+    z-index: 1000;
+    transition: top 0.3s;
+  }
+
+  .skip-link:focus {
+    top: 6px;
+  }
+
+  /* ===============================================
+     HIGH CONTRAST MODE
+     =============================================== */
+  @media (prefers-contrast: high) {
+    .high-contrast\:border-2 {
+      border-width: 2px;
+    }
+
+    .high-contrast\:border-4 {
+      border-width: 4px;
+    }
+
+    .high-contrast\:text-black {
+      color: black;
+    }
+
+    .high-contrast\:text-white {
+      color: white;
+    }
+
+    .high-contrast\:bg-white {
+      background-color: white;
+    }
+
+    .high-contrast\:bg-black {
+      background-color: black;
+    }
+
+    .high-contrast\:border-black {
+      border-color: black;
+    }
+
+    .high-contrast\:border-white {
+      border-color: white;
+    }
+  }
+
+  /* ===============================================
+     REDUCED MOTION
+     =============================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .motion-reduce\:animate-none {
+      animation: none;
+    }
+
+    .motion-reduce\:transition-none {
+      transition: none;
+    }
+
+    .motion-reduce\:transform-none {
+      transform: none;
+    }
+
+    .motion-reduce\:hover\:transform-none:hover {
+      transform: none;
+    }
+
+    .motion-reduce\:focus\:transform-none:focus {
+      transform: none;
+    }
+
+    .motion-reduce\:active\:transform-none:active {
+      transform: none;
+    }
+  }
+
+  /* ===============================================
+     COLOR SCHEME
+     =============================================== */
+  @media (prefers-color-scheme: dark) {
+    .dark\:text-white {
+      color: white;
+    }
+
+    .dark\:text-black {
+      color: black;
+    }
+
+    .dark\:bg-white {
+      background-color: white;
+    }
+
+    .dark\:bg-black {
+      background-color: black;
+    }
+
+    .dark\:border-white {
+      border-color: white;
+    }
+
+    .dark\:border-black {
+      border-color: black;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    .light\:text-black {
+      color: black;
+    }
+
+    .light\:text-white {
+      color: white;
+    }
+
+    .light\:bg-black {
+      background-color: black;
+    }
+
+    .light\:bg-white {
+      background-color: white;
+    }
+
+    .light\:border-black {
+      border-color: black;
+    }
+
+    .light\:border-white {
+      border-color: white;
+    }
+  }
+
+  /* ===============================================
+     ARIA STATES
+     =============================================== */
+  .aria-expanded\:true[aria-expanded="true"] {
+    /* Styles for expanded state */
+  }
+
+  .aria-expanded\:false[aria-expanded="false"] {
+    /* Styles for collapsed state */
+  }
+
+  .aria-selected\:true[aria-selected="true"] {
+    background-color: var(--primary-100);
+    color: var(--primary-800);
+  }
+
+  .aria-selected\:false[aria-selected="false"] {
+    background-color: transparent;
+    color: inherit;
+  }
+
+  .aria-checked\:true[aria-checked="true"] {
+    background-color: var(--primary-600);
+    color: white;
+  }
+
+  .aria-checked\:false[aria-checked="false"] {
+    background-color: transparent;
+    color: inherit;
+  }
+
+  .aria-disabled\:true[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .aria-disabled\:false[aria-disabled="false"] {
+    opacity: 1;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  /* ===============================================
+     KEYBOARD NAVIGATION
+     =============================================== */
+  .keyboard-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .keyboard-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0.5rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    background: var(--primary-600);
+    color: white;
+    border-radius: var(--radius-base);
+  }
+
+  /* ===============================================
+     TOUCH TARGETS
+     =============================================== */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .touch-target-sm {
+    min-height: 32px;
+    min-width: 32px;
+  }
+
+  .touch-target-lg {
+    min-height: 56px;
+    min-width: 56px;
+  }
+
+  /* ===============================================
+     TEXT ACCESSIBILITY
+     =============================================== */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .text-nowrap {
+    white-space: nowrap;
+  }
+
+  .text-wrap {
+    white-space: normal;
+  }
+
+  /* ===============================================
+     CONTRAST RATIOS
+     =============================================== */
+  .contrast-aaa {
+    /* AAA contrast ratio (7:1 for normal text, 4.5:1 for large text) */
+  }
+
+  .contrast-aa {
+    /* AA contrast ratio (4.5:1 for normal text, 3:1 for large text) */
+  }
+
+  .contrast-aa-large {
+    /* AA contrast ratio for large text (3:1) */
+  }
+
+  /* ===============================================
+     SEMANTIC COLORS
+     =============================================== */
+  .text-success {
+    color: var(--success-700);
+  }
+
+  .text-warning {
+    color: var(--warning-700);
+  }
+
+  .text-error {
+    color: var(--error-700);
+  }
+
+  .text-info {
+    color: var(--info-700);
+  }
+
+  .bg-success {
+    background-color: var(--success-100);
+  }
+
+  .bg-warning {
+    background-color: var(--warning-100);
+  }
+
+  .bg-error {
+    background-color: var(--error-100);
+  }
+
+  .bg-info {
+    background-color: var(--info-100);
+  }
+
+  .border-success {
+    border-color: var(--success-500);
+  }
+
+  .border-warning {
+    border-color: var(--warning-500);
+  }
+
+  .border-error {
+    border-color: var(--error-500);
+  }
+
+  .border-info {
+    border-color: var(--info-500);
+  }
+
+  /* ===============================================
+     LIVE REGIONS
+     =============================================== */
+  .live-region {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .live-region-polite {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .live-region-assertive {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* ===============================================
+     DRAG AND DROP
+     =============================================== */
+  .draggable {
+    cursor: grab;
+  }
+
+  .draggable:active {
+    cursor: grabbing;
+  }
+
+  .drop-zone {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .drop-zone:hover {
+    border-color: var(--primary-500);
+    background-color: var(--primary-50);
+  }
+
+  .drop-zone.drag-over {
+    border-color: var(--primary-600);
+    background-color: var(--primary-100);
+  }
+
+  /* ===============================================
+     PRINT STYLES
+     =============================================== */
+  @media print {
+    .print\:hidden {
+      display: none !important;
+    }
+
+    .print\:block {
+      display: block !important;
+    }
+
+    .print\:text-black {
+      color: black !important;
+    }
+
+    .print\:bg-white {
+      background-color: white !important;
+    }
+
+    .print\:border-black {
+      border-color: black !important;
+    }
+
+    .print\:shadow-none {
+      box-shadow: none !important;
+    }
+  }
+}

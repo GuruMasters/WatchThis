@@ -1,0 +1,311 @@
+/* ===============================================
+   INTERACTIVE UTILITIES
+   Enhanced interaction patterns and feedback
+   =============================================== */
+
+/* Focus management */
+.focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+.focus-ring {
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
+}
+
+/* Selection styles */
+.select-none {
+  user-select: none;
+}
+
+.select-text {
+  user-select: text;
+}
+
+.select-all {
+  user-select: all;
+}
+
+.select-auto {
+  user-select: auto;
+}
+
+/* Cursor utilities */
+.cursor-pointer { cursor: pointer; }
+.cursor-default { cursor: default; }
+.cursor-not-allowed { cursor: not-allowed; }
+.cursor-text { cursor: text; }
+.cursor-move { cursor: move; }
+.cursor-grab { cursor: grab; }
+.cursor-grabbing { cursor: grabbing; }
+
+/* Pointer events */
+.pointer-events-none { pointer-events: none; }
+.pointer-events-auto { pointer-events: auto; }
+.pointer-events-all { pointer-events: all; }
+
+/* Touch action */
+.touch-pan-x { touch-action: pan-x; }
+.touch-pan-y { touch-action: pan-y; }
+.touch-pinch-zoom { touch-action: pinch-zoom; }
+.touch-none { touch-action: none; }
+.touch-auto { touch-action: auto; }
+
+/* Scroll behavior */
+.scroll-smooth { scroll-behavior: smooth; }
+.scroll-auto { scroll-behavior: auto; }
+
+/* Interactive states */
+.interactive {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interactive:hover {
+  transform: translateY(-1px);
+}
+
+.interactive:active {
+  transform: translateY(0);
+}
+
+/* Button-like interactions */
+.btn-like {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: var(--font-medium);
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.btn-like:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-like:active {
+  transform: translateY(0);
+}
+
+/* Card interactions */
+.card-interactive {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.card-interactive:active {
+  transform: translateY(-2px);
+}
+
+/* Form interactions */
+.input-focus {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-focus:focus {
+  transform: scale(1.02);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+/* Loading states */
+.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin: -0.5rem 0 0 -0.5rem;
+  border: 2px solid var(--primary-500);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+/* Disabled state */
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Active state */
+.active {
+  background-color: var(--primary-100);
+  color: var(--primary-800);
+  font-weight: var(--font-medium);
+}
+
+/* Visited state for links */
+.visited {
+  color: var(--secondary-600);
+}
+
+.visited:hover {
+  color: var(--secondary-700);
+}
+
+/* Drag and drop */
+.drag-over {
+  background: rgba(14, 165, 233, 0.1);
+  border: 2px dashed var(--primary-500);
+}
+
+.drag-over::before {
+  content: 'Drop here';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--primary-600);
+  font-weight: var(--font-medium);
+  pointer-events: none;
+}
+
+/* Interactive feedback */
+.feedback-success {
+  animation: feedback-success 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes feedback-success {
+  0% {
+    background-color: var(--success-100);
+    transform: scale(1);
+  }
+  50% {
+    background-color: var(--success-200);
+    transform: scale(1.02);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+
+.feedback-error {
+  animation: feedback-error 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes feedback-error {
+  0% {
+    background-color: var(--error-100);
+    transform: scale(1);
+  }
+  50% {
+    background-color: var(--error-200);
+    transform: scale(1.02);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+
+.feedback-warning {
+  animation: feedback-warning 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes feedback-warning {
+  0% {
+    background-color: var(--warning-100);
+    transform: scale(1);
+  }
+  50% {
+    background-color: var(--warning-200);
+    transform: scale(1.02);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+
+/* Hover and focus combinations */
+.hover-focus:hover,
+.hover-focus:focus-visible {
+  background-color: var(--primary-50);
+  color: var(--primary-700);
+  border-color: var(--primary-300);
+}
+
+/* Interactive groups */
+.interactive-group > * {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interactive-group:hover > * {
+  opacity: 0.8;
+}
+
+.interactive-group > *:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* Touch-friendly sizing */
+@media (pointer: coarse) {
+  .btn-like,
+  .interactive {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .focus-visible {
+    outline-offset: 4px;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .btn-like {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .interactive,
+  .btn-like,
+  .card-interactive,
+  .input-focus {
+    transition: none;
+  }
+
+  .interactive:hover,
+  .btn-like:hover,
+  .card-interactive:hover {
+    transform: none;
+  }
+
+  .feedback-success,
+  .feedback-error,
+  .feedback-warning {
+    animation: none;
+  }
+}

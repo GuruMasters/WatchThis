@@ -1,0 +1,706 @@
+/* ===============================================
+   PERFORMANCE OPTIMIZATIONS
+   CSS performance and optimization utilities
+   =============================================== */
+
+@layer utilities {
+  /* ===============================================
+     GPU ACCELERATION
+     =============================================== */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .gpu-accelerated-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .gpu-accelerated-2d {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* ===============================================
+     WILL CHANGE
+     =============================================== */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  .will-change-scroll {
+    will-change: scroll-position;
+  }
+
+  .will-change-contents {
+    will-change: contents;
+  }
+
+  .will-change-auto {
+    will-change: auto;
+  }
+
+  .will-change-transform-opacity {
+    will-change: transform, opacity;
+  }
+
+  .will-change-transform-scroll {
+    will-change: transform, scroll-position;
+  }
+
+  .will-change-opacity-scroll {
+    will-change: opacity, scroll-position;
+  }
+
+  .will-change-transform-opacity-scroll {
+    will-change: transform, opacity, scroll-position;
+  }
+
+  /* ===============================================
+     CONTAIN
+     =============================================== */
+  .contain-none {
+    contain: none;
+  }
+
+  .contain-strict {
+    contain: strict;
+  }
+
+  .contain-content {
+    contain: content;
+  }
+
+  .contain-size {
+    contain: size;
+  }
+
+  .contain-layout {
+    contain: layout;
+  }
+
+  .contain-style {
+    contain: style;
+  }
+
+  .contain-paint {
+    contain: paint;
+  }
+
+  .contain-layout-paint {
+    contain: layout paint;
+  }
+
+  .contain-layout-style {
+    contain: layout style;
+  }
+
+  .contain-layout-paint-style {
+    contain: layout paint style;
+  }
+
+  .contain-size-layout {
+    contain: size layout;
+  }
+
+  .contain-size-layout-paint {
+    contain: size layout paint;
+  }
+
+  .contain-size-layout-paint-style {
+    contain: size layout paint style;
+  }
+
+  /* ===============================================
+     BACKFACE VISIBILITY
+     =============================================== */
+  .backface-visible {
+    backface-visibility: visible;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  /* ===============================================
+     PERSPECTIVE
+     =============================================== */
+  .perspective-none {
+    perspective: none;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .perspective-1500 {
+    perspective: 1500px;
+  }
+
+  .perspective-2000 {
+    perspective: 2000px;
+  }
+
+  .perspective-2500 {
+    perspective: 2500px;
+  }
+
+  .perspective-3000 {
+    perspective: 3000px;
+  }
+
+  /* ===============================================
+     TRANSFORM STYLE
+     =============================================== */
+  .transform-style-flat {
+    transform-style: flat;
+  }
+
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  /* ===============================================
+     TRANSFORM ORIGIN
+     =============================================== */
+  .transform-origin-center {
+    transform-origin: center;
+  }
+
+  .transform-origin-top {
+    transform-origin: top;
+  }
+
+  .transform-origin-top-right {
+    transform-origin: top right;
+  }
+
+  .transform-origin-right {
+    transform-origin: right;
+  }
+
+  .transform-origin-bottom-right {
+    transform-origin: bottom right;
+  }
+
+  .transform-origin-bottom {
+    transform-origin: bottom;
+  }
+
+  .transform-origin-bottom-left {
+    transform-origin: bottom left;
+  }
+
+  .transform-origin-left {
+    transform-origin: left;
+  }
+
+  .transform-origin-top-left {
+    transform-origin: top left;
+  }
+
+  /* ===============================================
+     HARDWARE ACCELERATION
+     =============================================== */
+  .hardware-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+  }
+
+  .hardware-accelerated-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+  }
+
+  .hardware-accelerated-2d {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* ===============================================
+     COMPOSITING
+     =============================================== */
+  .composite-layer {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .composite-layer-3d {
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  .composite-layer-2d {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* ===============================================
+     RENDERING OPTIMIZATIONS
+     =============================================== */
+  .render-optimized {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+    contain: layout paint;
+  }
+
+  .render-optimized-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+    contain: layout paint;
+  }
+
+  .render-optimized-2d {
+    transform: translateZ(0);
+    will-change: transform;
+    contain: layout paint;
+  }
+
+  /* ===============================================
+     ANIMATION PERFORMANCE
+     =============================================== */
+  .animate-gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+  }
+
+  .animate-gpu-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+  }
+
+  .animate-gpu-2d {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* ===============================================
+     SCROLL PERFORMANCE
+     =============================================== */
+  .scroll-optimized {
+    will-change: scroll-position;
+    contain: layout paint;
+  }
+
+  .scroll-optimized-gpu {
+    transform: translateZ(0);
+    will-change: scroll-position;
+    contain: layout paint;
+  }
+
+  .scroll-optimized-3d {
+    transform: translate3d(0, 0, 0);
+    will-change: scroll-position;
+    contain: layout paint;
+  }
+
+  /* ===============================================
+     PAINT OPTIMIZATIONS
+     =============================================== */
+  .paint-optimized {
+    contain: paint;
+  }
+
+  .paint-optimized-layout {
+    contain: layout paint;
+  }
+
+  .paint-optimized-style {
+    contain: style paint;
+  }
+
+  .paint-optimized-layout-style {
+    contain: layout style paint;
+  }
+
+  /* ===============================================
+     LAYOUT OPTIMIZATIONS
+     =============================================== */
+  .layout-optimized {
+    contain: layout;
+  }
+
+  .layout-optimized-paint {
+    contain: layout paint;
+  }
+
+  .layout-optimized-style {
+    contain: layout style;
+  }
+
+  .layout-optimized-paint-style {
+    contain: layout paint style;
+  }
+
+  /* ===============================================
+     STYLE OPTIMIZATIONS
+     =============================================== */
+  .style-optimized {
+    contain: style;
+  }
+
+  .style-optimized-layout {
+    contain: style layout;
+  }
+
+  .style-optimized-paint {
+    contain: style paint;
+  }
+
+  .style-optimized-layout-paint {
+    contain: style layout paint;
+  }
+
+  /* ===============================================
+     SIZE OPTIMIZATIONS
+     =============================================== */
+  .size-optimized {
+    contain: size;
+  }
+
+  .size-optimized-layout {
+    contain: size layout;
+  }
+
+  .size-optimized-paint {
+    contain: size paint;
+  }
+
+  .size-optimized-style {
+    contain: size style;
+  }
+
+  .size-optimized-layout-paint {
+    contain: size layout paint;
+  }
+
+  .size-optimized-layout-style {
+    contain: size layout style;
+  }
+
+  .size-optimized-paint-style {
+    contain: size paint style;
+  }
+
+  .size-optimized-layout-paint-style {
+    contain: size layout paint style;
+  }
+
+  /* ===============================================
+     CONTENT OPTIMIZATIONS
+     =============================================== */
+  .content-optimized {
+    contain: content;
+  }
+
+  .content-optimized-layout {
+    contain: content layout;
+  }
+
+  .content-optimized-paint {
+    contain: content paint;
+  }
+
+  .content-optimized-style {
+    contain: content style;
+  }
+
+  .content-optimized-layout-paint {
+    contain: content layout paint;
+  }
+
+  .content-optimized-layout-style {
+    contain: content layout style;
+  }
+
+  .content-optimized-paint-style {
+    contain: content paint style;
+  }
+
+  .content-optimized-layout-paint-style {
+    contain: content layout paint style;
+  }
+
+  /* ===============================================
+     STRICT OPTIMIZATIONS
+     =============================================== */
+  .strict-optimized {
+    contain: strict;
+  }
+
+  .strict-optimized-gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+    contain: strict;
+  }
+
+  .strict-optimized-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+    contain: strict;
+  }
+
+  .strict-optimized-2d {
+    transform: translateZ(0);
+    will-change: transform;
+    contain: strict;
+  }
+
+  /* ===============================================
+     MEMORY OPTIMIZATIONS
+     =============================================== */
+  .memory-optimized {
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .memory-optimized-gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .memory-optimized-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .memory-optimized-2d {
+    transform: translateZ(0);
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  /* ===============================================
+     BATTERY OPTIMIZATIONS
+     =============================================== */
+  .battery-optimized {
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .battery-optimized-gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .battery-optimized-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .battery-optimized-2d {
+    transform: translateZ(0);
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  /* ===============================================
+     NETWORK OPTIMIZATIONS
+     =============================================== */
+  .network-optimized {
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .network-optimized-gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .network-optimized-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .network-optimized-2d {
+    transform: translateZ(0);
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  /* ===============================================
+     CPU OPTIMIZATIONS
+     =============================================== */
+  .cpu-optimized {
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .cpu-optimized-gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .cpu-optimized-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  .cpu-optimized-2d {
+    transform: translateZ(0);
+    contain: layout paint;
+    will-change: auto;
+  }
+
+  /* ===============================================
+     GPU OPTIMIZATIONS
+     =============================================== */
+  .gpu-optimized {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+    contain: layout paint;
+  }
+
+  .gpu-optimized-3d {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+    contain: layout paint;
+  }
+
+  .gpu-optimized-2d {
+    transform: translateZ(0);
+    will-change: transform;
+    contain: layout paint;
+  }
+
+  /* ===============================================
+     RESPONSIVE PERFORMANCE
+     =============================================== */
+  @media (max-width: 640px) {
+    .mobile-optimized {
+      contain: layout paint;
+      will-change: auto;
+    }
+
+    .mobile-optimized-gpu {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      contain: layout paint;
+      will-change: auto;
+    }
+
+    .mobile-optimized-3d {
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      contain: layout paint;
+      will-change: auto;
+    }
+
+    .mobile-optimized-2d {
+      transform: translateZ(0);
+      contain: layout paint;
+      will-change: auto;
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .tablet-optimized {
+      contain: layout paint;
+      will-change: auto;
+    }
+
+    .tablet-optimized-gpu {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      contain: layout paint;
+      will-change: auto;
+    }
+
+    .tablet-optimized-3d {
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      contain: layout paint;
+      will-change: auto;
+    }
+
+    .tablet-optimized-2d {
+      transform: translateZ(0);
+      contain: layout paint;
+      will-change: auto;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .desktop-optimized {
+      contain: layout paint;
+      will-change: auto;
+    }
+
+    .desktop-optimized-gpu {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      contain: layout paint;
+      will-change: auto;
+    }
+
+    .desktop-optimized-3d {
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      contain: layout paint;
+      will-change: auto;
+    }
+
+    .desktop-optimized-2d {
+      transform: translateZ(0);
+      contain: layout paint;
+      will-change: auto;
+    }
+  }
+}
