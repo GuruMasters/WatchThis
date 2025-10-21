@@ -69,14 +69,14 @@ jobs:
         run: yarn nx build consultation-frontend --configuration=production --skip-nx-cache
 
       - name: Upload backend artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: backend-dist
           path: dist/consultation-backend
           retention-days: 7
 
       - name: Upload frontend artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
           path: dist/consultation-frontend
@@ -146,7 +146,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Download frontend artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: frontend-dist
           path: dist/consultation-frontend
