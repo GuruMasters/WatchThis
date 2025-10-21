@@ -11,6 +11,8 @@ jobs:
   lint-and-test:
     name: Lint & Test
     runs-on: ubuntu-latest
+    env:
+      NX_CLOUD_DISTRIBUTED_EXECUTION: false
     
     steps:
       - name: Checkout code
@@ -44,6 +46,8 @@ jobs:
     name: Build Applications
     runs-on: ubuntu-latest
     needs: lint-and-test
+    env:
+      NX_CLOUD_DISTRIBUTED_EXECUTION: false
     
     steps:
       - name: Checkout code
@@ -125,6 +129,8 @@ jobs:
     name: Performance Testing
     runs-on: ubuntu-latest
     needs: build
+    env:
+      NX_CLOUD_DISTRIBUTED_EXECUTION: false
     
     steps:
       - name: Checkout code
