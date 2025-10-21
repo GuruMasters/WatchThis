@@ -30,7 +30,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Lint frontend
-        run: yarn nx lint consultation-frontend
+        run: yarn nx lint consultation-frontend --skip-nx-cache
 
       # Note: Backend linting temporarily disabled due to ESLint configuration issues
       # - name: Lint backend
@@ -63,10 +63,10 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build backend
-        run: yarn nx build consultation-backend --configuration=production
+        run: yarn nx build consultation-backend --configuration=production --skip-nx-cache
 
       - name: Build frontend
-        run: yarn nx build consultation-frontend --configuration=production
+        run: yarn nx build consultation-frontend --configuration=production --skip-nx-cache
 
       - name: Upload backend artifact
         uses: actions/upload-artifact@v3
