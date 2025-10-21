@@ -3,7 +3,7 @@
 # ==========================================
 
 # Stage 1: Build
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Install yarn globally
 RUN npm install -g yarn
@@ -12,7 +12,6 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json yarn.lock ./
-COPY consultation-backend/package.json ./consultation-backend/
 
 # Install dependencies
 RUN yarn install --frozen-lockfile
@@ -24,7 +23,7 @@ COPY . .
 RUN yarn nx build consultation-backend --configuration=production
 
 # Stage 2: Production
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Install yarn globally
 RUN npm install -g yarn
@@ -34,7 +33,6 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json yarn.lock ./
-COPY consultation-backend/package.json ./consultation-backend/
 
 # Install only production dependencies
 RUN yarn install --frozen-lockfile --production
@@ -42,8 +40,6 @@ RUN yarn install --frozen-lockfile --production
 # Copy built application
 COPY --from=builder /app/dist/consultation-backend ./dist/consultation-backend
 
-# Copy Firebase service account key (if exists)
-COPY watchthis-*.json ./ 2>/dev/null || true
 
 # Expose port
 EXPOSE 3088

@@ -3,7 +3,7 @@
 # ==========================================
 
 # Stage 1: Build
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Install yarn globally
 RUN npm install -g yarn
@@ -12,7 +12,6 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json yarn.lock ./
-COPY consultation-frontend/package.json ./consultation-frontend/
 
 # Install dependencies
 RUN yarn install --frozen-lockfile
