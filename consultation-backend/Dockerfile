@@ -5,9 +5,6 @@
 # Stage 1: Build
 FROM node:20-alpine AS builder
 
-# Install yarn globally
-RUN npm install -g yarn
-
 WORKDIR /app
 
 # Copy package files
@@ -25,10 +22,6 @@ RUN yarn nx build consultation-backend --configuration=production
 # Stage 2: Production
 FROM node:20-alpine
 
-# Install yarn globally
-RUN npm install -g yarn
-
-# Create app directory
 WORKDIR /app
 
 # Copy package files
