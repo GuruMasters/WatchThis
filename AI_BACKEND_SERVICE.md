@@ -430,3 +430,4 @@ curl -X POST http://localhost:3088/api/ai/chat \
 
 Za dodatna pitanja ili podršku, konsultujte dokumentaciju ili kontaktirajte razvojni tim.
 
+

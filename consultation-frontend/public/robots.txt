@@ -1,0 +1,4 @@
+# Disallow all search engine crawling until site is ready
+User-agent: *
+Disallow: /
+

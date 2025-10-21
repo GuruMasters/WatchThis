@@ -204,3 +204,4 @@ Ako imaš problema:
 **Trenutno stanje**: Fallback sistem je aktivan i radi!
 **Za pravi AI**: Dodaj OpenAI API key! 🚀
 
+

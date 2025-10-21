@@ -1,0 +1,2849 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '../../components/ui/button';
+import { ArrowRight, Check, Code, Zap, Sparkles, Smartphone, Cloud, Database, Layers, Settings, Shield, Search, Lightbulb, Wrench, TestTube, Rocket, Heart, Linkedin } from 'lucide-react';
+
+/**
+ * Software Development Service Page
+ * Featuring live code animation across multiple programming languages
+ */
+
+// Mac Browser Window Component
+const MacBrowserWindow: React.FC<{ children: React.ReactNode; url: string }> = ({ children, url }) => (
+  <div style={{
+    background: '#1E1E1E',
+    borderRadius: '12px',
+    overflow: 'hidden',
+    boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
+    border: '1px solid rgba(255,255,255,0.1)'
+  }}>
+    {/* Browser Toolbar */}
+    <div style={{
+      background: '#2D2D2D',
+      padding: '12px 16px',
+      borderBottom: '1px solid rgba(255,255,255,0.05)',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px'
+    }}>
+      {/* Traffic Lights */}
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F57' }} />
+        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FEBC2E' }} />
+        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#28C840' }} />
+      </div>
+      {/* Address Bar */}
+      <div style={{
+        flex: 1,
+        background: '#1E1E1E',
+        borderRadius: '6px',
+        padding: '6px 12px',
+        fontSize: '13px',
+        color: '#999',
+        border: '1px solid rgba(255,255,255,0.05)'
+      }}>
+        {url}
+      </div>
+    </div>
+    {/* Browser Content */}
+    <div>
+      {children}
+    </div>
+  </div>
+);
+
+// Code Reveal Animation Component
+const CodeRevealSection: React.FC = () => {
+  const [displayedCode, setDisplayedCode] = useState('');
+  const [currentLine, setCurrentLine] = useState(0);
+  const [sparkles, setSparkles] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const codeRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const codeSnippets = [
+    { language: '.NET', color: '#512BD4', code: `// Modern enterprise solutions
+[ApiController]
+[Route("api/[controller]")]
+public class UsersController : ControllerBase
+{
+    private readonly IUserService _userService;
+    
+    [HttpPost]
+    public async Task<ActionResult<User>> Create(
+        [FromBody] CreateUserDto dto)
+    {
+        var user = await _userService.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetById), user);
+    }
+}` },
+    { language: 'Spring', color: '#6DB33F', code: `// Building scalable applications
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    @Autowired
+    private UserService userService;
+    
+    @PostMapping
+    public ResponseEntity<User> createUser(
+        @RequestBody @Valid UserDTO dto) {
+        User user = userService.createUser(dto);
+        return ResponseEntity.ok(user);
+    }
+}` },
+    { language: 'NestJS', color: '#E0234E', code: `// Enterprise-grade backend framework
+@Controller('api/users')
+export class UsersController {
+  constructor(
+    private readonly usersService: UsersService
+  ) {}
+  
+  @Post()
+  @UseGuards(AuthGuard)
+  async create(@Body() dto: CreateUserDto) {
+    return await this.usersService.create(dto);
+  }
+}` },
+    { language: 'SQL', color: '#4479A1', code: `-- Database magic at work
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    verified BOOLEAN DEFAULT false
+);
+
+CREATE INDEX idx_users_email ON users(email);
+SELECT * FROM users WHERE verified = true;` },
+    { language: 'Django', color: '#092E20', code: `# Python web framework powerhouse
+from django.views import View
+from django.http import JsonResponse
+
+class UserView(View):
+    def post(self, request):
+        user = User.objects.create(
+            email=request.POST['email'],
+            verified=True
+        )
+        return JsonResponse({'id': user.id})` },
+    { language: 'Go', color: '#00ADD8', code: `// Fast and efficient backend
+func CreateUser(w http.ResponseWriter, r *http.Request) {
+    var user User
+    json.NewDecoder(r.Body).Decode(&user)
+    
+    db.Create(&user)
+    
+    json.NewEncoder(w).Encode(user)
+}
+
+http.HandleFunc("/api/users", CreateUser)` },
+    { language: 'Swift', color: '#FA7343', code: `// iOS development made elegant
+class UserViewModel: ObservableObject {
+    @Published var users: [User] = []
+    
+    func fetchUsers() async {
+        do {
+            users = try await apiService.getUsers()
+        } catch {
+            print("Error: \\(error)")
+        }
+    }
+}` },
+    { language: 'Flutter', color: '#02569B', code: `// Cross-platform mobile apps
+class UserProfile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Profile')),
+      body: StreamBuilder<User>(
+        stream: userStream,
+        builder: (context, snapshot) {
+          return UserCard(user: snapshot.data);
+        },
+      ),
+    );
+  }
+}` },
+    { language: 'React', color: '#61DAFB', code: `// Crafting beautiful interfaces
+function Dashboard() {
+  const [data, setData] = useState([]);
+  
+  useEffect(() => {
+    fetchData().then(setData);
+  }, []);
+  
+  return (
+    <Layout>
+      <Charts data={data} />
+      <Analytics metrics={stats} />
+    </Layout>
+  );
+}` },
+    { language: 'Angular', color: '#DD0031', code: `// Building powerful SPAs
+@Component({
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html'
+})
+export class DashboardComponent implements OnInit {
+  users$: Observable<User[]>;
+  
+  constructor(private service: UserService) {}
+  
+  ngOnInit() {
+    this.users$ = this.service.getUsers();
+  }
+}` }
+  ];
+
+  const [activeSnippet, setActiveSnippet] = useState(0);
+  const snippet = codeSnippets[activeSnippet];
+
+  useEffect(() => {
+    const lines = snippet.code.split('\n');
+    
+    if (currentLine < lines.length) {
+      const currentLineText = lines[currentLine];
+      const chars = currentLineText.split('');
+      let charIndex = displayedCode.split('\n').length > currentLine ? 
+        displayedCode.split('\n')[currentLine]?.length || 0 : 0;
+
+      const timer = setTimeout(() => {
+        if (charIndex < chars.length) {
+          const newDisplayedCode = displayedCode.split('\n');
+          if (!newDisplayedCode[currentLine]) newDisplayedCode[currentLine] = '';
+          newDisplayedCode[currentLine] += chars[charIndex];
+          setDisplayedCode(newDisplayedCode.join('\n'));
+          
+          if (codeRef.current && Math.random() > 0.7) {
+            setSparkles(prev => [...prev, {
+              id: Date.now(),
+              x: (charIndex * 9) + Math.random() * 20,
+              y: (currentLine * 24) + Math.random() * 10
+            }]);
+          }
+        } else {
+          setCurrentLine(prev => prev + 1);
+        }
+      }, 30);
+
+      return () => clearTimeout(timer);
+    } else {
+      const resetTimer = setTimeout(() => {
+        setDisplayedCode('');
+        setCurrentLine(0);
+        setActiveSnippet((prev) => (prev + 1) % codeSnippets.length);
+      }, 3000);
+      
+      return () => clearTimeout(resetTimer);
+    }
+  }, [displayedCode, currentLine, snippet, activeSnippet, codeSnippets.length]);
+
+  useEffect(() => {
+    const cleanup = setInterval(() => {
+      setSparkles(prev => prev.filter(s => Date.now() - s.id < 1000));
+    }, 100);
+    return () => clearInterval(cleanup);
+  }, []);
+
+  return (
+    <section style={{
+      padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
+      background: 'linear-gradient(180deg, #000000 0%, #0a0a0f 100%)',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: 'linear-gradient(rgba(0,113,227,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,113,227,0.1) 1px, transparent 1px)',
+        backgroundSize: '50px 50px',
+        opacity: 0.3
+      }} />
+
+      <div style={{
+        maxWidth: '1400px',
+        margin: '0 auto',
+        position: 'relative',
+        zIndex: 1
+      }}>
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '80px'
+        }}>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'rgba(0,113,227,0.1)',
+            border: '1px solid rgba(0,113,227,0.3)',
+            borderRadius: '100px',
+            padding: '8px 20px',
+            marginBottom: '24px'
+          }}>
+            <Zap size={16} color="#0071E3" />
+            <span style={{
+              color: '#0071E3',
+              fontSize: 'clamp(12px, 2.8vw, 14px)',
+              fontWeight: 600,
+              letterSpacing: '0.5px'
+            }}>
+              LIVE DEVELOPMENT
+            </span>
+          </div>
+
+          <h2 style={{
+            fontSize: 'clamp(40px, 6vw, 64px)',
+            fontWeight: 700,
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            color: '#FFFFFF',
+            marginBottom: '24px',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+          }}>
+            Watch Code Come to
+            <br />
+            <span style={{
+              background: 'linear-gradient(90deg, #0071E3 0%, #34C759 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>
+              Life
+            </span>
+          </h2>
+
+          <p style={{
+            fontSize: 'clamp(16px, 4vw, 20px)',
+            lineHeight: 1.6,
+            color: 'rgba(255,255,255,0.7)',
+            maxWidth: '700px',
+            margin: '0 auto'
+          }}>
+            Experience the magic of software development in real-time
+          </p>
+        </div>
+
+        <div style={{
+          maxWidth: '900px',
+          margin: '0 auto'
+        }}>
+          <MacBrowserWindow url={`code-editor.dev/${snippet.language.toLowerCase()}`}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: 'clamp(16px, 3.5vw, 20px) clamp(16px, 4vw, 24px)',
+              borderBottom: '1px solid rgba(255,255,255,0.1)',
+              background: '#000000'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                color: snippet.color,
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
+                fontWeight: 600
+              }}>
+                <Code size={16} />
+                {snippet.language}
+              </div>
+            </div>
+
+            <div
+            ref={codeRef}
+            style={{
+              padding: '32px',
+              fontFamily: 'Monaco, "Courier New", monospace',
+              fontSize: 'clamp(13px, 3vw, 15px)',
+              lineHeight: '24px',
+              color: '#E8E8E8',
+              minHeight: '300px',
+              position: 'relative',
+              background: 'rgba(0,0,0,0.4)'
+            }}
+          >
+            {sparkles.map(sparkle => (
+              <Sparkles
+                key={sparkle.id}
+                size={12}
+                style={{
+                  position: 'absolute',
+                  left: `${sparkle.x}px`,
+                  top: `${sparkle.y}px`,
+                  color: snippet.color,
+                  animation: 'sparkle 1s ease-out forwards',
+                  pointerEvents: 'none'
+                }}
+              />
+            ))}
+
+            <pre style={{
+              margin: 0,
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word'
+            }}>
+              <code>{displayedCode}</code>
+              <span style={{
+                display: 'inline-block',
+                width: '2px',
+                height: '20px',
+                background: snippet.color,
+                marginLeft: '2px',
+                animation: 'blink 1s infinite',
+                verticalAlign: 'middle'
+              }} />
+            </pre>
+          </div>
+
+          <div style={{
+            display: 'flex',
+            gap: 'clamp(4px, 1vw, 8px)',
+            padding: 'clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px)',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
+            background: 'rgba(0,0,0,0.3)',
+            flexWrap: 'wrap',
+            overflowX: 'auto'
+          }}>
+            {codeSnippets.map((lang, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  setDisplayedCode('');
+                  setCurrentLine(0);
+                  setActiveSnippet(idx);
+                }}
+                style={{
+                  padding: 'clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 16px)',
+                  borderRadius: 'clamp(6px, 1.5vw, 8px)',
+                  border: 'none',
+                  background: activeSnippet === idx ? lang.color : 'rgba(255,255,255,0.05)',
+                  color: activeSnippet === idx ? '#000' : '#FFF',
+                  fontSize: 'clamp(10px, 2.5vw, 13px)',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0
+                }}
+              >
+                {lang.language}
+              </button>
+            ))}
+          </div>
+          </MacBrowserWindow>
+        </div>
+
+        <style>{`
+          @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0; }
+          }
+          @keyframes sparkle {
+            0% { opacity: 1; transform: scale(1) translateY(0); }
+            100% { opacity: 0; transform: scale(0.5) translateY(-20px); }
+          }
+        `}</style>
+      </div>
+    </section>
+  );
+};
+
+export const SoftwareDevelopmentPage: React.FC = () => {
+  const services = [
+    'Web Development (Angular, React, Next.js, NestJS, Node.js)',
+    'Mobile Apps (iOS / Android / Flutter / React Native)',
+    'Custom Software Solutions',
+    'API Integration & Automation',
+    'Microservices Architecture',
+    'Firebase / Cloud Integrations',
+    'Database Design & Optimization (SQL / MongoDB / Firestore)',
+    'AI & Machine Learning Solutions',
+    'SaaS Development',
+    'Blockchain / Web3 Integration'
+  ];
+
+  return (
+    <div style={{
+      backgroundColor: '#FFFFFF',
+      maxWidth: '100vw',
+      overflowX: 'hidden',
+      minHeight: '100vh'
+    }}>
+      {/* Hero */}
+      <section style={{
+        padding: 'clamp(60px, 15vw, 140px) clamp(16px, 5vw, 24px) clamp(50px, 12vw, 100px)',
+        textAlign: 'center'
+      }}>
+        <h1 style={{
+          fontSize: 'clamp(32px, 8vw, 80px)',
+          fontWeight: 600,
+          lineHeight: 1.1,
+          color: '#1D1D1F',
+          marginBottom: '24px'
+        }}>
+          Software Development
+        </h1>
+        <p style={{
+          fontSize: 'clamp(16px, 3.5vw, 24px)',
+          color: '#6E6E73',
+          maxWidth: '800px',
+          margin: '0 auto 48px'
+        }}>
+          Programming and digital solutions services
+        </p>
+        <Link to="/booking">
+          <Button variant="primary" size="lg" rightIcon={<ArrowRight />}>
+            Start Your Project
+          </Button>
+        </Link>
+      </section>
+
+      {/* Code Animation */}
+      <CodeRevealSection />
+
+      {/* Services Section - Usluge razvoja softvera */}
+      <section style={{
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
+        background: '#F5F5F7'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '80px'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(0,113,227,0.1)',
+              border: '1px solid rgba(0,113,227,0.3)',
+              borderRadius: '100px',
+              padding: '8px 20px',
+              marginBottom: '24px'
+            }}>
+              <Code size={16} color="#0071E3" />
+              <span style={{
+                color: '#0071E3',
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
+                fontWeight: 600,
+                letterSpacing: '0.5px'
+              }}>
+                RAZVOJ SOFTVERA
+              </span>
+            </div>
+
+          <h2 style={{
+              fontSize: 'clamp(32px, 6vw, 64px)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
+              color: '#1D1D1F',
+              marginBottom: '24px'
+            }}>
+              Usluge Razvoja
+              <br />
+              <span style={{
+                background: 'linear-gradient(90deg, #0071E3 0%, #34C759 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                Softvera
+              </span>
+          </h2>
+
+            <p style={{
+              fontSize: 'clamp(16px, 4vw, 20px)',
+              lineHeight: 1.6,
+              color: 'rgba(29,29,31,0.7)',
+              maxWidth: '700px',
+              margin: '0 auto'
+            }}>
+              Kompletne razvojne usluge koje pokrivaju sve aspekte modernog softvera
+            </p>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '32px',
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            {[
+              {
+                icon: <Layers size={32} />,
+                title: 'Custom Software Development',
+                description: 'Razvijamo softver po meri koji se savršeno uklapa u vaše poslovne procese.',
+                color: '#0071E3'
+              },
+              {
+                icon: <Code size={32} />,
+                title: 'Web Application Development',
+                description: 'Frontend i backend sistemi sa modernim framework-ovima (React, Node, Django).',
+                color: '#34C759'
+              },
+              {
+                icon: <Smartphone size={32} />,
+                title: 'Mobile App Development',
+                description: 'iOS i Android aplikacije sa visokom performansom i UX kvalitetom.',
+                color: '#FF9500'
+              },
+              {
+                icon: <Database size={32} />,
+                title: 'API Development & Integration',
+                description: 'Izrada REST i GraphQL API-ja i integracija sa eksternim servisima.',
+                color: '#AF52DE'
+              },
+              {
+                icon: <Cloud size={32} />,
+                title: 'Cloud Solutions',
+                description: 'AWS, Azure i Google Cloud infrastruktura, DevOps implementacija.',
+                color: '#FF2D55'
+              },
+              {
+                icon: <Settings size={32} />,
+                title: 'Software Maintenance & Support',
+                description: 'Kontinuirana podrška, monitoring, optimizacija i nadogradnje.',
+                color: '#10B981'
+              }
+            ].map((service, i) => (
+              <div
+                key={i}
+                style={{
+                  background: '#FFFFFF',
+                  padding: '40px 32px',
+                  borderRadius: '24px',
+                  border: '1px solid #E5E7EB',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  transform: 'translateY(0)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.05)';
+                }}
+              >
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '20px',
+                  background: `${service.color}15`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 24px',
+                  color: service.color,
+                  fontSize: '32px'
+                }}>
+                  {service.icon}
+                </div>
+
+                <h3 style={{
+                  fontSize: '20px',
+            fontWeight: 600,
+                  color: '#1D1D1F',
+                  marginBottom: '16px',
+                  lineHeight: 1.3
+                }}>
+                  {service.title}
+                </h3>
+
+                <p style={{
+                  fontSize: '16px',
+                  color: 'rgba(29,29,31,0.7)',
+                  lineHeight: 1.6
+                }}>
+                  {service.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Development Process Section */}
+      <section style={{
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
+        background: '#000000',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'linear-gradient(rgba(0,113,227,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,113,227,0.05) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+          opacity: 0.3
+        }} />
+
+        <div style={{ maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '80px'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(0,113,227,0.1)',
+              border: '1px solid rgba(0,113,227,0.3)',
+              borderRadius: '100px',
+              padding: '8px 20px',
+              marginBottom: '24px'
+            }}>
+              <Zap size={16} color="#0071E3" />
+              <span style={{
+                color: '#0071E3',
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
+                fontWeight: 600,
+                letterSpacing: '0.5px'
+              }}>
+                PROCES RAZVOJA
+              </span>
+            </div>
+
+            <h2 style={{
+              fontSize: 'clamp(32px, 6vw, 64px)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
+              color: '#FFFFFF',
+              marginBottom: '24px'
+            }}>
+              Waterfall
+              <br />
+              <span style={{
+                background: 'linear-gradient(90deg, #0071E3 0%, #34C759 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                Model
+              </span>
+          </h2>
+
+            <p style={{
+              fontSize: 'clamp(16px, 4vw, 20px)',
+              lineHeight: 1.6,
+              color: 'rgba(255,255,255,0.7)',
+              maxWidth: '700px',
+              margin: '0 auto'
+            }}>
+              Jasan i organizovan pristup razvoju softvera koji garantuje kvalitet
+            </p>
+          </div>
+
+          {/* Enhanced Waterfall Model Process */}
+          <div style={{
+            position: 'relative',
+            maxWidth: '1000px',
+            margin: '0 auto',
+            padding: '60px 0'
+          }}>
+            {/* Main Waterfall Flow */}
+            <div style={{
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center'
+            }}>
+              {[
+                {
+                  step: '01',
+                  title: 'Product Strategy',
+                  subtitle: 'Define product vision, target audience, and business objectives to create a strategic roadmap.',
+                  icon: '🎯',
+                  color: '#667eea',
+                  bgColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                },
+                {
+                  step: '02',
+                  title: 'User Experience Design',
+                  subtitle: 'Create intuitive user interfaces and seamless experiences through research-driven design principles.',
+                  icon: '🎨',
+                  color: '#f093fb',
+                  bgColor: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+                },
+                {
+                  step: '03',
+                  title: 'Technical Architecture',
+                  subtitle: 'Design scalable system architecture with microservices, APIs, and cloud infrastructure planning.',
+                  icon: '🏗️',
+                  color: '#4facfe',
+                  bgColor: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+                },
+                {
+                  step: '04',
+                  title: 'Agile Development',
+                  subtitle: 'Build features iteratively using agile methodologies with continuous integration and deployment.',
+                  icon: '⚡',
+                  color: '#43e97b',
+                  bgColor: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+                },
+                {
+                  step: '05',
+                  title: 'Quality Assurance',
+                  subtitle: 'Implement comprehensive testing strategies including automation, performance, and security testing.',
+                  icon: '🛡️',
+                  color: '#fa709a',
+                  bgColor: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+                },
+                {
+                  step: '06',
+                  title: 'Launch & Growth',
+                  subtitle: 'Deploy to production with monitoring, analytics, and continuous optimization for sustainable growth.',
+                  icon: '🚀',
+                  color: '#a8edea',
+                  bgColor: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
+                }
+              ].map((item, i) => (
+                <div key={i} style={{
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                  maxWidth: '900px',
+                  marginBottom: i < 5 ? '120px' : '0',
+                  zIndex: 10 - i
+                }}>
+                  {/* Step Card - Increased size by 5% */}
+                  <div style={{
+                    background: item.bgColor,
+                    borderRadius: '25px',
+                    padding: '52px 40px', // Increased by 5% from 50px 38px
+                    color: '#FFFFFF',
+                    position: 'relative',
+                    width: '100%',
+                    minHeight: '220px', // Increased from 200px
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    boxShadow: '0 25px 80px rgba(0,0,0,0.2)',
+                    transition: 'all 0.4s ease',
+                    cursor: 'pointer',
+                    transform: `translateY(${i * 15}px) scale(${1 - i * 0.02})`, // Waterfall effect
+                    zIndex: 10
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = `translateY(${i * 15}px) scale(${1.05 - i * 0.02})`;
+                    e.currentTarget.style.boxShadow = '0 30px 80px rgba(0,0,0,0.25)';
+                    e.currentTarget.style.zIndex = '15';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = `translateY(${i * 15}px) scale(${1 - i * 0.02})`;
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0,0,0,0.15)';
+                    e.currentTarget.style.zIndex = '10';
+                  }}
+                  >
+                    {/* Step Header */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '20px',
+                      marginBottom: '20px'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '70px', // Increased from 60px
+                        height: '70px', // Increased from 60px
+                        background: 'rgba(255,255,255,0.25)',
+                        borderRadius: '50%',
+                        fontSize: '28px', // Increased from 24px
+                        fontWeight: 700,
+                        color: '#FFFFFF',
+                        border: '3px solid rgba(255,255,255,0.4)',
+                        boxShadow: '0 0 20px rgba(255,255,255,0.3)'
+                      }}>
+                        {item.step}
+                      </div>
+
+                      <div>
+                        <div style={{
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          opacity: 0.9,
+                          marginBottom: '4px'
+                        }}>
+                          Step {item.step}
+                        </div>
+                        <h3 style={{
+                          fontSize: '32px',
+                          fontWeight: 700,
+                          margin: 0,
+                          lineHeight: 1.2
+                        }}>
+                          {item.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Step Description - Larger text */}
+                    <p style={{
+                      fontSize: '18px',
+                      lineHeight: 1.7,
+                      opacity: 0.95,
+                      margin: 0,
+                      textAlign: 'center',
+                      maxWidth: '700px',
+                      marginLeft: 'auto',
+                      marginRight: 'auto'
+                    }}>
+                      {item.subtitle}
+                    </p>
+
+                    {/* Decorative Elements */}
+                    <div style={{
+                      position: 'absolute',
+                      top: '20px',
+                      right: '20px',
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      opacity: 0.7
+                    }}>
+                      {item.icon}
+                    </div>
+                  </div>
+
+                  {/* Custom SVG Arrow - Between steps */}
+                  {i < 5 && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      zIndex: 3,
+                      marginTop: '30px'
+                    }}>
+                      <svg width="60" height="50" viewBox="0 0 60 50" fill="none">
+                        {/* Arrow Body */}
+                        <path
+                          d="M30 0 L50 25 L30 50 L30 40 L10 40 L10 10 L30 10 Z"
+                          fill="url(#waterfallArrowGradient)"
+                          opacity="0.9"
+                        />
+                        {/* Arrow Head */}
+                        <path
+                          d="M35 15 L45 25 L35 35"
+                          stroke="#FFFFFF"
+                          strokeWidth="3"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <defs>
+                          <linearGradient id="waterfallArrowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#0071E3"/>
+                            <stop offset="50%" stopColor="#34C759"/>
+                            <stop offset="100%" stopColor="#0071E3"/>
+                          </linearGradient>
+                        </defs>
+                        <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Background Connecting Lines */}
+            <svg
+              style={{
+                position: 'absolute',
+                top: '0',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '4px',
+                height: '100%',
+                zIndex: 1
+              }}
+              viewBox="0 0 4 1000"
+            >
+              <path
+                d="M2 0 Q2 50 2 100 Q2 150 2 200 Q2 250 2 300 Q2 350 2 400 Q2 450 2 500 Q2 550 2 600 Q2 650 2 700 Q2 750 2 800 Q2 850 2 900 Q2 950 2 1000"
+                stroke="url(#waterfallLineGradient)"
+                strokeWidth="4"
+                fill="none"
+                strokeDasharray="8,12"
+              />
+              <defs>
+                <linearGradient id="waterfallLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#0071E3" stopOpacity="0.3"/>
+                  <stop offset="50%" stopColor="#34C759" stopOpacity="0.6"/>
+                  <stop offset="100%" stopColor="#0071E3" stopOpacity="0.3"/>
+                </linearGradient>
+              </defs>
+              <animate attributeName="stroke-dashoffset" values="20;0;20" dur="3s" repeatCount="indefinite" begin="0s"/>
+            </svg>
+          </div>
+
+            {/* Process Flow Description */}
+            <div style={{
+              marginTop: '60px',
+              textAlign: 'center',
+              maxWidth: '800px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gap: '32px',
+                marginTop: '40px'
+              }}>
+                <div style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <h4 style={{
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#667eea',
+                    marginBottom: '16px'
+                  }}>
+                    Product Strategy
+                  </h4>
+                  <p style={{
+                    fontSize: '14px',
+                    color: 'rgba(255,255,255,0.8)',
+                    lineHeight: 1.6,
+                    margin: 0
+                  }}>
+                    Define product vision, target audience, and business objectives to create a strategic roadmap for development.
+                  </p>
+                </div>
+
+                <div style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <h4 style={{
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#f093fb',
+                    marginBottom: '16px'
+                  }}>
+                    User Experience Design
+                  </h4>
+                  <p style={{
+                    fontSize: '14px',
+                    color: 'rgba(255,255,255,0.8)',
+                    lineHeight: 1.6,
+                    margin: 0
+                  }}>
+                    Create intuitive user interfaces and seamless experiences through research-driven design principles and user feedback.
+                  </p>
+                </div>
+
+                <div style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <h4 style={{
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#4facfe',
+                    marginBottom: '16px'
+                  }}>
+                    Technical Architecture
+                  </h4>
+                  <p style={{
+                    fontSize: '14px',
+                    color: 'rgba(255,255,255,0.8)',
+                    lineHeight: 1.6,
+                    margin: 0
+                  }}>
+                    Design scalable system architecture with microservices, APIs, and cloud infrastructure planning for optimal performance.
+                  </p>
+                </div>
+
+                <div style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <h4 style={{
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#43e97b',
+                    marginBottom: '16px'
+                  }}>
+                    Agile Development
+                  </h4>
+                  <p style={{
+                    fontSize: '14px',
+                    color: 'rgba(255,255,255,0.8)',
+                    lineHeight: 1.6,
+                    margin: 0
+                  }}>
+                    Build features iteratively using agile methodologies with continuous integration and deployment for rapid delivery.
+                  </p>
+                </div>
+
+                <div style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <h4 style={{
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#fa709a',
+                    marginBottom: '16px'
+                  }}>
+                    Quality Assurance
+                  </h4>
+                  <p style={{
+                    fontSize: '14px',
+                    color: 'rgba(255,255,255,0.8)',
+                    lineHeight: 1.6,
+                    margin: 0
+                  }}>
+                    Implement comprehensive testing strategies including automation, performance, and security testing to ensure reliability.
+                  </p>
+                </div>
+
+                <div style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <h4 style={{
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#a8edea',
+                    marginBottom: '16px'
+                  }}>
+                    Launch & Growth
+                  </h4>
+                  <p style={{
+                    fontSize: '14px',
+                    color: 'rgba(255,255,255,0.8)',
+                    lineHeight: 1.6,
+                    margin: 0
+                  }}>
+                    Deploy to production with monitoring, analytics, and continuous optimization for sustainable growth and user satisfaction.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <style>{`
+            @keyframes pulse {
+              0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+              50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+            }
+
+            @keyframes arrowPulse {
+              0%, 100% { opacity: 0.7; transform: translateY(-50%) scale(1); }
+              50% { opacity: 1; transform: translateY(-50%) scale(1.1); }
+            }
+
+            @keyframes flowAnimation {
+              0% { stroke-dashoffset: 30; }
+              100% { stroke-dashoffset: 0; }
+            }
+
+            @keyframes cardFloat {
+              0%, 100% { transform: translateY(0) scale(1); }
+              50% { transform: translateY(-5px) scale(1.02); }
+            }
+          `}</style>
+        </div>
+      </section>
+
+
+      {/* Why Choose Us - Competitive Advantages */}
+      <section style={{
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
+        background: '#000000',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'linear-gradient(rgba(0,113,227,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,113,227,0.05) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+          opacity: 0.3
+        }} />
+
+        <div style={{ maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '80px'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(0,113,227,0.1)',
+              border: '1px solid rgba(0,113,227,0.3)',
+              borderRadius: '100px',
+              padding: '8px 20px',
+              marginBottom: '24px'
+            }}>
+              <Zap size={16} color="#0071E3" />
+              <span style={{
+                color: '#0071E3',
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
+                fontWeight: 600,
+                letterSpacing: '0.5px'
+              }}>
+                ZAŠTO MI
+              </span>
+            </div>
+
+            <h2 style={{
+              fontSize: 'clamp(32px, 6vw, 64px)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
+              color: '#FFFFFF',
+              marginBottom: '24px'
+            }}>
+              Why Choose
+              <br />
+              <span style={{
+                background: 'linear-gradient(90deg, #0071E3 0%, #34C759 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                Us?
+              </span>
+            </h2>
+
+            <p style={{
+              fontSize: 'clamp(16px, 4vw, 20px)',
+              lineHeight: 1.6,
+              color: 'rgba(255,255,255,0.7)',
+              maxWidth: '700px',
+              margin: '0 auto'
+            }}>
+              Otkrijte zašto smo najbolji izbor za vaš sledeći projekat
+            </p>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '32px',
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            {[
+              {
+                number: '01',
+                title: 'Proven Expertise',
+                subtitle: '15+ Years Experience',
+                description: 'Naš tim poseduje više od 15 godina iskustva u razvoju kompleksnih softverskih rešenja. Radili smo sa preko 200 klijenata iz različitih industrija.',
+                advantages: [
+                  'Senior developers sa 10+ godina iskustva',
+                  'Specijalizacija u enterprise aplikacijama',
+                  'Međunarodno priznate sertifikacije',
+                  'Kontinuirano usavršavanje i edukacija'
+                ],
+                stats: ['200+ Projects', '50+ Clients', '98% Success Rate', '15+ Years'],
+                color: '#667eea',
+                bgColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+              },
+              {
+                number: '02',
+                title: 'Quality & Reliability',
+                subtitle: 'Zero-Downtime Guarantee',
+                description: 'Garancija kvaliteta sa 99.9% uptime-om i sveobuhvatnim testiranjem. Naši sistemi su dizajnirani za skalabilnost i pouzdanost.',
+                advantages: [
+                  'Automated testing u svakoj fazi',
+                  'Performance monitoring 24/7',
+                  'Security-first development approach',
+                  'Disaster recovery planovi'
+                ],
+                stats: ['99.9% Uptime', 'Zero Data Loss', '24/7 Monitoring', 'ISO 27001 Certified'],
+                color: '#f093fb',
+                bgColor: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+              },
+              {
+                number: '03',
+                title: 'Innovation & Technology',
+                subtitle: 'Cutting-Edge Solutions',
+                description: 'Koristimo najnovije tehnologije i pratimo trendove u industriji. Naši timovi su uvek u toku sa najnovijim razvojima u AI, blockchain-u i cloud computing-u.',
+                advantages: [
+                  'AI i machine learning integracije',
+                  'Blockchain i Web3 rešenja',
+                  'Cloud-native architecture',
+                  'DevOps i automation'
+                ],
+                stats: ['50+ Technologies', 'AI Integration', 'Cloud Native', 'Microservices'],
+                color: '#4facfe',
+                bgColor: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+              },
+              {
+                number: '04',
+                title: 'Agile & Flexible',
+                subtitle: 'Rapid Delivery',
+                description: 'Agile metodologija omogućava brzu isporuku i fleksibilnost u promenama. Radimo u sprintovima sa redovnim feedback-om i transparentnošću.',
+                advantages: [
+                  '2-week sprint cycles',
+                  'Daily standup meetings',
+                  'Continuous integration/deployment',
+                  'Real-time progress tracking'
+                ],
+                stats: ['2-Week Sprints', 'Daily Updates', 'CI/CD Pipeline', 'Agile Certified'],
+                color: '#43e97b',
+                bgColor: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+              },
+              {
+                number: '05',
+                title: 'Client Satisfaction',
+                subtitle: 'Long-Term Partnerships',
+                description: '98% naših klijenata se vraća za nove projekte. Fokusirani smo na dugoročne odnose i kontinuiranu podršku nakon lansiranja.',
+                advantages: [
+                  'Dedicated support team',
+                  'Regular maintenance updates',
+                  'Performance optimization',
+                  'Feature enhancement requests'
+                ],
+                stats: ['98% Retention', '24/7 Support', 'Monthly Updates', 'SLA Guaranteed'],
+                color: '#fa709a',
+                bgColor: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+              },
+              {
+                number: '06',
+                title: 'Cost Effective',
+                subtitle: 'Maximum ROI',
+                description: 'Optimizujemo troškove bez kompromisa na kvalitetu. Naš pristup štedi vreme i novac klijenata sa efikasnim procesima i re-ušljivim rešenjima.',
+                advantages: [
+                  'Competitive pricing',
+                  'No hidden costs',
+                  'Efficient resource utilization',
+                  'Long-term cost savings'
+                ],
+                stats: ['30% Cost Savings', 'No Hidden Fees', 'ROI Focused', 'Transparent Billing'],
+                color: '#a8edea',
+                bgColor: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
+              }
+            ].map((advantage, i) => (
+              <div
+                key={i}
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '20px',
+                  padding: '32px',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(0,0,0,0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                {/* Advantage Number */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '60px',
+                  height: '60px',
+                  background: advantage.bgColor,
+                  borderRadius: '50%',
+                  fontSize: '24px',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  marginBottom: '24px',
+                  boxShadow: `0 8px 32px ${advantage.color}40`
+                }}>
+                  {advantage.number}
+                </div>
+
+                {/* Advantage Content */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '20px'
+                }}>
+                  {/* Title & Subtitle */}
+                  <div>
+                    <h3 style={{
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      color: '#FFFFFF',
+                      marginBottom: '8px',
+                      lineHeight: 1.2
+                    }}>
+                      {advantage.title}
+                    </h3>
+                    <div style={{
+                      fontSize: '16px',
+                      fontWeight: 600,
+                      color: advantage.color,
+                      marginBottom: '16px'
+                    }}>
+                      {advantage.subtitle}
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p style={{
+                    fontSize: '16px',
+                    color: 'rgba(255,255,255,0.9)',
+                    lineHeight: 1.6,
+                    margin: 0
+                  }}>
+                    {advantage.description}
+                  </p>
+
+                  {/* Advantages List */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px'
+                  }}>
+                    {advantage.advantages.map((adv, advIndex) => (
+                      <div
+                        key={advIndex}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '12px',
+                          fontSize: '14px',
+                          color: 'rgba(255,255,255,0.8)',
+                          background: 'rgba(255,255,255,0.05)',
+                          padding: '12px 16px',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(255,255,255,0.1)'
+                        }}
+                      >
+                        <div style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          background: advantage.color,
+                          flexShrink: 0
+                        }} />
+                        {adv}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Statistics */}
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+                    gap: '12px'
+                  }}>
+                    {advantage.stats.map((stat, statIndex) => (
+                      <div
+                        key={statIndex}
+                        style={{
+                          textAlign: 'center',
+                          padding: '12px 8px',
+                          background: `${advantage.color}15`,
+                          border: `1px solid ${advantage.color}30`,
+                          borderRadius: '8px'
+                        }}
+                      >
+                        <div style={{
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          color: advantage.color,
+                          lineHeight: 1.2
+                        }}>
+                          {stat}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Call to Action */}
+          <div style={{
+            marginTop: '80px',
+            textAlign: 'center',
+            padding: '60px 40px',
+            background: 'rgba(0,113,227,0.1)',
+            border: '1px solid rgba(0,113,227,0.3)',
+            borderRadius: '20px'
+          }}>
+            <h3 style={{
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#FFFFFF',
+              marginBottom: '16px'
+            }}>
+              Ready to Experience Excellence?
+            </h3>
+            <p style={{
+              fontSize: '18px',
+              color: 'rgba(255,255,255,0.8)',
+              marginBottom: '32px',
+              maxWidth: '600px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              Pridružite se našim zadovoljnim klijentima i ostvarite svoje digitalne ciljeve sa našim ekspertnim timom.
+            </p>
+            <Link to="/booking">
+              <Button variant="primary" size="xl" rightIcon={<ArrowRight />}>
+                Start Your Project Today
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Development Team Section */}
+      <section style={{
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
+        background: '#F5F5F7'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '80px'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(0,113,227,0.1)',
+              border: '1px solid rgba(0,113,227,0.3)',
+              borderRadius: '100px',
+              padding: '8px 20px',
+              marginBottom: '24px'
+            }}>
+              <Heart size={16} color="#0071E3" />
+              <span style={{
+                color: '#0071E3',
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
+                fontWeight: 600,
+                letterSpacing: '0.5px'
+              }}>
+                TIM
+              </span>
+            </div>
+
+            <h2 style={{
+              fontSize: 'clamp(32px, 6vw, 64px)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
+              color: '#1D1D1F',
+              marginBottom: '24px'
+            }}>
+              Development
+              <br />
+              <span style={{
+                background: 'linear-gradient(90deg, #0071E3 0%, #34C759 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                Team
+              </span>
+            </h2>
+
+            <p style={{
+              fontSize: 'clamp(16px, 4vw, 20px)',
+              lineHeight: 1.6,
+              color: 'rgba(29,29,31,0.7)',
+              maxWidth: '700px',
+              margin: '0 auto'
+            }}>
+              Pokaži stručnost i ljudsku stranu našeg razvojnog tima
+            </p>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '40px',
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            {[
+              {
+                name: 'Marko Lukić',
+                position: 'Senior Backend Engineer',
+                specialization: 'Node.js, Microservices, API Security',
+                image: '/watchthis/Radomir.jpeg', // Placeholder image
+                linkedin: '#',
+                color: '#0071E3'
+              },
+              {
+                name: 'Ana Petrović',
+                position: 'Full Stack Developer',
+                specialization: 'React, TypeScript, Cloud Architecture',
+                image: '/watchthis/Aleksandra.jpeg', // Placeholder image
+                linkedin: '#',
+                color: '#34C759'
+              },
+              {
+                name: 'Stefan Jovanović',
+                position: 'Mobile App Developer',
+                specialization: 'React Native, iOS, Android',
+                image: '/watchthis/Ilija.jpeg', // Placeholder image
+                linkedin: '#',
+                color: '#FF9500'
+              },
+              {
+                name: 'Milica Đorđević',
+                position: 'Frontend Developer',
+                specialization: 'Vue.js, Angular, UX/UI Design',
+                image: '/watchthis/Aleksandra.jpeg', // Placeholder image
+                linkedin: '#',
+                color: '#AF52DE'
+              },
+              {
+                name: 'Nikola Nikolić',
+                position: 'DevOps Engineer',
+                specialization: 'AWS, Docker, Kubernetes, CI/CD',
+                image: '/watchthis/Radomir.jpeg', // Placeholder image
+                linkedin: '#',
+                color: '#FF2D55'
+              },
+              {
+                name: 'Jovana Stanković',
+                position: 'QA Engineer',
+                specialization: 'Automated Testing, Performance Testing',
+                image: '/watchthis/Aleksandra.jpeg', // Placeholder image
+                linkedin: '#',
+                color: '#10B981'
+              }
+            ].map((member, i) => (
+              <div
+                key={i}
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid #E5E7EB',
+                  borderRadius: '24px',
+                  padding: '32px',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(0,0,0,0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                {/* Profile Image */}
+                <div style={{
+                  width: '120px',
+                  height: '120px',
+                  borderRadius: '50%',
+                  background: `linear-gradient(135deg, ${member.color} 0%, ${member.color}40 100%)`,
+                  margin: '0 auto 24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  border: '4px solid #FFFFFF',
+                  boxShadow: `0 8px 32px ${member.color}30`
+                }}>
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      borderRadius: '50%'
+                    }}
+                  />
+                </div>
+
+                {/* Member Info */}
+                <h3 style={{
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  color: '#1D1D1F',
+                  marginBottom: '8px',
+                  lineHeight: 1.3
+                }}>
+                  {member.name}
+                </h3>
+
+                <p style={{
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  color: member.color,
+                  marginBottom: '16px'
+                }}>
+                  {member.position}
+                </p>
+
+                <p style={{
+                  fontSize: '14px',
+                  color: 'rgba(29,29,31,0.7)',
+                  lineHeight: 1.5,
+                  marginBottom: '24px'
+                }}>
+                  {member.specialization}
+                </p>
+
+                {/* LinkedIn Icon */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '16px'
+                }}>
+                  <a
+                    href={member.linkedin}
+                    style={{
+                      width: '44px',
+                      height: '44px',
+                      borderRadius: '50%',
+                      background: '#0077B5',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#FFFFFF',
+                      textDecoration: 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.1)';
+                      e.currentTarget.style.background = '#005885';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.background = '#0077B5';
+                    }}
+                  >
+                    <Linkedin size={20} />
+                  </a>
+                </div>
+
+                {/* Decorative Elements */}
+                <div style={{
+                  position: 'absolute',
+                  top: '16px',
+                  right: '16px',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  background: `${member.color}15`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '18px',
+                  fontWeight: 700,
+                  color: member.color
+                }}>
+                  {i + 1}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Software Quality & Security Section */}
+      <section style={{
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
+        background: '#000000',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'linear-gradient(rgba(0,113,227,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,113,227,0.05) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+          opacity: 0.3
+        }} />
+
+        <div style={{ maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '80px'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(0,113,227,0.1)',
+              border: '1px solid rgba(0,113,227,0.3)',
+              borderRadius: '100px',
+              padding: '8px 20px',
+              marginBottom: '24px'
+            }}>
+              <Shield size={16} color="#0071E3" />
+              <span style={{
+                color: '#0071E3',
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
+                fontWeight: 600,
+                letterSpacing: '0.5px'
+              }}>
+                KVALITET & BEZBEDNOST
+              </span>
+            </div>
+
+            <h2 style={{
+              fontSize: 'clamp(32px, 6vw, 64px)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
+              color: '#FFFFFF',
+              marginBottom: '24px'
+            }}>
+              Software Quality
+              <br />
+              <span style={{
+                background: 'linear-gradient(90deg, #0071E3 0%, #34C759 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                & Security
+              </span>
+            </h2>
+
+            <p style={{
+              fontSize: 'clamp(16px, 4vw, 20px)',
+              lineHeight: 1.6,
+              color: 'rgba(255,255,255,0.7)',
+              maxWidth: '700px',
+              margin: '0 auto'
+            }}>
+              Naglasiti pouzdanost i bezbednost naših softverskih rešenja
+            </p>
+          </div>
+
+          {/* DevSecOps Cycle Infographic */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '60px'
+          }}>
+            <div style={{
+              position: 'relative',
+              width: '300px',
+              height: '300px'
+            }}>
+              {/* Central Hub */}
+              <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #0071E3 0%, #34C759 100%)',
+                transform: 'translate(-50%, -50%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                boxShadow: '0 0 40px rgba(0,113,227,0.5)',
+                animation: 'hubPulse 3s infinite ease-in-out'
+              }}>
+                DevSecOps
+              </div>
+
+              {/* Orbiting Elements */}
+              {[
+                { name: 'Secure Code', icon: <Shield size={20} />, color: '#0071E3', angle: 0 },
+                { name: 'Automated Testing', icon: <TestTube size={20} />, color: '#34C759', angle: 60 },
+                { name: 'Data Encryption', icon: <Database size={20} />, color: '#FF9500', angle: 120 },
+                { name: 'Scalable Infrastructure', icon: <Cloud size={20} />, color: '#AF52DE', angle: 180 },
+                { name: 'Continuous Deployment', icon: <Rocket size={20} />, color: '#FF2D55', angle: 240 },
+                { name: 'Performance Monitoring', icon: <Zap size={20} />, color: '#10B981', angle: 300 }
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    width: '140px',
+                    height: '140px',
+                    transformOrigin: 'center',
+                    transform: `translate(-50%, -50%) rotate(${item.angle}deg)`,
+                    animation: `orbit 20s linear infinite`
+                  }}
+                >
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '50%',
+                    background: item.color,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#FFFFFF',
+                    boxShadow: `0 4px 20px ${item.color}40`,
+                    animation: `pulse 2s infinite ease-in-out ${i * 0.5}s`
+                  }}>
+                    {item.icon}
+                  </div>
+
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '-30px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    color: '#FFFFFF',
+                    textAlign: 'center',
+                    whiteSpace: 'nowrap',
+                    width: '80px'
+                  }}>
+                    {item.name}
+                  </div>
+                </div>
+              ))}
+
+              {/* Connecting Lines */}
+              <svg
+                width="300"
+                height="300"
+                style={{ position: 'absolute', top: 0, left: 0 }}
+              >
+                {[
+                  { angle1: 0, angle2: 60 },
+                  { angle1: 60, angle2: 120 },
+                  { angle1: 120, angle2: 180 },
+                  { angle1: 180, angle2: 240 },
+                  { angle1: 240, angle2: 300 },
+                  { angle1: 300, angle2: 0 }
+                ].map((line, i) => {
+                  const x1 = 150 + 70 * Math.cos((line.angle1 * Math.PI) / 180);
+                  const y1 = 150 + 70 * Math.sin((line.angle1 * Math.PI) / 180);
+                  const x2 = 150 + 70 * Math.cos((line.angle2 * Math.PI) / 180);
+                  const y2 = 150 + 70 * Math.sin((line.angle2 * Math.PI) / 180);
+
+                  return (
+                    <line
+                      key={i}
+                      x1={x1}
+                      y1={y1}
+                      x2={x2}
+                      y2={y2}
+                      stroke="#0071E3"
+                      strokeWidth="2"
+                      strokeDasharray="5,5"
+                      opacity="0.6"
+                      style={{ animation: `lineFlow 3s linear infinite ${i * 0.3}s` }}
+                    />
+                  );
+                })}
+              </svg>
+            </div>
+          </div>
+
+          {/* Quality Features Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '32px',
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            {[
+              {
+                icon: <Shield size={32} />,
+                title: 'Secure Code Practices',
+                description: 'Sigurne prakse kodiranja sa OWASP standardima i regularnim security auditima.',
+                color: '#0071E3'
+              },
+              {
+                icon: <TestTube size={32} />,
+                title: 'Automated Testing',
+                description: 'Kompletna automatizacija testiranja sa unit, integration i end-to-end testovima.',
+                color: '#34C759'
+              },
+              {
+                icon: <Database size={32} />,
+                title: 'Data Encryption',
+                description: 'Enkripcija podataka u tranzitu i mirovanju sa AES-256 standardima.',
+                color: '#FF9500'
+              },
+              {
+                icon: <Cloud size={32} />,
+                title: 'Scalable Infrastructure',
+                description: 'Horizontano skalabilna infrastruktura sa auto-scaling i load balancing-om.',
+                color: '#AF52DE'
+              },
+              {
+                icon: <Rocket size={32} />,
+                title: 'Continuous Deployment',
+                description: 'Kontinuirano deploy-ovanje sa blue-green strategijama i rollback mogućnostima.',
+                color: '#FF2D55'
+              },
+              {
+                icon: <Zap size={32} />,
+                title: 'Performance Monitoring',
+                description: 'Real-time monitoring performansi sa alerting sistemima i optimizacijom.',
+                color: '#10B981'
+              }
+            ].map((feature, i) => (
+              <div
+                key={i}
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '20px',
+                  padding: '32px',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  position: 'relative'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(0,0,0,0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <div style={{
+                  width: '64px',
+                  height: '64px',
+                  borderRadius: '16px',
+                  background: `${feature.color}20`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  color: feature.color,
+                  fontSize: '28px'
+                }}>
+                  {feature.icon}
+                </div>
+
+                <h3 style={{
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  color: '#FFFFFF',
+                  marginBottom: '16px',
+                  lineHeight: 1.3
+                }}>
+                  {feature.title}
+                </h3>
+
+                <p style={{
+                  fontSize: '16px',
+                  color: 'rgba(255,255,255,0.8)',
+                  lineHeight: 1.6
+                }}>
+                  {feature.description}
+                </p>
+
+                {/* Progress Bar */}
+                <div style={{
+                  marginTop: '24px',
+                  width: '100%',
+                  height: '4px',
+                  background: 'rgba(255,255,255,0.1)',
+                  borderRadius: '2px',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    background: feature.color,
+                    borderRadius: '2px',
+                    animation: `progressBar 2s ease-in-out ${i * 0.2}s`
+                  }} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <style>{`
+            @keyframes hubPulse {
+              0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                boxShadow: 0 0 40px rgba(0,113,227,0.5);
+              }
+              50% {
+                transform: translate(-50%, -50%) scale(1.05);
+                boxShadow: 0 0 60px rgba(0,113,227,0.8);
+              }
+            }
+
+            @keyframes orbit {
+              from { transform: translate(-50%, -50%) rotate(0deg); }
+              to { transform: translate(-50%, -50%) rotate(360deg); }
+            }
+
+            @keyframes lineFlow {
+              0% { strokeDashoffset: 20; }
+              100% { strokeDashoffset: 0; }
+            }
+
+            @keyframes progressBar {
+              0% { width: 0%; }
+              100% { width: 100%; }
+            }
+          `}</style>
+        </div>
+      </section>
+
+      {/* Technologies Stack - Professional Overview */}
+      <section style={{
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
+        background: '#F5F5F7'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '80px'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(0,113,227,0.1)',
+              border: '1px solid rgba(0,113,227,0.3)',
+              borderRadius: '100px',
+              padding: '8px 20px',
+              marginBottom: '24px'
+            }}>
+              <Settings size={16} color="#0071E3" />
+              <span style={{
+                color: '#0071E3',
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
+                fontWeight: 600,
+                letterSpacing: '0.5px'
+              }}>
+                TEHNOLOŠKI STACK
+              </span>
+            </div>
+
+            <h2 style={{
+              fontSize: 'clamp(32px, 6vw, 64px)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
+              color: '#1D1D1F',
+              marginBottom: '24px'
+            }}>
+              Technology
+              <br />
+              <span style={{
+                background: 'linear-gradient(90deg, #0071E3 0%, #34C759 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                Stack
+              </span>
+            </h2>
+
+            <p style={{
+              fontSize: 'clamp(16px, 4vw, 20px)',
+              lineHeight: 1.6,
+              color: 'rgba(29,29,31,0.7)',
+              maxWidth: '700px',
+              margin: '0 auto'
+            }}>
+              Kompletan ekosistem modernih tehnologija koje koristimo za isporuku vrhunskih softverskih rešenja
+            </p>
+          </div>
+
+          {/* Technology Categories */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '40px',
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            {[
+              {
+                category: 'Frontend Development',
+                icon: <Code size={32} />,
+                color: '#0071E3',
+                technologies: [
+                  {
+                    name: 'React',
+                    version: '18.2+',
+                    description: 'Modern JavaScript biblioteka za izgradnju korisničkih interfejsa sa komponentnom arhitekturom',
+                    features: ['Virtual DOM', 'JSX', 'Hooks', 'Context API', 'Concurrent Features'],
+                    useCase: 'SPA, PWA, kompleksne web aplikacije'
+                  },
+                  {
+                    name: 'Angular',
+                    version: '16+',
+                    description: 'Full-featured framework za enterprise web aplikacije sa TypeScript podrškom',
+                    features: ['Two-way binding', 'Dependency injection', 'Modules', 'Directives', 'RxJS'],
+                    useCase: 'Velike enterprise aplikacije, real-time dashboards'
+                  },
+                  {
+                    name: 'Vue.js',
+                    version: '3.3+',
+                    description: 'Progresivni framework sa fokusom na reaktivnost i komponentnu arhitekturu',
+                    features: ['Composition API', 'Virtual DOM', 'Reaktivnost', 'Single-file components'],
+                    useCase: 'Progresivne web aplikacije, mikroservisi'
+                  },
+                  {
+                    name: 'Next.js',
+                    version: '14+',
+                    description: 'React framework sa server-side rendering i optimizacijama performansi',
+                    features: ['SSR', 'SSG', 'API routes', 'Image optimization', 'Middleware'],
+                    useCase: 'SEO-friendly aplikacije, e-commerce, blogovi'
+                  },
+                  {
+                    name: 'TypeScript',
+                    version: '5.2+',
+                    description: 'Statički tipiziran JavaScript za bolju razvojnu produktivnost i održavanje',
+                    features: ['Static typing', 'IntelliSense', 'Refactoring', 'Advanced IDE support'],
+                    useCase: 'Svi projekti za bolju tipsku sigurnost'
+                  }
+                ]
+              },
+              {
+                category: 'Backend Development',
+                icon: <Database size={32} />,
+                color: '#34C759',
+                technologies: [
+                  {
+                    name: 'Node.js',
+                    version: '20 LTS',
+                    description: 'JavaScript runtime za serversku stranu sa event-driven arhitekturom',
+                    features: ['Non-blocking I/O', 'NPM ecosystem', 'Cross-platform', 'High performance'],
+                    useCase: 'REST APIs, real-time aplikacije, mikroservisi'
+                  },
+                  {
+                    name: 'NestJS',
+                    version: '10+',
+                    description: 'Progresivni Node.js framework sa TypeScript podrškom i modularnom arhitekturom',
+                    features: ['Decorators', 'Modules', 'Providers', 'Guards', 'Interceptors'],
+                    useCase: 'Enterprise aplikacije, mikroservisi, GraphQL APIs'
+                  },
+                  {
+                    name: 'Django',
+                    version: '4.2+',
+                    description: 'High-level Python web framework sa batteries-included filozofijom',
+                    features: ['ORM', 'Admin interface', 'Authentication', 'Security', 'Scalability'],
+                    useCase: 'Kompleksne web aplikacije, CMS, e-commerce'
+                  },
+                  {
+                    name: 'Spring Boot',
+                    version: '3.1+',
+                    description: 'Java framework za brzi razvoj enterprise aplikacija sa auto-konfiguracijom',
+                    features: ['Auto-configuration', 'Standalone apps', 'Microservices', 'Security', 'Monitoring'],
+                    useCase: 'Enterprise Java aplikacije, mikroservisi'
+                  },
+                  {
+                    name: '.NET Core',
+                    version: '8+',
+                    description: 'Cross-platform framework za moderne aplikacije sa C# jezikom',
+                    features: ['Cross-platform', 'High performance', 'Cloud-native', 'Container support'],
+                    useCase: 'Enterprise aplikacije, cloud servisi'
+                  }
+                ]
+              },
+              {
+                category: 'Mobile Development',
+                icon: <Smartphone size={32} />,
+                color: '#FF9500',
+                technologies: [
+                  {
+                    name: 'React Native',
+                    version: '0.72+',
+                    description: 'Framework za razvoj nativnih mobilnih aplikacija koristeći React',
+                    features: ['Native performance', 'Code reuse', 'Hot reload', 'Third-party plugins'],
+                    useCase: 'Cross-platform mobilne aplikacije'
+                  },
+                  {
+                    name: 'Flutter',
+                    version: '3.13+',
+                    description: 'Google-ov UI toolkit za izgradnju nativnih aplikacija iz single codebase-a',
+                    features: ['Dart language', 'Widget system', 'Hot reload', 'Native performance'],
+                    useCase: 'Visoko-performantne cross-platform aplikacije'
+                  },
+                  {
+                    name: 'Swift',
+                    version: '5.9+',
+                    description: 'Apple-ov programski jezik za iOS, macOS, watchOS i tvOS razvoj',
+                    features: ['Type safety', 'Performance', 'Interoperability', 'Modern syntax'],
+                    useCase: 'Native iOS aplikacije, Apple ecosystem'
+                  },
+                  {
+                    name: 'Kotlin',
+                    version: '1.9+',
+                    description: 'Moderni programski jezik za Android razvoj sa concisen sintaksom',
+                    features: ['Null safety', 'Coroutines', 'Extension functions', 'Interoperability'],
+                    useCase: 'Moderni Android razvoj, multiplatform aplikacije'
+                  }
+                ]
+              },
+              {
+                category: 'Databases & Storage',
+                icon: <Database size={32} />,
+                color: '#AF52DE',
+                technologies: [
+                  {
+                    name: 'PostgreSQL',
+                    version: '15+',
+                    description: 'Napredna open-source relaciona baza podataka sa JSON podrškom',
+                    features: ['ACID compliance', 'JSON support', 'Advanced indexing', 'Replication'],
+                    useCase: 'Kompleksni podaci, analitika, enterprise aplikacije'
+                  },
+                  {
+                    name: 'MongoDB',
+                    version: '7.0+',
+                    description: 'NoSQL dokument baza podataka sa fleksibilnom shemom',
+                    features: ['Document model', 'Horizontal scaling', 'Aggregation', 'Geospatial'],
+                    useCase: 'Real-time aplikacije, content management, IoT'
+                  },
+                  {
+                    name: 'Redis',
+                    version: '7.2+',
+                    description: 'In-memory data structure store za caching i real-time funkcionalnosti',
+                    features: ['High performance', 'Persistence', 'Clustering', 'Pub/Sub'],
+                    useCase: 'Caching, session storage, real-time features'
+                  },
+                  {
+                    name: 'Elasticsearch',
+                    version: '8.9+',
+                    description: 'Distribuirani search i analytics engine sa full-text search mogućnostima',
+                    features: ['Full-text search', 'Analytics', 'Log analysis', 'Machine learning'],
+                    useCase: 'Search funkcionalnosti, log analiza, monitoring'
+                  }
+                ]
+              },
+              {
+                category: 'Cloud & DevOps',
+                icon: <Cloud size={32} />,
+                color: '#FF2D55',
+                technologies: [
+                  {
+                    name: 'Amazon Web Services',
+                    version: 'Latest',
+                    description: 'Kompletna cloud computing platforma sa 200+ servisima',
+                    features: ['Compute', 'Storage', 'Database', 'AI/ML', 'IoT', 'Security'],
+                    useCase: 'Scalable cloud infrastruktura, enterprise aplikacije'
+                  },
+                  {
+                    name: 'Microsoft Azure',
+                    version: 'Latest',
+                    description: 'Cloud computing servis za izgradnju, testiranje i deploy aplikacija',
+                    features: ['Global reach', 'Hybrid cloud', 'AI services', 'DevOps tools'],
+                    useCase: 'Enterprise cloud rešenja, .NET aplikacije'
+                  },
+                  {
+                    name: 'Docker',
+                    version: '24+',
+                    description: 'Platforma za kontejnerizaciju aplikacija sa izolovanom izvršnom okolinom',
+                    features: ['Containerization', 'Portability', 'Resource efficiency', 'Ecosystem'],
+                    useCase: 'Microservices, konzistentna deployment okolina'
+                  },
+                  {
+                    name: 'Kubernetes',
+                    version: '1.28+',
+                    description: 'Open-source platforma za automatsko deployment, scaling i upravljanje kontejnerizovanim aplikacijama',
+                    features: ['Auto-scaling', 'Load balancing', 'Self-healing', 'Service discovery'],
+                    useCase: 'Container orchestration, cloud-native aplikacije'
+                  }
+                ]
+              },
+              {
+                category: 'Testing & Quality Assurance',
+                icon: <Shield size={32} />,
+                color: '#10B981',
+                technologies: [
+                  {
+                    name: 'Jest',
+                    version: '29+',
+                    description: 'JavaScript testing framework sa fokusom na jednostavnost i performanse',
+                    features: ['Unit testing', 'Mocking', 'Snapshot testing', 'Code coverage'],
+                    useCase: 'JavaScript/TypeScript aplikacije testiranje'
+                  },
+                  {
+                    name: 'Cypress',
+                    version: '13+',
+                    description: 'End-to-end testing framework za web aplikacije sa realnim browser okruženjem',
+                    features: ['E2E testing', 'Real browser', 'Time travel', 'Screenshots'],
+                    useCase: 'Web aplikacije integration testiranje'
+                  },
+                  {
+                    name: 'Selenium',
+                    version: '4.11+',
+                    description: 'Framework za automatizaciju web browser-a za testiranje web aplikacija',
+                    features: ['Multi-browser', 'Multi-language', 'Distributed testing', 'Recording'],
+                    useCase: 'Cross-browser testiranje, regression testing'
+                  },
+                  {
+                    name: 'Postman',
+                    version: '10+',
+                    description: 'Collaboration platforma za API razvoj sa comprehensive testing mogućnostima',
+                    features: ['API testing', 'Mock servers', 'Documentation', 'Collaboration'],
+                    useCase: 'API testiranje, dokumentacija, timska saradnja'
+                  }
+                ]
+              }
+            ].map((category, categoryIndex) => (
+              <div key={categoryIndex} style={{
+                background: '#FFFFFF',
+                  border: '1px solid #E5E7EB',
+                borderRadius: '20px',
+                padding: '32px',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px)';
+                e.currentTarget.style.boxShadow = '0 20px 60px rgba(0,0,0,0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+              >
+                {/* Category Header */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px',
+                  marginBottom: '32px',
+                  paddingBottom: '20px',
+                  borderBottom: `2px solid ${category.color}20`
+                }}>
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '14px',
+                    background: `${category.color}15`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: category.color,
+                    fontSize: '24px'
+                  }}>
+                    {category.icon}
+                  </div>
+                  <div>
+                    <h3 style={{
+                      fontSize: '20px',
+                      fontWeight: 600,
+                      color: '#1D1D1F',
+                      margin: 0,
+                      lineHeight: 1.2
+                    }}>
+                      {category.category}
+                    </h3>
+                    <p style={{
+                      fontSize: '14px',
+                      color: 'rgba(29,29,31,0.6)',
+                      margin: '4px 0 0',
+                      lineHeight: 1.3
+                    }}>
+                      {category.technologies.length} technologies
+                    </p>
+                  </div>
+                </div>
+
+                {/* Technology List */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '24px'
+                }}>
+                  {category.technologies.map((tech, techIndex) => (
+                    <div
+                      key={techIndex}
+                      style={{
+                        padding: '20px',
+                        background: '#F8FAFC',
+                        border: '1px solid #E2E8F0',
+                        borderRadius: '12px',
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer',
+                        position: 'relative'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = '#F1F5F9';
+                        e.currentTarget.style.borderColor = category.color;
+                        e.currentTarget.style.transform = 'translateX(8px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = '#F8FAFC';
+                        e.currentTarget.style.borderColor = '#E2E8F0';
+                        e.currentTarget.style.transform = 'translateX(0)';
+                      }}
+                    >
+                      {/* Tech Header */}
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: '12px'
+                      }}>
+                        <h4 style={{
+                          fontSize: '18px',
+                          fontWeight: 600,
+                          color: '#1D1D1F',
+                          margin: 0,
+                          lineHeight: 1.2
+                        }}>
+                          {tech.name}
+                        </h4>
+                        <div style={{
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: category.color,
+                          background: `${category.color}15`,
+                          padding: '4px 8px',
+                          borderRadius: '6px'
+                        }}>
+                          v{tech.version}
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                <p style={{
+                        fontSize: '14px',
+                        color: 'rgba(29,29,31,0.7)',
+                        lineHeight: 1.5,
+                        margin: '0 0 16px'
+                      }}>
+                        {tech.description}
+                      </p>
+
+                      {/* Features */}
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                        gap: '8px',
+                        marginBottom: '16px'
+                      }}>
+                        {tech.features.map((feature, featureIndex) => (
+                          <div
+                            key={featureIndex}
+                            style={{
+                              fontSize: '12px',
+                              fontWeight: 500,
+                              color: category.color,
+                              background: `${category.color}10`,
+                              padding: '6px 10px',
+                              borderRadius: '20px',
+                              textAlign: 'center',
+                              border: `1px solid ${category.color}20`
+                            }}
+                          >
+                            {feature}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Use Case */}
+                      <div style={{
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        color: 'rgba(29,29,31,0.8)',
+                        background: 'rgba(29,29,31,0.05)',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        borderLeft: `3px solid ${category.color}`
+                      }}>
+                        <strong>Primena:</strong> {tech.useCase}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Technology Statistics */}
+          <div style={{
+            marginTop: '80px',
+            textAlign: 'center'
+          }}>
+            <h3 style={{
+              fontSize: '28px',
+              fontWeight: 600,
+              color: '#1D1D1F',
+              marginBottom: '48px'
+            }}>
+              Technology Stack Statistics
+            </h3>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '24px',
+              maxWidth: '1000px',
+              margin: '0 auto'
+            }}>
+              {[
+                { metric: '50+', label: 'Technologies', color: '#0071E3' },
+                { metric: '6', label: 'Categories', color: '#34C759' },
+                { metric: '15+', label: 'Frontend Tools', color: '#FF9500' },
+                { metric: '12+', label: 'Backend Frameworks', color: '#AF52DE' },
+                { metric: '8+', label: 'Mobile Platforms', color: '#FF2D55' },
+                { metric: '12+', label: 'Databases', color: '#10B981' },
+                { metric: '8+', label: 'Cloud Services', color: '#FF6B35' },
+                { metric: '10+', label: 'Testing Tools', color: '#8B5CF6' }
+              ].map((stat, i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '16px',
+                    padding: '32px 24px',
+                    textAlign: 'center',
+                    transition: 'all 0.3s ease',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0,0,0,0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  <div style={{
+                    fontSize: '36px',
+                    fontWeight: 700,
+                    color: stat.color,
+                    marginBottom: '8px',
+                    lineHeight: 1
+                  }}>
+                    {stat.metric}
+                  </div>
+                  <div style={{
+                  fontSize: '16px',
+                    fontWeight: 600,
+                  color: '#1D1D1F',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}>
+                    {stat.label}
+                  </div>
+
+                  {/* Background Pattern */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: `radial-gradient(circle at 50% 50%, ${stat.color}08 0%, transparent 70%)`,
+                    pointerEvents: 'none'
+                  }} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Technology Expertise Levels */}
+          <div style={{
+            marginTop: '80px',
+            textAlign: 'center'
+          }}>
+            <h3 style={{
+              fontSize: '28px',
+              fontWeight: 600,
+              color: '#1D1D1F',
+              marginBottom: '48px'
+            }}>
+              Expertise Levels
+            </h3>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '24px',
+              maxWidth: '900px',
+              margin: '0 auto'
+            }}>
+              {[
+                {
+                  level: 'Expert',
+                  description: 'Deep knowledge, complex implementations, architecture design',
+                  technologies: ['React', 'Node.js', 'PostgreSQL', 'AWS', 'Docker', 'Kubernetes'],
+                  color: '#10B981'
+                },
+                {
+                  level: 'Advanced',
+                  description: 'Strong proficiency, independent development, optimization',
+                  technologies: ['Angular', 'Vue.js', 'MongoDB', 'Azure', 'Jenkins', 'Cypress'],
+                  color: '#3B82F6'
+                },
+                {
+                  level: 'Intermediate',
+                  description: 'Good working knowledge, team collaboration, standard implementations',
+                  technologies: ['Next.js', 'Django', 'MySQL', 'GCP', 'Selenium', 'Jest'],
+                  color: '#F59E0B'
+                },
+                {
+                  level: 'Learning',
+                  description: 'Active learning, research, prototype development',
+                  technologies: ['Flutter', 'Redis', 'Terraform', 'GitLab CI', 'Playwright'],
+                  color: '#8B5CF6'
+                }
+              ].map((expertise, i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '16px',
+                    padding: '28px 24px',
+                    textAlign: 'center',
+                    transition: 'all 0.3s ease',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  <div style={{
+                    fontSize: '20px',
+                    fontWeight: 700,
+                    color: expertise.color,
+                    marginBottom: '12px'
+                  }}>
+                    {expertise.level}
+                  </div>
+
+                  <p style={{
+                    fontSize: '14px',
+                    color: 'rgba(29,29,31,0.7)',
+                    lineHeight: 1.5,
+                    marginBottom: '20px'
+                  }}>
+                    {expertise.description}
+                  </p>
+
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '8px',
+                    justifyContent: 'center'
+                  }}>
+                    {expertise.technologies.map((tech, techIndex) => (
+                      <div
+                        key={techIndex}
+                        style={{
+                          fontSize: '11px',
+                  fontWeight: 500,
+                          color: expertise.color,
+                          background: `${expertise.color}15`,
+                          padding: '4px 8px',
+                          borderRadius: '12px',
+                          border: `1px solid ${expertise.color}25`
+                        }}
+                      >
+                        {tech}
+              </div>
+            ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section style={{
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
+        textAlign: 'center'
+      }}>
+        <h2 style={{
+          fontSize: 'clamp(28px, 6vw, 56px)',
+          fontWeight: 600,
+          marginBottom: '24px',
+          color: '#1D1D1F'
+        }}>
+          Ready to Build Something Amazing?
+        </h2>
+        <p style={{
+          fontSize: 'clamp(16px, 3.5vw, 20px)',
+          color: '#6E6E73',
+          marginBottom: '48px'
+        }}>
+          Let's discuss your software development project
+        </p>
+        <Link to="/booking">
+          <Button variant="primary" size="xl" rightIcon={<ArrowRight />}>
+            Book a Consultation
+          </Button>
+        </Link>
+      </section>
+    </div>
+  );
+};
+
+export default SoftwareDevelopmentPage;
+

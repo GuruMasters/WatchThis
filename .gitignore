@@ -128,4 +128,9 @@ yarn-error.log
 *-firebase-adminsdk-*.json
 watchthis-*.json
 
+# Firebase Hosting
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
 consultation-mobile-e2e/artifacts

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
 import { ArrowRight, Check, Code, TrendingUp, Lightbulb, Shield, X, Zap, Sparkles } from 'lucide-react';
-import ProductFlow3D from '../../components/ui/ProductFlow3D';
 
 /**
  * COMPLETE APPLE REDESIGN - Services Overview Page
@@ -21,6 +20,14 @@ const CodeRevealSection: React.FC = () => {
   const [currentLine, setCurrentLine] = useState(0);
   const [sparkles, setSparkles] = useState<Array<{ id: number; x: number; y: number }>>([]);
   const codeRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const codeSnippets = [
     { language: 'NestJS', color: '#E0234E', code: `// Enterprise-grade backend framework
@@ -199,7 +206,7 @@ class UserRepository(
 
   return (
     <section style={{
-      padding: '120px 24px',
+      padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
       background: 'linear-gradient(180deg, #000000 0%, #0a0a0f 100%)',
       position: 'relative',
       overflow: 'hidden'
@@ -236,7 +243,7 @@ class UserRepository(
             <Zap size={16} color="#0071E3" />
             <span style={{
               color: '#0071E3',
-              fontSize: '14px',
+              fontSize: 'clamp(12px, 2.8vw, 14px)',
               fontWeight: 600,
               letterSpacing: '0.5px'
             }}>
@@ -266,7 +273,7 @@ class UserRepository(
           </h2>
 
           <p style={{
-            fontSize: '20px',
+            fontSize: 'clamp(16px, 4vw, 20px)',
             lineHeight: 1.6,
             color: 'rgba(255,255,255,0.7)',
             maxWidth: '700px',
@@ -292,7 +299,7 @@ class UserRepository(
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '20px 24px',
+            padding: 'clamp(16px, 3.5vw, 20px) clamp(16px, 4vw, 24px)',
             borderBottom: '1px solid rgba(255,255,255,0.1)',
             background: 'rgba(0,0,0,0.3)'
           }}>
@@ -306,7 +313,7 @@ class UserRepository(
               alignItems: 'center',
               gap: '8px',
               color: snippet.color,
-              fontSize: '14px',
+              fontSize: 'clamp(12px, 2.8vw, 14px)',
               fontWeight: 600
             }}>
               <Code size={16} />
@@ -320,7 +327,7 @@ class UserRepository(
             style={{
               padding: '32px',
               fontFamily: 'Monaco, "Courier New", monospace',
-              fontSize: '15px',
+              fontSize: 'clamp(13px, 3vw, 15px)',
               lineHeight: '24px',
               color: '#E8E8E8',
               minHeight: '300px',
@@ -365,12 +372,14 @@ class UserRepository(
           {/* Language Tabs */}
           <div style={{
             display: 'flex',
-            gap: '8px',
-            padding: '16px 24px',
+            gap: 'clamp(4px, 1vw, 8px)',
+            padding: 'clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px)',
             borderTop: '1px solid rgba(255,255,255,0.1)',
-            background: 'rgba(0,0,0,0.3)'
+            background: 'rgba(0,0,0,0.3)',
+            flexWrap: 'wrap',
+            overflowX: 'auto'
           }}>
-            {codeSnippets.map((lang, idx) => (
+            {codeSnippets.slice(0, isMobile ? 4 : codeSnippets.length).map((lang, idx) => (
               <button
                 key={idx}
                 onClick={() => {
@@ -379,15 +388,17 @@ class UserRepository(
                   setActiveSnippet(idx);
                 }}
                 style={{
-                  padding: '8px 16px',
-                  borderRadius: '8px',
+                  padding: 'clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 16px)',
+                  borderRadius: 'clamp(6px, 1.5vw, 8px)',
                   border: 'none',
                   background: activeSnippet === idx ? lang.color : 'rgba(255,255,255,0.05)',
                   color: activeSnippet === idx ? '#000' : '#FFF',
-                  fontSize: '13px',
+                  fontSize: 'clamp(10px, 2.5vw, 13px)',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0
                 }}
                 onMouseEnter={(e) => {
                   if (activeSnippet !== idx) {
@@ -514,12 +525,17 @@ export const ServicesPage: React.FC = () => {
   ];
 
     return (
-    <div style={{ background: '#FFFFFF' }}>
+    <div style={{ 
+      background: '#FFFFFF',
+      maxWidth: '100vw',
+      overflowX: 'hidden',
+      minHeight: '100vh'
+    }}>
       {/* ===========================
           HERO SECTION
           =========================== */}
       <section style={{
-        padding: '140px 24px 100px',
+        padding: 'clamp(60px, 15vw, 140px) clamp(16px, 5vw, 24px) clamp(50px, 12vw, 100px)',
         background: '#FFFFFF',
         textAlign: 'center'
       }}>
@@ -575,7 +591,7 @@ export const ServicesPage: React.FC = () => {
           SERVICES GRID
           =========================== */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         background: '#F5F5F7'
       }}>
         <div style={{
@@ -584,7 +600,7 @@ export const ServicesPage: React.FC = () => {
         }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
             gap: '32px'
           }}>
             {services.map((service, index) => (
@@ -629,7 +645,7 @@ export const ServicesPage: React.FC = () => {
 
                   {/* Title */}
                   <h3 style={{
-                    fontSize: '28px',
+                    fontSize: 'clamp(20px, 5vw, 28px)',
                     fontWeight: 600,
                     color: '#1D1D1F',
                     marginBottom: '16px',
@@ -640,7 +656,7 @@ export const ServicesPage: React.FC = () => {
 
                   {/* Description */}
                   <p style={{
-                    fontSize: '17px',
+                    fontSize: 'clamp(14px, 3.3vw, 17px)',
                     lineHeight: 1.6,
                     color: '#6E6E73',
                     marginBottom: '32px',
@@ -663,7 +679,7 @@ export const ServicesPage: React.FC = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '10px',
-                        fontSize: '15px',
+                        fontSize: 'clamp(13px, 3vw, 15px)',
                         color: '#6E6E73'
                       }}>
                         <Check size={16} color={service.color} strokeWidth={2.5} />
@@ -678,7 +694,7 @@ export const ServicesPage: React.FC = () => {
                     alignItems: 'center',
                     gap: '6px',
                     color: service.color,
-                    fontSize: '17px',
+                    fontSize: 'clamp(14px, 3.3vw, 17px)',
                     fontWeight: 500,
                     transition: 'gap 0.2s ease'
                   }}
@@ -703,7 +719,7 @@ export const ServicesPage: React.FC = () => {
           STATS SECTION
           =========================== */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         background: '#FFFFFF',
         borderTop: '1px solid #D2D2D7',
         borderBottom: '1px solid #D2D2D7'
@@ -727,14 +743,14 @@ export const ServicesPage: React.FC = () => {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
             gap: '60px',
             textAlign: 'center'
           }}>
             {stats.map((stat, index) => (
               <div key={index}>
                 <div style={{
-                  fontSize: '64px',
+                  fontSize: 'clamp(36px, 10vw, 64px)',
                   fontWeight: 700,
                   color: '#0071E3',
                   marginBottom: '8px',
@@ -743,7 +759,7 @@ export const ServicesPage: React.FC = () => {
                   {stat.value}
             </div>
                 <div style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(15px, 3.5vw, 18px)',
                   color: '#6E6E73',
                   fontWeight: 500
                 }}>
@@ -759,7 +775,7 @@ export const ServicesPage: React.FC = () => {
           BENEFITS SECTION
           =========================== */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         background: '#F5F5F7'
       }}>
               <div style={{
@@ -782,7 +798,7 @@ export const ServicesPage: React.FC = () => {
               Why Work With Us
             </h2>
             <p style={{
-              fontSize: '20px',
+              fontSize: 'clamp(16px, 4vw, 20px)',
               lineHeight: 1.6,
               color: '#6E6E73',
               maxWidth: '600px',
@@ -794,7 +810,7 @@ export const ServicesPage: React.FC = () => {
 
                     <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))',
             gap: '48px'
           }}>
             {benefits.map((benefit, index) => (
@@ -813,7 +829,7 @@ export const ServicesPage: React.FC = () => {
           </div>
 
                 <h3 style={{
-                  fontSize: '22px',
+                  fontSize: 'clamp(18px, 4.5vw, 22px)',
                   fontWeight: 600,
                   color: '#1D1D1F',
                   marginBottom: '12px',
@@ -823,7 +839,7 @@ export const ServicesPage: React.FC = () => {
                 </h3>
 
                 <p style={{
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   lineHeight: 1.6,
                   color: '#6E6E73'
                 }}>
@@ -839,7 +855,7 @@ export const ServicesPage: React.FC = () => {
           OUR PROCESS - Timeline Section
           =========================== */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         background: '#FFFFFF'
       }}>
         <div style={{
@@ -862,7 +878,7 @@ export const ServicesPage: React.FC = () => {
               Our Development Process
             </h2>
             <p style={{
-              fontSize: '20px',
+              fontSize: 'clamp(16px, 4vw, 20px)',
               lineHeight: 1.6,
               color: '#6E6E73',
               maxWidth: '700px',
@@ -875,7 +891,7 @@ export const ServicesPage: React.FC = () => {
           {/* Process Steps */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
             gap: '48px'
           }}>
             {[
@@ -912,7 +928,7 @@ export const ServicesPage: React.FC = () => {
                 key={index}
                 style={{
                   position: 'relative',
-                  padding: '48px 32px',
+                  padding: 'clamp(28px, 6vw, 48px) clamp(20px, 5vw, 32px)',
                   background: '#F5F5F7',
                   borderRadius: '24px',
                   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -935,7 +951,7 @@ export const ServicesPage: React.FC = () => {
                   position: 'absolute',
                   top: '24px',
                   right: '24px',
-                  fontSize: '80px',
+                  fontSize: 'clamp(40px, 12vw, 80px)',
                   fontWeight: 800,
                   color: `${process.color}15`,
                   lineHeight: 1,
@@ -961,7 +977,7 @@ export const ServicesPage: React.FC = () => {
 
                 {/* Title */}
                 <h3 style={{
-                  fontSize: '28px',
+                  fontSize: 'clamp(20px, 5vw, 28px)',
                   fontWeight: 600,
                   color: '#1D1D1F',
                   marginBottom: '16px',
@@ -972,7 +988,7 @@ export const ServicesPage: React.FC = () => {
 
                 {/* Description */}
                 <p style={{
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   lineHeight: 1.6,
                   color: '#6E6E73',
                   marginBottom: 0
@@ -994,7 +1010,7 @@ export const ServicesPage: React.FC = () => {
           TOOLS & TECHNOLOGIES - WITH REAL LOGOS
           =========================== */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         background: '#FFFFFF'
       }}>
         <div style={{
@@ -1017,7 +1033,7 @@ export const ServicesPage: React.FC = () => {
               Technologies We Master
             </h2>
             <p style={{
-              fontSize: '20px',
+              fontSize: 'clamp(16px, 4vw, 20px)',
               lineHeight: 1.6,
               color: '#6E6E73',
               maxWidth: '700px',
@@ -1029,7 +1045,7 @@ export const ServicesPage: React.FC = () => {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(160px, 100%), 1fr))',
             gap: '32px',
             maxWidth: '1200px',
             margin: '0 auto'
@@ -1053,7 +1069,7 @@ export const ServicesPage: React.FC = () => {
                 style={{
                   background: '#F5F5F7',
                   borderRadius: '24px',
-                  padding: '40px 24px',
+                  padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 24px)',
                   textAlign: 'center',
                   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                   cursor: 'pointer',
@@ -1089,7 +1105,7 @@ export const ServicesPage: React.FC = () => {
                   }}
                 />
                 <div style={{
-                  fontSize: '17px',
+                  fontSize: 'clamp(14px, 3.3vw, 17px)',
                   fontWeight: 600,
                   color: '#1D1D1F',
                   fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
@@ -1106,7 +1122,7 @@ export const ServicesPage: React.FC = () => {
           FEATURE COMPARISON TABLE - COMPACT & STYLED
           =========================== */}
       <section style={{
-        padding: '80px 24px',
+        padding: 'clamp(40px, 8vw, 80px) clamp(16px, 5vw, 24px)',
         background: 'linear-gradient(180deg, #F5F5F7 0%, #FFFFFF 100%)',
         position: 'relative',
         overflow: 'hidden'
@@ -1156,7 +1172,7 @@ export const ServicesPage: React.FC = () => {
               <Check size={14} color="#0071E3" strokeWidth={3} />
               <span style={{
                 color: '#0071E3',
-                fontSize: '13px',
+                fontSize: 'clamp(11px, 2.7vw, 13px)',
                 fontWeight: 600,
                 letterSpacing: '0.5px'
               }}>
@@ -1176,7 +1192,7 @@ export const ServicesPage: React.FC = () => {
               What's Included
             </h2>
             <p style={{
-              fontSize: '18px',
+              fontSize: 'clamp(15px, 3.5vw, 18px)',
               lineHeight: 1.5,
               color: '#6E6E73',
               maxWidth: '600px',
@@ -1186,27 +1202,29 @@ export const ServicesPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Comparison Table - Compact & Styled */}
+          {/* Comparison Table - Compact & Styled with Mobile Scroll */}
           <div style={{
             background: 'rgba(255, 255, 255, 0.8)',
             backdropFilter: 'blur(20px)',
             borderRadius: '20px',
-            overflow: 'hidden',
+            overflow: 'auto',
             boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.1)',
-            border: '1px solid rgba(255,255,255,0.8)'
+            border: '1px solid rgba(255,255,255,0.8)',
+            WebkitOverflowScrolling: 'touch'
           }}>
             {/* Table Header - Compact */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: '1.8fr 1fr 1fr 1fr',
+              minWidth: '600px',
               gap: '16px',
-              padding: '20px 24px',
+              padding: 'clamp(16px, 3.5vw, 20px) clamp(16px, 4vw, 24px)',
               background: 'linear-gradient(135deg, #0071E3 0%, #00A8E8 100%)',
               color: '#FFFFFF',
               position: 'relative'
             }}>
               <div style={{
-                fontSize: '15px',
+                fontSize: 'clamp(13px, 3vw, 15px)',
                 fontWeight: 700,
                 letterSpacing: '0.5px',
                 textTransform: 'uppercase',
@@ -1215,7 +1233,7 @@ export const ServicesPage: React.FC = () => {
                 Feature
               </div>
               <div style={{
-                fontSize: '14px',
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
                 fontWeight: 600,
                 textAlign: 'center',
                 fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
@@ -1223,7 +1241,7 @@ export const ServicesPage: React.FC = () => {
                 Starter
               </div>
               <div style={{
-                fontSize: '14px',
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
                 fontWeight: 600,
                 textAlign: 'center',
                 fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
@@ -1235,7 +1253,7 @@ export const ServicesPage: React.FC = () => {
                   right: '0',
                   background: '#FFD700',
                   color: '#1D1D1F',
-                  fontSize: '10px',
+                  fontSize: 'clamp(9px, 2vw, 10px)',
                   padding: '2px 8px',
                   borderRadius: '8px',
                   fontWeight: 700
@@ -1245,7 +1263,7 @@ export const ServicesPage: React.FC = () => {
                 Professional
               </div>
               <div style={{
-                fontSize: '14px',
+                fontSize: 'clamp(12px, 2.8vw, 14px)',
                 fontWeight: 600,
                 textAlign: 'center',
                 fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
@@ -1270,8 +1288,9 @@ export const ServicesPage: React.FC = () => {
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1.8fr 1fr 1fr 1fr',
+                  minWidth: '600px',
                   gap: '16px',
-                  padding: '16px 24px',
+                  padding: 'clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px)',
                   borderBottom: index < 7 ? '1px solid rgba(0,0,0,0.04)' : 'none',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   cursor: 'pointer',
@@ -1287,7 +1306,7 @@ export const ServicesPage: React.FC = () => {
                 }}
               >
                 <div style={{
-                  fontSize: '15px',
+                  fontSize: 'clamp(13px, 3vw, 15px)',
                   fontWeight: 500,
                   color: '#1D1D1F',
                   fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
@@ -1340,7 +1359,7 @@ export const ServicesPage: React.FC = () => {
                     </div>
                   ) : (
                     <span style={{
-                      fontSize: '13px',
+                      fontSize: 'clamp(11px, 2.7vw, 13px)',
                       color: '#0071E3',
                       fontWeight: 600,
                       padding: '4px 10px',
@@ -1386,7 +1405,7 @@ export const ServicesPage: React.FC = () => {
                     </div>
                   ) : (
                     <span style={{
-                      fontSize: '13px',
+                      fontSize: 'clamp(11px, 2.7vw, 13px)',
                       color: '#0071E3',
                       fontWeight: 600,
                       padding: '4px 10px',
@@ -1432,7 +1451,7 @@ export const ServicesPage: React.FC = () => {
                     </div>
                   ) : (
                     <span style={{
-                      fontSize: '13px',
+                      fontSize: 'clamp(11px, 2.7vw, 13px)',
                       color: '#0071E3',
                       fontWeight: 600,
                       padding: '4px 10px',
@@ -1461,7 +1480,7 @@ export const ServicesPage: React.FC = () => {
               }}>
                 <div>
                   <div style={{
-                    fontSize: '16px',
+                    fontSize: 'clamp(14px, 3.2vw, 16px)',
                     fontWeight: 600,
                     color: '#1D1D1F',
                     marginBottom: '4px',
@@ -1470,7 +1489,7 @@ export const ServicesPage: React.FC = () => {
                     Ready to get started?
                   </div>
                   <div style={{
-                    fontSize: '14px',
+                    fontSize: 'clamp(12px, 2.8vw, 14px)',
                     color: '#6E6E73'
                   }}>
                     Choose the perfect plan for your project
@@ -1504,15 +1523,10 @@ export const ServicesPage: React.FC = () => {
       </section>
 
       {/* ===========================
-          3D PRODUCT FLOW - SOLAR SYSTEM
-          =========================== */}
-      <ProductFlow3D />
-
-      {/* ===========================
           CTA SECTION
           =========================== */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         background: '#FFFFFF',
         textAlign: 'center'
       }}>
@@ -1533,7 +1547,7 @@ export const ServicesPage: React.FC = () => {
           </h2>
 
           <p style={{
-            fontSize: '20px',
+            fontSize: 'clamp(16px, 4vw, 20px)',
             lineHeight: 1.6,
             color: '#6E6E73',
             marginBottom: '48px'
@@ -1564,6 +1578,28 @@ export const ServicesPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Mobile responsive overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          /* Service cards grid - ensure single column on mobile */
+          .services-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+          }
+          
+          /* Comparison table - better mobile layout */
+          .comparison-table {
+            overflow-x: auto !important;
+          }
+          
+          /* Stats grid - 2 columns on mobile */
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 16px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

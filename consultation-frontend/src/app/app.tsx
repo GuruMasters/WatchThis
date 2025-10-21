@@ -15,14 +15,24 @@ const BookingPage = lazy(() => import('../../../libs/consultation/frontend/pages
 
 // Lazy load service detail pages
 const ApplicationDevelopmentPage = lazy(() => import('../../../libs/consultation/frontend/pages/services/application-development-page'));
-const DigitalMarketingPage = lazy(() => import('../../../libs/consultation/frontend/pages/services/digital-marketing-page'));
 const SupportMaintenancePage = lazy(() => import('../../../libs/consultation/frontend/pages/services/support-maintenance-page'));
+
+// Lazy load new service pages (8 categories)
+const SoftwareDevelopmentPage = lazy(() => import('../../../libs/consultation/frontend/pages/services/software-development-page'));
+const DesignBrandingPage = lazy(() => import('../../../libs/consultation/frontend/pages/services/design-branding-page'));
+const DigitalMarketingPage = lazy(() => import('../../../libs/consultation/frontend/pages/services/digital-marketing-page'));
+const BusinessSalesPage = lazy(() => import('../../../libs/consultation/frontend/pages/services/business-sales-page'));
+const CloudInfrastructurePage = lazy(() => import('../../../libs/consultation/frontend/pages/services/cloud-infrastructure-page'));
+const ConsultingStrategyPage = lazy(() => import('../../../libs/consultation/frontend/pages/services/consulting-strategy-page'));
+const DataAnalyticsPage = lazy(() => import('../../../libs/consultation/frontend/pages/services/data-analytics-page').then(m => ({ default: m.DataAnalyticsPage })));
+const SecurityCompliancePage = lazy(() => import('../../../libs/consultation/frontend/pages/services/security-compliance-page'));
 
 // Lazy load legal pages
 const PrivacyPolicyPage = lazy(() => import('../../../libs/consultation/frontend/pages/legal/privacy-policy-page'));
 const TermsOfServicePage = lazy(() => import('../../../libs/consultation/frontend/pages/legal/terms-of-service-page'));
 const CookiePolicyPage = lazy(() => import('../../../libs/consultation/frontend/pages/legal/cookie-policy-page'));
 const GdprPage = lazy(() => import('../../../libs/consultation/frontend/pages/legal/gdpr-page'));
+const PrivacyGdprPage = lazy(() => import('../../../libs/consultation/frontend/pages/legal/privacy-gdpr-page'));
 
 // Global Loading Context
 const LoadingContext = createContext<{
@@ -92,15 +102,24 @@ export function App() {
       <RouteTransitionLoader />
       <GlobalLoader />
       <Suspense fallback={<PageLoader />}>
-        <Routes>
+    <Routes>
           {/* Main routes - Homepage is not lazy loaded (critical) */}
-          <Route path="/" element={<PageLayout><HomePage /></PageLayout>} />
+      <Route path="/" element={<PageLayout><HomePage /></PageLayout>} />
 
           {/* Services routes - Lazy loaded */}
           <Route path="/services" element={<PageLayout><Suspense fallback={<PageLoader />}><ServicesPage /></Suspense></PageLayout>} />
           <Route path="/services/application-development" element={<PageLayout><Suspense fallback={<PageLoader />}><ApplicationDevelopmentPage /></Suspense></PageLayout>} />
-          <Route path="/services/digital-marketing" element={<PageLayout><Suspense fallback={<PageLoader />}><DigitalMarketingPage /></Suspense></PageLayout>} />
           <Route path="/services/support-maintenance" element={<PageLayout><Suspense fallback={<PageLoader />}><SupportMaintenancePage /></Suspense></PageLayout>} />
+
+          {/* New service pages - 8 categories */}
+          <Route path="/services/software-development" element={<PageLayout><Suspense fallback={<PageLoader />}><SoftwareDevelopmentPage /></Suspense></PageLayout>} />
+          <Route path="/services/design-branding" element={<PageLayout><Suspense fallback={<PageLoader />}><DesignBrandingPage /></Suspense></PageLayout>} />
+          <Route path="/services/digital-marketing" element={<PageLayout><Suspense fallback={<PageLoader />}><DigitalMarketingPage /></Suspense></PageLayout>} />
+          <Route path="/services/business-sales" element={<PageLayout><Suspense fallback={<PageLoader />}><BusinessSalesPage /></Suspense></PageLayout>} />
+          <Route path="/services/cloud-infrastructure" element={<PageLayout><Suspense fallback={<PageLoader />}><CloudInfrastructurePage /></Suspense></PageLayout>} />
+          <Route path="/services/consulting-strategy" element={<PageLayout><Suspense fallback={<PageLoader />}><ConsultingStrategyPage /></Suspense></PageLayout>} />
+          <Route path="/services/data-analytics" element={<PageLayout><Suspense fallback={<PageLoader />}><DataAnalyticsPage /></Suspense></PageLayout>} />
+          <Route path="/services/security-compliance" element={<PageLayout><Suspense fallback={<PageLoader />}><SecurityCompliancePage /></Suspense></PageLayout>} />
 
           {/* About route - Lazy loaded */}
           <Route path="/about" element={<PageLayout><Suspense fallback={<PageLoader />}><AboutPage /></Suspense></PageLayout>} />
@@ -111,15 +130,16 @@ export function App() {
           <Route path="/legal/terms-of-service" element={<PageLayout><Suspense fallback={<PageLoader />}><TermsOfServicePage /></Suspense></PageLayout>} />
           <Route path="/legal/cookie-policy" element={<PageLayout><Suspense fallback={<PageLoader />}><CookiePolicyPage /></Suspense></PageLayout>} />
           <Route path="/legal/gdpr" element={<PageLayout><Suspense fallback={<PageLoader />}><GdprPage /></Suspense></PageLayout>} />
+          <Route path="/privacy-gdpr" element={<PageLayout><Suspense fallback={<PageLoader />}><PrivacyGdprPage /></Suspense></PageLayout>} />
 
           {/* Other routes - Lazy loaded */}
           <Route path="/faq" element={<PageLayout><Suspense fallback={<PageLoader />}><FAQPage /></Suspense></PageLayout>} />
           <Route path="/contact" element={<PageLayout><Suspense fallback={<PageLoader />}><ContactPage /></Suspense></PageLayout>} />
           <Route path="/booking" element={<PageLayout><Suspense fallback={<PageLoader />}><BookingPage /></Suspense></PageLayout>} />
-
-          {/* Catch-all route - redirect to home */}
-          <Route path="*" element={<PageLayout><HomePage /></PageLayout>} />
-        </Routes>
+      
+      {/* Catch-all route - redirect to home */}
+      <Route path="*" element={<PageLayout><HomePage /></PageLayout>} />
+    </Routes>
       </Suspense>
     </LoadingProvider>
   );

@@ -11,15 +11,20 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [isTranslating, setIsTranslating] = useState(false);
   
-  const [messages, setMessages] = useState([
+  // Store original English messages for translation
+  const [originalMessages, setOriginalMessages] = useState([
     {
       id: 1,
       type: 'ai',
       content: "Hi! I'm your AI assistant. I can help you with questions about our services, pricing, or getting started. How can I assist you today?",
+      originalContent: "Hi! I'm your AI assistant. I can help you with questions about our services, pricing, or getting started. How can I assist you today?",
       timestamp: new Date()
     }
   ]);
+  
+  const [messages, setMessages] = useState(originalMessages);
 
   // Translation service - koristi backend API
   const translateText = async (text: string, targetLang: string): Promise<string> => {
@@ -59,22 +64,56 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
     }
   };
 
-  // Update initial message when language changes
+  // Translate all messages when language changes
   React.useEffect(() => {
-    const updateInitialMessage = async () => {
-      const baseMessage = "Hi! I'm your AI assistant. I can help you with questions about our services, pricing, or getting started. How can I assist you today?";
-      const translatedMessage = await translateText(baseMessage, selectedLanguage);
-      
-      setMessages([{
-        id: 1,
-        type: 'ai',
-        content: translatedMessage,
-        timestamp: new Date()
-      }]);
+    const translateMessages = async () => {
+      if (selectedLanguage === 'en') {
+        // If English, just use original messages
+        setMessages(originalMessages);
+        return;
+      }
+
+      setIsTranslating(true);
+
+      try {
+        const translatedMessages = await Promise.all(
+          originalMessages.map(async (msg) => {
+            try {
+              const response = await fetch('http://localhost:3088/api/translation/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  text: msg.originalContent || msg.content,
+                  targetLanguage: selectedLanguage,
+                  sourceLanguage: 'en'
+                })
+              });
+
+              if (response.ok) {
+                const result = await response.json();
+                return {
+                  ...msg,
+                  content: result.data?.translatedText || result.translatedText || msg.content,
+                  originalContent: msg.originalContent || msg.content
+                };
+              }
+            } catch (error) {
+              console.error('Translation failed for message:', error);
+            }
+            return msg;
+          })
+        );
+
+        setMessages(translatedMessages);
+      } catch (error) {
+        console.error('Failed to translate messages:', error);
+      } finally {
+        setIsTranslating(false);
+      }
     };
 
-    updateInitialMessage();
-  }, [selectedLanguage]);
+    translateMessages();
+  }, [selectedLanguage, originalMessages]);
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
@@ -88,16 +127,26 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
       id: messages.length + 1,
       type: 'user',
       content: newMessage,
+      originalContent: newMessage, // Store for translation
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
+    setOriginalMessages(prev => [...prev, userMessage]);
     const currentMessage = newMessage;
     setNewMessage('');
     setIsTyping(true);
 
     try {
-      // Poziv backend AI servisa
+      // Pripremi conversation history - isključi inicijalnu AI poruku
+      const conversationHistory = messages
+        .slice(1) // Skip first AI greeting message
+        .map(msg => ({
+          role: msg.type === 'user' ? 'user' as const : 'ai' as const,
+          content: msg.content
+        }));
+
+      // Poziv backend AI servisa sa conversation memory
       const response = await fetch('http://localhost:3088/api/ai/chat', {
         method: 'POST',
         headers: {
@@ -105,7 +154,8 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
         },
         body: JSON.stringify({
           message: currentMessage,
-          language: selectedLanguage
+          language: selectedLanguage,
+          conversationHistory: conversationHistory // 🧠 Conversation Memory!
         })
       });
 
@@ -123,10 +173,17 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
         id: messages.length + 2,
         type: 'ai',
         content: result.data.response,
+        originalContent: result.data.originalResponse || result.data.response, // Store English version
         timestamp: new Date()
       };
 
+      // Update both messages and originalMessages
       setMessages(prev => [...prev, aiMessage]);
+      setOriginalMessages(prev => [...prev, {
+        ...aiMessage,
+        content: result.data.originalResponse || result.data.response,
+        originalContent: result.data.originalResponse || result.data.response
+      }]);
 
       // ✨ AI-Assisted Form Submission
       // Ako AI detektuje da ima dovoljno informacija, automatski submituje formu
@@ -156,9 +213,11 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
               id: messages.length + 3,
               type: 'ai',
               content: `✅ ${submitResult.data.message}\n\n📧 Confirmation has been sent to ${formData.email}`,
+              originalContent: `✅ ${submitResult.data.message}\n\n📧 Confirmation has been sent to ${formData.email}`,
               timestamp: new Date()
             };
             setMessages(prev => [...prev, confirmationMessage]);
+            setOriginalMessages(prev => [...prev, confirmationMessage]);
             
             console.log('✅ AI booking submitted successfully!', submitResult.data);
           } else {
@@ -172,9 +231,11 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
             id: messages.length + 3,
             type: 'ai',
             content: `I've collected your information, but there was an issue submitting it automatically. Please use the contact form below to submit your request manually. Thank you!`,
+            originalContent: `I've collected your information, but there was an issue submitting it automatically. Please use the contact form below to submit your request manually. Thank you!`,
             timestamp: new Date()
           };
           setMessages(prev => [...prev, errorMessage]);
+          setOriginalMessages(prev => [...prev, errorMessage]);
         } finally {
           setIsTyping(false);
         }
@@ -188,10 +249,12 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
         id: messages.length + 2,
         type: 'ai',
         content: "I'm sorry, I'm having trouble connecting right now. Please try again or contact us directly at busines.watch.this@gmail.com",
+        originalContent: "I'm sorry, I'm having trouble connecting right now. Please try again or contact us directly at busines.watch.this@gmail.com",
         timestamp: new Date()
       };
 
       setMessages(prev => [...prev, aiMessage]);
+      setOriginalMessages(prev => [...prev, aiMessage]);
     } finally {
       setIsTyping(false);
     }
@@ -208,12 +271,13 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          background: isExpanded ? 'linear-gradient(135deg, #8B5CF6, #7C3AED)' : 'rgba(139, 92, 246, 0.1)',
+          backgroundImage: isExpanded ? 'linear-gradient(135deg, #8B5CF6, #7C3AED)' : 'none',
+          backgroundColor: isExpanded ? 'transparent' : 'rgba(139, 92, 246, 0.1)',
           color: isExpanded ? '#FFFFFF' : '#8B5CF6',
           border: '2px solid rgba(139, 92, 246, 0.3)',
           borderRadius: '12px',
           padding: '12px 20px',
-          fontSize: '15px',
+          fontSize: 'clamp(13px, 3vw, 15px)',
           fontWeight: 600,
           transition: 'all 0.3s ease',
           boxShadow: isExpanded ? '0 8px 25px rgba(139, 92, 246, 0.3)' : '0 4px 12px rgba(139, 92, 246, 0.1)'
@@ -264,7 +328,7 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
           }}>
           {/* Chat Header */}
           <div style={{
-            padding: '20px 24px',
+            padding: 'clamp(16px, 3.5vw, 20px) clamp(16px, 4vw, 24px)',
             borderBottom: '1px solid #F5F5F7',
             backgroundImage: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
             backgroundColor: 'transparent'
@@ -282,7 +346,7 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
                 <div style={{
                   width: '40px',
                   height: '40px',
-                  background: 'rgba(255, 255, 255, 0.2)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
@@ -296,7 +360,7 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
                 </div>
                 <div>
                   <h3 style={{
-                    fontSize: '16px',
+                    fontSize: 'clamp(14px, 3.2vw, 16px)',
                     fontWeight: 600,
                     color: '#FFFFFF',
                     margin: 0,
@@ -305,7 +369,7 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
                     AI Assistant
                   </h3>
                   <p style={{
-                    fontSize: '13px',
+                    fontSize: 'clamp(11px, 2.7vw, 13px)',
                     color: 'rgba(255, 255, 255, 0.8)',
                     margin: 0
                   }}>
@@ -331,9 +395,9 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
                       padding: '8px 12px',
                       borderRadius: '8px',
                       border: '1px solid rgba(255, 255, 255, 0.3)',
-                      background: 'rgba(255, 255, 255, 0.1)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
                       color: '#FFFFFF',
-                      fontSize: '13px',
+                      fontSize: 'clamp(11px, 2.7vw, 13px)',
                       fontWeight: 500,
                       cursor: 'pointer',
                       outline: 'none',
@@ -366,10 +430,10 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
                     width: '32px',
                     height: '32px',
                     borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.2)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
                     border: '1px solid rgba(255, 255, 255, 0.3)',
                     color: '#FFFFFF',
-                    fontSize: '16px',
+                    fontSize: 'clamp(14px, 3.2vw, 16px)',
                     fontWeight: 600,
                     cursor: 'pointer',
                     display: 'flex',
@@ -415,11 +479,14 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
                   maxWidth: '80%',
                   padding: '12px 16px',
                   borderRadius: '16px',
-                  background: message.type === 'user'
+                  backgroundImage: message.type === 'user'
                     ? 'linear-gradient(135deg, #8B5CF6, #7C3AED)'
+                    : 'none',
+                  backgroundColor: message.type === 'user'
+                    ? 'transparent'
                     : '#F8F9FA',
                   color: message.type === 'user' ? '#FFFFFF' : '#1D1D1F',
-                  fontSize: '14px',
+                  fontSize: 'clamp(12px, 2.8vw, 14px)',
                   lineHeight: 1.5
                 }}>
                   {message.content}
@@ -431,7 +498,7 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
               <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <div style={{
                   padding: '12px 16px',
-                  background: '#F8F9FA',
+                  backgroundColor: '#F8F9FA',
                   borderRadius: '16px',
                   display: 'flex',
                   alignItems: 'center',
@@ -440,21 +507,21 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
                   <div style={{
                     width: '6px',
                     height: '6px',
-                    background: '#6E6E73',
+                    backgroundColor: '#6E6E73',
                     borderRadius: '50%',
                     animation: 'bounce 1.4s infinite ease-in-out'
                   }} />
                   <div style={{
                     width: '6px',
                     height: '6px',
-                    background: '#6E6E73',
+                    backgroundColor: '#6E6E73',
                     borderRadius: '50%',
                     animation: 'bounce 1.4s infinite ease-in-out 0.16s'
                   }} />
                   <div style={{
                     width: '6px',
                     height: '6px',
-                    background: '#6E6E73',
+                    backgroundColor: '#6E6E73',
                     borderRadius: '50%',
                     animation: 'bounce 1.4s infinite ease-in-out 0.32s'
                   }} />
@@ -465,9 +532,9 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
 
           {/* Input */}
           <form onSubmit={handleSendMessage} style={{
-            padding: '20px 24px',
+            padding: 'clamp(16px, 3.5vw, 20px) clamp(16px, 4vw, 24px)',
             borderTop: '1px solid #F5F5F7',
-            background: '#FAFAFA'
+            backgroundColor: '#FAFAFA'
           }}>
             <div style={{
               display: 'flex',
@@ -494,9 +561,9 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
                   padding: '12px 16px',
                   border: '2px solid #E5E5E7',
                   borderRadius: '12px',
-                  fontSize: '15px',
+                  fontSize: 'clamp(13px, 3vw, 15px)',
                   outline: 'none',
-                  background: '#FFFFFF',
+                  backgroundColor: '#FFFFFF',
                   transition: 'border-color 0.2s'
                 }}
                 onFocus={(e) => e.target.style.borderColor = '#8B5CF6'}
@@ -514,7 +581,7 @@ export const AIChatToggle: React.FC<AIChatToggleProps> = () => {
                   backgroundColor: 'transparent',
                   border: 'none',
                   color: '#FFFFFF',
-                  fontSize: '14px',
+                  fontSize: 'clamp(12px, 2.8vw, 14px)',
                   fontWeight: 600,
                   cursor: newMessage.trim() ? 'pointer' : 'not-allowed',
                   opacity: newMessage.trim() ? 1 : 0.6
@@ -591,10 +658,15 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
+    <div style={{ 
+      backgroundColor: '#FFFFFF', 
+      minHeight: '100vh',
+      maxWidth: '100vw',
+      overflowX: 'hidden'
+    }}>
       {/* Hero Section */}
       <section style={{
-        padding: '160px 24px 100px',
+        padding: 'clamp(70px, 16vw, 160px) clamp(16px, 5vw, 24px) clamp(50px, 12vw, 100px)',
         textAlign: 'center',
         backgroundImage: 'linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%)',
         backgroundColor: 'transparent',
@@ -653,7 +725,7 @@ export const ContactPage: React.FC = () => {
               <path d="M22 6l-10 7L2 6" />
             </svg>
             <span style={{
-              fontSize: '14px',
+              fontSize: 'clamp(12px, 2.8vw, 14px)',
             fontWeight: 600,
               color: '#0071E3',
               textTransform: 'uppercase',
@@ -690,20 +762,20 @@ export const ContactPage: React.FC = () => {
 
           {/* Contact Form */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         backgroundColor: '#FFFFFF',
         position: 'relative'
       }}>
-        <div style={{
-          maxWidth: '1400px',
+        <div className="contact-grid" style={{
+          maxWidth: '100%',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '80px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(400px, 100%), 1fr))',
+          gap: 'clamp(32px, 8vw, 80px)',
           alignItems: 'start'
         }}>
           {/* Form Side */}
-          <div style={{
+          <div className="contact-form-card" style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '24px',
             padding: '56px',
@@ -732,7 +804,7 @@ export const ContactPage: React.FC = () => {
               </div>
               <div>
                 <h2 style={{
-                  fontSize: '28px',
+                  fontSize: 'clamp(20px, 5vw, 28px)',
                   fontWeight: 700,
                   color: '#1D1D1F',
                   margin: 0,
@@ -741,7 +813,7 @@ export const ContactPage: React.FC = () => {
                   Send us a Message
                 </h2>
                 <p style={{
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   color: '#6E6E73',
                   margin: 0,
                   marginTop: '4px'
@@ -752,11 +824,11 @@ export const ContactPage: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="form-fields-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '16px' }}>
                 <div>
               <label htmlFor="name" style={{
                 display: 'block',
-                    fontSize: '15px',
+                    fontSize: 'clamp(13px, 3vw, 15px)',
                     fontWeight: 600,
                 color: '#1D1D1F',
                 marginBottom: '8px'
@@ -775,7 +847,7 @@ export const ContactPage: React.FC = () => {
                   padding: '14px 16px',
                   border: '2px solid #E5E5E7',
                   borderRadius: '12px',
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   transition: 'all 0.2s ease',
                   outline: 'none',
                   backgroundColor: '#FFFFFF'
@@ -795,7 +867,7 @@ export const ContactPage: React.FC = () => {
                 <div>
               <label htmlFor="email" style={{
                 display: 'block',
-                    fontSize: '15px',
+                    fontSize: 'clamp(13px, 3vw, 15px)',
                     fontWeight: 600,
                 color: '#1D1D1F',
                 marginBottom: '8px'
@@ -814,7 +886,7 @@ export const ContactPage: React.FC = () => {
                   padding: '14px 16px',
                   border: '2px solid #E5E5E7',
                   borderRadius: '12px',
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   transition: 'all 0.2s ease',
                   outline: 'none',
                   backgroundColor: '#FFFFFF'
@@ -835,7 +907,7 @@ export const ContactPage: React.FC = () => {
               <div>
               <label htmlFor="subject" style={{
                 display: 'block',
-                  fontSize: '15px',
+                  fontSize: 'clamp(13px, 3vw, 15px)',
                   fontWeight: 600,
                 color: '#1D1D1F',
                 marginBottom: '8px'
@@ -853,7 +925,7 @@ export const ContactPage: React.FC = () => {
                   padding: '14px 16px',
                   border: '2px solid #E5E5E7',
                   borderRadius: '12px',
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   transition: 'all 0.2s ease',
                   outline: 'none',
                   backgroundColor: '#FFFFFF'
@@ -873,7 +945,7 @@ export const ContactPage: React.FC = () => {
               <div>
               <label htmlFor="message" style={{
                 display: 'block',
-                  fontSize: '15px',
+                  fontSize: 'clamp(13px, 3vw, 15px)',
                   fontWeight: 600,
                 color: '#1D1D1F',
                 marginBottom: '8px'
@@ -892,7 +964,7 @@ export const ContactPage: React.FC = () => {
                   padding: '14px 16px',
                   border: '2px solid #E5E5E7',
                   borderRadius: '12px',
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   resize: 'vertical',
                   transition: 'all 0.2s ease',
                   outline: 'none',
@@ -919,7 +991,7 @@ export const ContactPage: React.FC = () => {
                 style={{
                   minWidth: '200px',
                   padding: '16px 32px',
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                     fontWeight: 600,
                     borderRadius: '12px'
                 }}
@@ -936,7 +1008,7 @@ export const ContactPage: React.FC = () => {
                   border: '1px solid #10B981',
                   borderRadius: '12px',
                   color: '#065F46',
-                  fontSize: '15px',
+                  fontSize: 'clamp(13px, 3vw, 15px)',
                   textAlign: 'center',
                   fontWeight: 500
                 }}>
@@ -952,7 +1024,7 @@ export const ContactPage: React.FC = () => {
                   border: '1px solid #EF4444',
                   borderRadius: '12px',
                   color: '#991B1B',
-                  fontSize: '15px',
+                  fontSize: 'clamp(13px, 3vw, 15px)',
                   textAlign: 'center',
                   fontWeight: 500
                 }}>
@@ -971,7 +1043,7 @@ export const ContactPage: React.FC = () => {
           }}>
             <div>
               <h3 style={{
-                fontSize: '24px',
+                fontSize: 'clamp(18px, 4.5vw, 24px)',
                 fontWeight: 700,
                 color: '#1D1D1F',
                 marginBottom: '16px',
@@ -1005,10 +1077,10 @@ export const ContactPage: React.FC = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 style={{ fontSize: '18px', fontWeight: 600, color: '#1D1D1F', marginBottom: '4px' }}>
+                    <h4 style={{ fontSize: 'clamp(15px, 3.5vw, 18px)', fontWeight: 600, color: '#1D1D1F', marginBottom: '4px' }}>
                       Quick Response
                     </h4>
-                    <p style={{ fontSize: '15px', color: '#6E6E73', lineHeight: 1.5 }}>
+                    <p style={{ fontSize: 'clamp(13px, 3vw, 15px)', color: '#6E6E73', lineHeight: 1.5 }}>
                       We typically respond to inquiries within one business day.
                     </p>
                   </div>
@@ -1034,10 +1106,10 @@ export const ContactPage: React.FC = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 style={{ fontSize: '18px', fontWeight: 600, color: '#1D1D1F', marginBottom: '4px' }}>
+                    <h4 style={{ fontSize: 'clamp(15px, 3.5vw, 18px)', fontWeight: 600, color: '#1D1D1F', marginBottom: '4px' }}>
                       Expert Team
                     </h4>
-                    <p style={{ fontSize: '15px', color: '#6E6E73', lineHeight: 1.5 }}>
+                    <p style={{ fontSize: 'clamp(13px, 3vw, 15px)', color: '#6E6E73', lineHeight: 1.5 }}>
                       Work with experienced professionals who understand your industry.
                     </p>
                   </div>
@@ -1065,10 +1137,10 @@ export const ContactPage: React.FC = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 style={{ fontSize: '18px', fontWeight: 600, color: '#1D1D1F', marginBottom: '4px' }}>
+                    <h4 style={{ fontSize: 'clamp(15px, 3.5vw, 18px)', fontWeight: 600, color: '#1D1D1F', marginBottom: '4px' }}>
                       Tailored Solutions
                     </h4>
-                    <p style={{ fontSize: '15px', color: '#6E6E73', lineHeight: 1.5 }}>
+                    <p style={{ fontSize: 'clamp(13px, 3vw, 15px)', color: '#6E6E73', lineHeight: 1.5 }}>
                       Every project is customized to meet your specific needs and goals.
                     </p>
                   </div>
@@ -1084,7 +1156,7 @@ export const ContactPage: React.FC = () => {
             textAlign: 'center'
           }}>
               <h4 style={{
-                fontSize: '20px',
+                fontSize: 'clamp(16px, 4vw, 20px)',
                 fontWeight: 600,
                 color: '#1D1D1F',
                 marginBottom: '12px'
@@ -1092,7 +1164,7 @@ export const ContactPage: React.FC = () => {
                 Need Immediate Help?
               </h4>
               <p style={{
-                fontSize: '15px',
+                fontSize: 'clamp(13px, 3vw, 15px)',
                 color: '#6E6E73',
                 marginBottom: '20px'
               }}>
@@ -1120,8 +1192,9 @@ export const ContactPage: React.FC = () => {
         position: 'relative'
       }}>
         <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto'
+          maxWidth: '100%',
+          margin: '0 auto',
+          padding: '0 clamp(16px, 5vw, 24px)'
         }}>
           <div style={{
             textAlign: 'center',
@@ -1138,7 +1211,7 @@ export const ContactPage: React.FC = () => {
               Other Ways to Connect
           </h2>
             <p style={{
-              fontSize: '20px',
+              fontSize: 'clamp(16px, 4vw, 20px)',
               lineHeight: 1.6,
               color: '#6E6E73',
               maxWidth: '600px',
@@ -1150,20 +1223,23 @@ export const ContactPage: React.FC = () => {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-            gap: '32px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+            gap: 'clamp(20px, 5vw, 32px)',
+            justifyItems: 'center'
           }}>
             {/* Email */}
             <div style={{
               backgroundColor: '#FFFFFF',
-              padding: '40px',
+              padding: 'clamp(24px, 5vw, 40px)',
               borderRadius: '20px',
               boxShadow: '0 8px 25px rgba(0, 0, 0, 0.05), 0 4px 10px rgba(0, 0, 0, 0.02)',
               textAlign: 'center',
               border: '1px solid rgba(229, 229, 231, 0.5)',
               transition: 'all 0.3s ease',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              width: '100%',
+              maxWidth: '400px'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-4px)';
@@ -1204,7 +1280,7 @@ export const ContactPage: React.FC = () => {
               </div>
 
               <h3 style={{
-                fontSize: '22px',
+                fontSize: 'clamp(18px, 4.5vw, 22px)',
                 fontWeight: 700,
                 color: '#1D1D1F',
                 marginBottom: '12px',
@@ -1216,7 +1292,7 @@ export const ContactPage: React.FC = () => {
               </h3>
 
               <p style={{
-                fontSize: '17px',
+                fontSize: 'clamp(14px, 3.3vw, 17px)',
                 color: '#6E6E73',
                 marginBottom: '20px',
                 position: 'relative',
@@ -1237,7 +1313,7 @@ export const ContactPage: React.FC = () => {
                     color: '#FFFFFF',
                     textDecoration: 'none',
                     borderRadius: '12px',
-                    fontSize: '16px',
+                    fontSize: 'clamp(14px, 3.2vw, 16px)',
                     fontWeight: 600,
                     transition: 'all 0.2s ease',
                     position: 'relative',
@@ -1259,14 +1335,16 @@ export const ContactPage: React.FC = () => {
             {/* Phone */}
             <div style={{
               backgroundColor: '#FFFFFF',
-              padding: '40px',
+              padding: 'clamp(24px, 5vw, 40px)',
               borderRadius: '20px',
               boxShadow: '0 8px 25px rgba(0, 0, 0, 0.05), 0 4px 10px rgba(0, 0, 0, 0.02)',
               textAlign: 'center',
               border: '1px solid rgba(229, 229, 231, 0.5)',
               transition: 'all 0.3s ease',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              width: '100%',
+              maxWidth: '400px'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-4px)';
@@ -1306,7 +1384,7 @@ export const ContactPage: React.FC = () => {
               </div>
 
               <h3 style={{
-                fontSize: '22px',
+                fontSize: 'clamp(18px, 4.5vw, 22px)',
                 fontWeight: 700,
                 color: '#1D1D1F',
                 marginBottom: '12px',
@@ -1318,7 +1396,7 @@ export const ContactPage: React.FC = () => {
               </h3>
 
               <p style={{
-                fontSize: '17px',
+                fontSize: 'clamp(14px, 3.3vw, 17px)',
                 color: '#6E6E73',
                 marginBottom: '20px',
                 position: 'relative',
@@ -1339,7 +1417,7 @@ export const ContactPage: React.FC = () => {
                     color: '#FFFFFF',
                     textDecoration: 'none',
                     borderRadius: '12px',
-                    fontSize: '16px',
+                    fontSize: 'clamp(14px, 3.2vw, 16px)',
                     fontWeight: 600,
                     transition: 'all 0.2s ease',
                     position: 'relative',
@@ -1361,14 +1439,16 @@ export const ContactPage: React.FC = () => {
             {/* Location */}
             <div style={{
               backgroundColor: '#FFFFFF',
-              padding: '40px',
+              padding: 'clamp(24px, 5vw, 40px)',
               borderRadius: '20px',
               boxShadow: '0 8px 25px rgba(0, 0, 0, 0.05), 0 4px 10px rgba(0, 0, 0, 0.02)',
               textAlign: 'center',
               border: '1px solid rgba(229, 229, 231, 0.5)',
               transition: 'all 0.3s ease',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              width: '100%',
+              maxWidth: '400px'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-4px)';
@@ -1409,7 +1489,7 @@ export const ContactPage: React.FC = () => {
               </div>
 
               <h3 style={{
-                fontSize: '22px',
+                fontSize: 'clamp(18px, 4.5vw, 22px)',
                 fontWeight: 700,
                 color: '#1D1D1F',
                 marginBottom: '12px',
@@ -1421,7 +1501,7 @@ export const ContactPage: React.FC = () => {
               </h3>
 
               <p style={{
-                fontSize: '17px',
+                fontSize: 'clamp(14px, 3.3vw, 17px)',
                 color: '#6E6E73',
                 marginBottom: '20px',
                 position: 'relative',
@@ -1449,6 +1529,29 @@ export const ContactPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Mobile responsive overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          /* Contact grid - single column on mobile */
+          .contact-grid {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
+          
+          /* Form card - better padding on mobile */
+          .contact-form-card {
+            padding: 24px !important;
+            border-radius: 16px !important;
+          }
+          
+          /* Form fields grid - single column on mobile */
+          .form-fields-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

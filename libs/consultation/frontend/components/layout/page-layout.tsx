@@ -224,7 +224,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
       width: '100%',
       background: '#111111',
       borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-      padding: '20px 0'
+      padding: 'clamp(20px, 4vw, 30px) 0'
     }}>
       {/* Watermark */}
       <Watermark text="WatchThis" color="yellow" rotation={-8} opacity={0.04} />
@@ -235,11 +235,11 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
         zIndex: 1,
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: '0 32px'
+        padding: '0 clamp(16px, 4vw, 32px)'
       }}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center gap-6 md:gap-8 lg:gap-10 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center gap-4 md:gap-6 lg:gap-8 w-full">
           {/* Left Section - Logo & Copyright */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-center sm:text-left">
             <div className="flex items-center gap-3">
               <div className="relative w-6 h-6">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FBC314] to-[#EFAF13] rounded-md blur opacity-30"></div>
@@ -247,30 +247,30 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
                   <Sparkles className="w-3 h-3 text-black" />
                 </div>
               </div>
-              <span className="text-base font-semibold text-white">WatchThis</span>
+              <span className="text-sm sm:text-base font-semibold text-white">WatchThis</span>
             </div>
-            <div className="text-sm text-gray-300">
+            <div className="text-xs sm:text-sm text-gray-300">
               © 2024 WatchThis. All rights reserved.
             </div>
           </div>
 
           {/* Newsletter (center column on lg) */}
           <div className="w-full flex justify-center lg:justify-center">
-            <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
+            <form onSubmit={handleNewsletterSubmit} className="flex gap-2 w-full max-w-[400px] px-2 sm:px-0">
               <input
                 type="email"
                 placeholder="Enter email"
                 value={newsletterEmail}
                 onChange={(e) => setNewsletterEmail(e.target.value)}
                 required
-                className="px-3 py-2 text-sm rounded-lg bg-white text-[#111111] placeholder-gray-500 w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px] focus:outline-none focus:ring-2 focus:ring-[#0081C5]"
+                className="px-3 py-2 text-xs sm:text-sm rounded-lg bg-white text-[#111111] placeholder-gray-500 flex-1 min-w-0 focus:outline-none focus:ring-2 focus:ring-[#0081C5]"
               />
               <Button
                 type="submit"
                 size="sm"
                 variant="primary"
                 loading={isSubmittingNewsletter}
-                style={{ borderRadius: '12px' }}
+                style={{ borderRadius: '12px', flexShrink: 0 }}
               >
                 Subscribe
               </Button>
@@ -278,7 +278,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
         </div>
 
           {/* Social Links (right column) */}
-          <div className="w-full flex items-center justify-center md:justify-end gap-3 md:gap-4">
+          <div className="w-full flex items-center justify-center md:justify-end gap-2.5 sm:gap-3 md:gap-4">
             {[
               {
                 icon: (
@@ -286,7 +286,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                   </svg>
                 ),
-                href: 'https://facebook.com',
+                href: '#',
                 gradient: 'from-blue-600 to-blue-700',
                 label: 'Facebook'
               },
@@ -296,7 +296,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
                     <path d="M3 3l18 18M21 3L3 21"/>
                   </svg>
                 ),
-                href: 'https://x.com',
+                href: '#',
                 gradient: 'from-neutral-700 to-black',
                 label: 'X'
               },
@@ -308,7 +308,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
                   </svg>
                 ),
-                href: 'https://instagram.com',
+                href: '#',
                 gradient: 'from-pink-600 to-purple-700',
                 label: 'Instagram'
               },
@@ -319,7 +319,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
                     <path d="m10 15 5-3-5-3z"/>
                   </svg>
                 ),
-                href: 'https://youtube.com',
+                href: '#',
                 gradient: 'from-red-600 to-red-700',
                 label: 'YouTube'
               }
@@ -327,9 +327,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
                 <a
                   key={index}
                   href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                className={`w-7 h-7 rounded-md bg-gradient-to-r ${social.gradient} flex items-center justify-center text-white transition-all duration-200 hover:scale-110`}
+                className={`w-6 h-6 sm:w-7 sm:h-7 rounded-md bg-gradient-to-r ${social.gradient} flex items-center justify-center text-white transition-all duration-200 hover:scale-110`}
                 title={social.label}
                 >
                 {social.icon}
@@ -369,7 +367,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
           }}>
             <div style={{ textAlign: 'center' }}>
               <h1 style={{
-                fontSize: '3rem',
+                fontSize: 'clamp(2rem, 8vw, 3rem)',
                 fontWeight: '900',
                 color: '#111111',
                 marginBottom: '16px',
@@ -379,7 +377,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
               </h1>
               {description && (
                 <p style={{
-                  fontSize: '1.25rem',
+                  fontSize: 'clamp(1rem, 4vw, 1.25rem)',
                   color: '#6b7280',
                   maxWidth: '768px',
                   margin: '0 auto',

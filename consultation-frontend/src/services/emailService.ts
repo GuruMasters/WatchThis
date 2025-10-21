@@ -67,58 +67,74 @@ class EmailService {
     }
   }
 
-  // Send confirmation email to user via NestJS Backend (primary)
+  // Send confirmation email to user (no-reply style)
   async sendConfirmationEmail(formData: any): Promise<boolean> {
     try {
-      console.log('Sending confirmation email via NestJS backend...');
+      console.log('🔔 Sending confirmation email to user:', formData.email);
+      console.log('📋 Full form data:', formData);
       
-      const response = await fetch('http://localhost:3088/email/confirmation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          name: `${formData.firstName} ${formData.lastName}`,
-        }),
+      // Template parameters for user confirmation
+      const templateParams = {
+        to_email: formData.email, // CRITICAL: User's email address
+        to_name: `${formData.firstName} ${formData.lastName}`,
+        from_name: 'WatchThis Team',
+        from_email: EMAIL_CONFIG.NOREPLY_EMAIL,
+        reply_to: EMAIL_CONFIG.CONSULTATION_EMAIL,
+        
+        // Booking details
+        service: formData.service || 'General Consultation',
+        preferred_date: formData.preferredDate || 'Not specified',
+        preferred_time: formData.preferredTime || 'Not specified',
+        company: formData.company || 'Not provided',
+        phone: formData.phone || 'Not provided',
+        
+        // Main message for confirmation
+        message: `Thank you for scheduling a consultation with WatchThis!
+
+We have received your request and will get back to you within 24 hours.
+
+Your Booking Details:
+━━━━━━━━━━━━━━━━━━
+• Service: ${formData.service || 'General Consultation'}
+• Date: ${formData.preferredDate || 'Not specified'}
+• Time: ${formData.preferredTime || 'Not specified'}
+• Email: ${formData.email}
+• Phone: ${formData.phone || 'Not provided'}
+
+Questions? Contact us at: ${EMAIL_CONFIG.CONSULTATION_EMAIL}
+
+Best regards,
+The WatchThis Team`,
+        
+        // Additional fields
+        subject: 'Consultation Request Received - WatchThis',
+        user_message: formData.message || 'No message provided'
+      };
+
+      console.log('📧 Confirmation email params:', {
+        to: templateParams.to_email,
+        from: templateParams.from_name,
+        service: templateParams.service,
+        date: templateParams.preferred_date
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      // Send using emailjs.send with explicit template params
+      const result = await emailjs.send(
+        EMAIL_CONFIG.SERVICE_ID,
+        EMAIL_CONFIG.CONFIRMATION_TEMPLATE_ID,
+        templateParams,
+        EMAIL_CONFIG.PUBLIC_KEY
+      );
 
-      const result = await response.json();
-      console.log('Confirmation email sent successfully via backend:', result);
+      console.log('✅ Confirmation email sent successfully!', result);
+      console.log(`✉️  Email should arrive at: ${formData.email}`);
       return true;
-    } catch (error) {
-      console.error('Failed to send confirmation email via backend:', error);
-      
-      // Fallback: try EmailJS
-      try {
-        console.log('Trying EmailJS as fallback...');
-        
-        const emailData = {
-          to_email: formData.email,
-          from_name: 'WatchThis Pro Team',
-          to_name: `${formData.firstName} ${formData.lastName}`,
-          service: formData.service || 'General Inquiry',
-          preferred_date: formData.preferredDate || 'Not specified',
-          preferred_time: formData.preferredTime || 'Not specified',
-          message: 'Thank you for scheduling a consultation with us. We will contact you soon to confirm the details.',
-        };
-
-        const result = await emailjs.send(
-          EMAIL_CONFIG.SERVICE_ID,
-          EMAIL_CONFIG.TEMPLATE_ID, // Use the same template for confirmation
-          emailData
-        );
-
-        console.log('Confirmation email sent successfully via EmailJS:', result);
-        return true;
-      } catch (emailjsError) {
-        console.error('Failed to send confirmation email via EmailJS:', emailjsError);
-        return false;
-      }
+    } catch (error: any) {
+      console.error('❌ Failed to send confirmation email!', error);
+      console.error('Error status:', error?.status);
+      console.error('Error text:', error?.text);
+      // Don't block the main flow if confirmation email fails
+      return false;
     }
   }
 
@@ -148,10 +164,73 @@ class EmailService {
       );
 
       console.log('Contact email sent successfully via EmailJS:', result);
+
+      // Send confirmation email to user
+      await this.sendContactConfirmationEmail(formData);
+
       return true;
     } catch (error) {
       console.error('Failed to send contact email via EmailJS:', error);
       alert('Failed to send email. Please try again or contact us directly at ' + EMAIL_CONFIG.CONSULTATION_EMAIL);
+      return false;
+    }
+  }
+
+  // Send confirmation email for contact form
+  async sendContactConfirmationEmail(formData: any): Promise<boolean> {
+    try {
+      console.log('🔔 Sending contact confirmation email to user:', formData.email);
+      
+      const emailData = {
+        to_email: formData.email,
+        to_name: `${formData.firstName} ${formData.lastName}`,
+        from_name: 'WatchThis Team',
+        from_email: 'noreply@watchthis.com',
+        reply_to: EMAIL_CONFIG.CONSULTATION_EMAIL,
+        
+        subject: formData.subject || 'General Inquiry',
+        message: `
+Thank you for contacting WatchThis!
+
+We have received your message and our team will respond within 24 hours.
+
+Your Message:
+${formData.message}
+
+Contact Information:
+- Email: ${formData.email}
+- Phone: ${formData.phone || 'Not provided'}
+
+Our support team will review your message and get back to you shortly.
+
+Questions? Contact us at: ${EMAIL_CONFIG.CONSULTATION_EMAIL}
+
+Best regards,
+The WatchThis Team
+        `.trim(),
+        
+        phone: formData.phone || 'Not provided',
+        user_message: formData.message
+      };
+
+      console.log('📧 Sending contact confirmation with data:', {
+        to: emailData.to_email,
+        name: emailData.to_name,
+        subject: emailData.subject
+      });
+
+      const result = await emailjs.send(
+        EMAIL_CONFIG.SERVICE_ID,
+        EMAIL_CONFIG.TEMPLATE_ID, // Use same template
+        emailData,
+        EMAIL_CONFIG.PUBLIC_KEY
+      );
+
+      console.log('✅ Contact confirmation email sent successfully:', result);
+      return true;
+    } catch (error) {
+      console.error('❌ Failed to send contact confirmation email:', error);
+      console.error('Error details:', error);
       return false;
     }
   }

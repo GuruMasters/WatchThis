@@ -140,12 +140,17 @@ export const FAQPage: React.FC = () => {
   const categories = [...new Set(faqs.map(faq => faq.category))];
 
   return (
-    <div style={{ backgroundColor: '#FFFFFF' }}>
+    <div style={{ 
+      backgroundColor: '#FFFFFF',
+      maxWidth: '100vw',
+      overflowX: 'hidden',
+      minHeight: '100vh'
+    }}>
       {/* ===========================
           HERO SECTION
           =========================== */}
       <section style={{
-        padding: '140px 24px 80px',
+        padding: 'clamp(60px, 15vw, 140px) clamp(16px, 5vw, 24px) clamp(40px, 8vw, 80px)',
         backgroundColor: '#F5F5F7',
         textAlign: 'center'
       }}>
@@ -207,7 +212,7 @@ export const FAQPage: React.FC = () => {
               style={{
                 width: '100%',
                 padding: '16px 20px 16px 52px',
-                fontSize: '17px',
+                fontSize: 'clamp(14px, 3.3vw, 17px)',
                 border: '1px solid #D2D2D7',
                 borderRadius: '12px',
                 outline: 'none',
@@ -233,7 +238,7 @@ export const FAQPage: React.FC = () => {
           FAQ CATEGORIES
           =========================== */}
       <section style={{
-        padding: '80px 24px'
+        padding: 'clamp(40px, 8vw, 80px) clamp(16px, 5vw, 24px)'
       }}>
         <div style={{
           maxWidth: '900px',
@@ -247,7 +252,7 @@ export const FAQPage: React.FC = () => {
             return (
               <div key={category} style={{ marginBottom: '64px' }}>
           <h2 style={{
-                  fontSize: '32px',
+                  fontSize: 'clamp(24px, 6vw, 32px)',
                   fontWeight: 600,
                   color: '#1D1D1F',
                   marginBottom: '32px',
@@ -300,7 +305,7 @@ export const FAQPage: React.FC = () => {
                           }}
                         >
                           <span style={{
-                            fontSize: '18px',
+                            fontSize: 'clamp(15px, 3.5vw, 18px)',
                             fontWeight: 500,
                             color: '#1D1D1F',
                             flex: 1
@@ -322,7 +327,7 @@ export const FAQPage: React.FC = () => {
                             borderTop: '1px solid #F5F5F7'
                           }}>
                             <p style={{
-                              fontSize: '16px',
+                              fontSize: 'clamp(14px, 3.2vw, 16px)',
                               lineHeight: 1.6,
                               color: '#6E6E73',
                               marginTop: '16px'
@@ -342,10 +347,10 @@ export const FAQPage: React.FC = () => {
           {filteredFAQs.length === 0 && (
             <div style={{
               textAlign: 'center',
-              padding: '80px 24px'
+              padding: 'clamp(40px, 8vw, 80px) clamp(16px, 5vw, 24px)'
             }}>
               <p style={{
-                fontSize: '18px',
+                fontSize: 'clamp(15px, 3.5vw, 18px)',
                 color: '#86868B'
               }}>
                 No questions found matching "{searchTerm}"
@@ -359,7 +364,7 @@ export const FAQPage: React.FC = () => {
           CTA SECTION
           =========================== */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         backgroundColor: '#F5F5F7',
         textAlign: 'center'
       }}>
@@ -380,7 +385,7 @@ export const FAQPage: React.FC = () => {
           </h2>
 
           <p style={{
-            fontSize: '18px',
+            fontSize: 'clamp(15px, 3.5vw, 18px)',
             lineHeight: 1.6,
             color: '#6E6E73',
             marginBottom: '24px'
@@ -398,6 +403,26 @@ export const FAQPage: React.FC = () => {
           </Link>
         </div>
       </section>
+
+      {/* Mobile responsive overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          /* Better spacing on mobile */
+          .faq-accordion-item {
+            border-radius: 12px !important;
+          }
+          
+          /* Ensure buttons don't overflow */
+          button {
+            word-wrap: break-word;
+          }
+          
+          /* Better touch targets */
+          .faq-question-button {
+            padding: 20px 16px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

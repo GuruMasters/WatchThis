@@ -17,7 +17,6 @@ import {
   StarIcon,
   HandshakeIcon
 } from '../../components/icons';
-import GlobeWebGL from '../../components/ui/GlobeWebGL';
 
 /**
  * COMPLETE APPLE REDESIGN - About Page
@@ -44,10 +43,15 @@ export const AboutPage: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#FFFFFF' }}>
+    <div style={{ 
+      backgroundColor: '#FFFFFF',
+      maxWidth: '100vw',
+      overflowX: 'hidden',
+      minHeight: '100vh'
+    }}>
       {/* Hero Section */}
       <section style={{
-        padding: '140px 24px 100px',
+        padding: 'clamp(60px, 15vw, 140px) clamp(16px, 5vw, 24px) clamp(50px, 12vw, 100px)',
         textAlign: 'center',
         backgroundImage: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
         backgroundColor: 'transparent',
@@ -71,23 +75,25 @@ export const AboutPage: React.FC = () => {
           zIndex: 1
         }}>
           <h1 style={{
-            fontSize: 'clamp(48px, 7vw, 80px)',
+            fontSize: 'clamp(32px, 8vw, 80px)',
             fontWeight: 600,
-            lineHeight: 1.05,
+            lineHeight: 1.1,
             letterSpacing: '-0.02em',
             color: '#1D1D1F',
-            marginBottom: '32px',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+            marginBottom: 'clamp(20px, 5vw, 32px)',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+            padding: '0 16px'
           }}>
             About WatchThis
           </h1>
 
           <p style={{
-            fontSize: 'clamp(20px, 2.5vw, 24px)',
+            fontSize: 'clamp(16px, 3.5vw, 24px)',
             lineHeight: 1.6,
             color: '#4D4D50',
-            marginBottom: '48px',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
+            marginBottom: 'clamp(32px, 6vw, 48px)',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
+            padding: '0 16px'
           }}>
             Empowering businesses with innovative digital solutions since 2014. We transform ideas into successful products through expert consultation and cutting-edge technology.
           </p>
@@ -95,10 +101,11 @@ export const AboutPage: React.FC = () => {
           {/* Company badges */}
           <div style={{
             display: 'flex',
-            gap: '16px',
+            gap: 'clamp(10px, 2.5vw, 16px)',
             justifyContent: 'center',
             flexWrap: 'wrap',
-            marginBottom: '48px'
+            marginBottom: 'clamp(32px, 6vw, 48px)',
+            padding: '0 16px'
           }}>
             {[
               { icon: <RocketIcon size={18} />, label: 'Innovation First' },
@@ -111,12 +118,12 @@ export const AboutPage: React.FC = () => {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 20px',
+                  gap: 'clamp(6px, 1.5vw, 8px)',
+                  padding: 'clamp(10px, 2.5vw, 12px) clamp(16px, 3.5vw, 20px)',
                   borderRadius: 9999,
                   background: 'linear-gradient(135deg, rgba(255,255,255,0.8), rgba(248,250,252,0.8))',
                   border: '1px solid rgba(0,113,227,0.15)',
-                  fontSize: '15px',
+                  fontSize: 'clamp(13px, 3vw, 15px)',
                   color: '#0071E3',
                   fontWeight: 600,
                   boxShadow: '0 4px 12px rgba(0,113,227,0.08)',
@@ -133,7 +140,7 @@ export const AboutPage: React.FC = () => {
 
       {/* Mission & Vision Section */}
       <section style={{
-        padding: '120px 24px',
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
         backgroundColor: '#FFFFFF',
         position: 'relative'
       }}>
@@ -144,8 +151,8 @@ export const AboutPage: React.FC = () => {
         }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-            gap: '80px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+            gap: 'clamp(32px, 8vw, 80px)',
             alignItems: 'center'
           }}>
             {/* Mission Card */}
@@ -154,7 +161,7 @@ export const AboutPage: React.FC = () => {
               backgroundImage: 'linear-gradient(145deg, rgba(0,113,227,0.05), rgba(0,136,255,0.05))',
               backgroundColor: 'transparent',
               borderRadius: 24,
-              padding: '48px 40px',
+                  padding: 'clamp(28px, 6vw, 48px) clamp(24px, 5vw, 40px)',
               boxShadow: '0 20px 40px rgba(0,113,227,0.08), inset 0 1px 0 rgba(255,255,255,0.8)',
               border: '1px solid rgba(0,113,227,0.12)',
               overflow: 'hidden'
@@ -214,7 +221,7 @@ export const AboutPage: React.FC = () => {
                 </h2>
 
                 <p style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(15px, 3.5vw, 18px)',
                   lineHeight: 1.7,
                   color: '#4D4D50',
                   marginBottom: '24px',
@@ -224,7 +231,7 @@ export const AboutPage: React.FC = () => {
                 </p>
 
                 <p style={{
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   lineHeight: 1.6,
                   color: '#6E6E73',
                   fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
@@ -240,7 +247,7 @@ export const AboutPage: React.FC = () => {
               backgroundImage: 'linear-gradient(145deg, rgba(52,199,89,0.05), rgba(48,209,88,0.05))',
               backgroundColor: 'transparent',
               borderRadius: 24,
-              padding: '48px 40px',
+                  padding: 'clamp(28px, 6vw, 48px) clamp(24px, 5vw, 40px)',
               boxShadow: '0 20px 40px rgba(52,199,89,0.08), inset 0 1px 0 rgba(255,255,255,0.8)',
               border: '1px solid rgba(52,199,89,0.12)',
               overflow: 'hidden'
@@ -299,7 +306,7 @@ export const AboutPage: React.FC = () => {
                 </h2>
 
                 <p style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(15px, 3.5vw, 18px)',
                   lineHeight: 1.7,
                   color: '#4D4D50',
                   marginBottom: '24px',
@@ -309,7 +316,7 @@ export const AboutPage: React.FC = () => {
                 </p>
 
                 <p style={{
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   lineHeight: 1.6,
                   color: '#6E6E73',
                   fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
@@ -323,12 +330,15 @@ export const AboutPage: React.FC = () => {
           {/* Company Values Section */}
           <div style={{
             marginTop: '80px',
-            textAlign: 'center'
+            textAlign: 'center',
+            background: '#111111',
+            padding: 'clamp(50px, 12vw, 100px) clamp(16px, 5vw, 24px)',
+            borderRadius: 'clamp(20px, 5vw, 32px)'
           }}>
             <h3 style={{
               fontSize: 'clamp(24px, 3vw, 32px)',
               fontWeight: 600,
-              color: '#1D1D1F',
+              color: '#FFFFFF',
               marginBottom: '48px',
               fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
             }}>
@@ -337,7 +347,7 @@ export const AboutPage: React.FC = () => {
 
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))',
               gap: '32px',
               maxWidth: '1000px',
               margin: '0 auto'
@@ -371,45 +381,51 @@ export const AboutPage: React.FC = () => {
                 <div
                   key={index}
                   style={{
-                    background: 'linear-gradient(145deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9))',
+                    background: '#1C1C1E',
                     borderRadius: 20,
-                    padding: '32px 24px',
+                    padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 24px)',
                     textAlign: 'center',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    boxShadow: '0 8px 25px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
+                    border: `2px solid ${value.color}`,
+                    boxShadow: `0 0 20px ${value.color}40, inset 0 0 10px ${value.color}20`,
                     transition: 'all 250ms ease',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    position: 'relative',
+                    overflow: 'hidden'
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)';
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = `0 16px 35px ${value.color}25, inset 0 1px 0 rgba(255,255,255,0.9)`;
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 30px ${value.color}60, inset 0 0 15px ${value.color}30`;
+                    (e.currentTarget as HTMLDivElement).style.border = `2px solid ${value.color}`;
                   }}
                   onMouseLeave={(e) => {
                     (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 25px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)';
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 20px ${value.color}40, inset 0 0 10px ${value.color}20`;
+                    (e.currentTarget as HTMLDivElement).style.border = `2px solid ${value.color}`;
                   }}
                 >
                   <div style={{
-                    fontSize: '32px',
+                    fontSize: 'clamp(24px, 6vw, 32px)',
                     marginBottom: '16px'
                   }}>
                     {value.icon}
                   </div>
                   <h4 style={{
-                    fontSize: '20px',
+                    fontSize: 'clamp(16px, 4vw, 20px)',
                     fontWeight: 700,
-                    color: '#1D1D1F',
+                    color: '#FFFFFF',
                     marginBottom: '12px',
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+                    textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)'
                   }}>
                     {value.title}
                   </h4>
                   <p style={{
-                    fontSize: '15px',
+                    fontSize: 'clamp(13px, 3vw, 15px)',
                     lineHeight: 1.6,
-                    color: '#4D4D50',
+                    color: '#A1A1A6',
                     margin: 0,
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
                   }}>
                     {value.desc}
                   </p>
@@ -422,7 +438,7 @@ export const AboutPage: React.FC = () => {
 
       {/* Leadership Section */}
       <section style={{
-        padding: '120px 24px',
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
         backgroundImage: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
         backgroundColor: 'transparent',
         position: 'relative'
@@ -488,7 +504,7 @@ export const AboutPage: React.FC = () => {
               Meet Our Founder
             </h2>
             <p style={{
-              fontSize: '20px',
+              fontSize: 'clamp(16px, 4vw, 20px)',
               color: '#4D4D50',
               margin: '0 auto',
               maxWidth: '600px',
@@ -502,24 +518,27 @@ export const AboutPage: React.FC = () => {
           {/* Representative Profile */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '300px 1fr',
-            gap: '64px',
-            alignItems: 'center',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+            gap: 'clamp(32px, 8vw, 64px)',
+            alignItems: 'start',
             maxWidth: '1000px',
             margin: '0 auto'
           }}>
             {/* Profile Image */}
             <div style={{
               position: 'relative',
-              width: '300px',
-              height: '400px',
-              borderRadius: 24,
+              width: '100%',
+              maxWidth: 'clamp(250px, 80vw, 300px)',
+              height: 'auto',
+              aspectRatio: '3/4',
+              borderRadius: 'clamp(16px, 4vw, 24px)',
               overflow: 'hidden',
               boxShadow: '0 25px 50px rgba(0,113,227,0.15), 0 10px 25px rgba(0,0,0,0.08)',
               background: 'linear-gradient(145deg, #0071E3, #0088FF)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              margin: '0 auto'
             }}>
               {/* Ilija's Profile Photo */}
               <img
@@ -573,7 +592,7 @@ export const AboutPage: React.FC = () => {
 
               <div style={{ position: 'relative', zIndex: 1 }}>
                 <h3 style={{
-                  fontSize: '32px',
+                  fontSize: 'clamp(24px, 6vw, 32px)',
                   fontWeight: 800,
                   color: '#1D1D1F',
                   marginBottom: '8px',
@@ -583,7 +602,7 @@ export const AboutPage: React.FC = () => {
                 </h3>
 
                 <p style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(15px, 3.5vw, 18px)',
                   color: '#0071E3',
                   fontWeight: 600,
                   marginBottom: '24px',
@@ -593,7 +612,7 @@ export const AboutPage: React.FC = () => {
                 </p>
 
                 <div style={{
-                  fontSize: '17px',
+                  fontSize: 'clamp(14px, 3.3vw, 17px)',
                   lineHeight: 1.7,
                   color: '#4D4D50',
                   marginBottom: '32px',
@@ -615,8 +634,8 @@ export const AboutPage: React.FC = () => {
                 {/* Key achievements */}
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                  gap: '16px'
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(140px, 100%), 1fr))',
+                  gap: 'clamp(12px, 3vw, 16px)'
                 }}>
                   {[
                     { label: '15+ Years', desc: 'Industry Experience' },
@@ -635,7 +654,7 @@ export const AboutPage: React.FC = () => {
                       }}
                     >
                       <div style={{
-                        fontSize: '20px',
+                        fontSize: 'clamp(16px, 4vw, 20px)',
                         fontWeight: 800,
                         color: '#0071E3',
                         marginBottom: '4px',
@@ -644,7 +663,7 @@ export const AboutPage: React.FC = () => {
                         {achievement.label}
                       </div>
                       <div style={{
-                        fontSize: '13px',
+                        fontSize: 'clamp(11px, 2.7vw, 13px)',
                         color: '#4D4D50',
                         fontWeight: 500,
                         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
@@ -662,9 +681,9 @@ export const AboutPage: React.FC = () => {
 
       {/* Stats Section */}
       <section style={{
-        padding: '100px 24px',
-        background: '#FFFFFF',
-        borderTop: '1px solid rgba(0,113,227,0.08)'
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
+        background: '#111111',
+        borderTop: '1px solid #2C2C2E'
       }}>
         <div style={{
           maxWidth: '1200px',
@@ -675,17 +694,18 @@ export const AboutPage: React.FC = () => {
             fontWeight: 600,
             lineHeight: 1.2,
             letterSpacing: '-0.01em',
-            color: '#1D1D1F',
+            color: '#FFFFFF',
             textAlign: 'center',
             marginBottom: '64px',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+            textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)'
           }}>
             By the Numbers
           </h2>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
             gap: '32px'
           }}>
             {[
@@ -695,37 +715,39 @@ export const AboutPage: React.FC = () => {
               { value: '98%', label: 'Client Satisfaction' }
             ].map((stat, index) => (
               <div key={index} style={{
-                background: 'linear-gradient(145deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9))',
+                background: '#1C1C1E',
                 borderRadius: 20,
-                padding: '40px 24px',
+                padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 24px)',
                 textAlign: 'center',
-                border: '1px solid rgba(255,255,255,0.2)',
-                boxShadow: '0 8px 25px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
+                border: '2px solid #0071E3',
+                boxShadow: '0 0 20px rgba(0, 113, 227, 0.3), inset 0 0 10px rgba(0, 113, 227, 0.1)',
                 transition: 'all 250ms ease',
                 cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)';
-                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 16px 35px rgba(0,113,227,0.12), inset 0 1px 0 rgba(255,255,255,0.9)';
+                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 0 30px rgba(0, 113, 227, 0.5), inset 0 0 15px rgba(0, 113, 227, 0.2)';
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
-                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 25px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)';
+                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 0 20px rgba(0, 113, 227, 0.3), inset 0 0 10px rgba(0, 113, 227, 0.1)';
               }}>
                 <div style={{
-                  fontSize: '56px',
+                  fontSize: 'clamp(32px, 8vw, 56px)',
                   fontWeight: 800,
                   color: '#0071E3',
                   marginBottom: '12px',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+                  textShadow: '0 0 10px rgba(0, 113, 227, 0.3)'
                 }}>
                   {stat.value}
                 </div>
                 <div style={{
-                  fontSize: '16px',
-                  color: '#4D4D50',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
+                  color: '#A1A1A6',
                   fontWeight: 600,
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
+                  textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)'
                 }}>
                   {stat.label}
                 </div>
@@ -737,7 +759,7 @@ export const AboutPage: React.FC = () => {
 
       {/* Team Section */}
       <section style={{
-        padding: '120px 24px',
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
         background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
         position: 'relative'
       }}>
@@ -802,7 +824,7 @@ export const AboutPage: React.FC = () => {
               Meet the Experts Behind Our Success
             </h2>
             <p style={{
-              fontSize: '20px',
+              fontSize: 'clamp(16px, 4vw, 20px)',
               color: '#4D4D50',
               margin: '0 auto',
               maxWidth: '600px',
@@ -814,11 +836,11 @@ export const AboutPage: React.FC = () => {
           </div>
 
           {/* Department Sections */}
-          <div style={{
+          <div className="team-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '24px',
-            marginBottom: '48px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+            gap: 'clamp(16px, 4vw, 24px)',
+            marginBottom: 'clamp(32px, 8vw, 48px)'
           }}>
             {[
               {
@@ -910,8 +932,8 @@ export const AboutPage: React.FC = () => {
                 key={deptIndex}
                 style={{
                   background: 'linear-gradient(145deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9))',
-                  borderRadius: 24,
-                  padding: '32px',
+                  borderRadius: 'clamp(16px, 4vw, 24px)',
+                  padding: 'clamp(20px, 5vw, 32px)',
                   border: '1px solid rgba(255,255,255,0.2)',
                   boxShadow: '0 8px 25px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
                   transition: 'all 300ms ease',
@@ -947,13 +969,13 @@ export const AboutPage: React.FC = () => {
                     marginBottom: '16px'
                   }}>
                     <div style={{
-                      fontSize: '28px'
+                      fontSize: 'clamp(20px, 5vw, 28px)'
                     }}>
                       {dept.icon}
                     </div>
                     <div>
                       <h3 style={{
-                        fontSize: '20px',
+                        fontSize: 'clamp(16px, 4vw, 20px)',
                         fontWeight: 700,
                         color: '#1D1D1F',
                         margin: 0,
@@ -962,7 +984,7 @@ export const AboutPage: React.FC = () => {
                         {dept.name}
                       </h3>
                       <p style={{
-                        fontSize: '14px',
+                        fontSize: 'clamp(12px, 2.8vw, 14px)',
                         color: dept.color,
                         fontWeight: 600,
                         margin: 0,
@@ -974,7 +996,7 @@ export const AboutPage: React.FC = () => {
                   </div>
 
                   <p style={{
-                    fontSize: '15px',
+                    fontSize: 'clamp(13px, 3vw, 15px)',
                     lineHeight: 1.6,
                     color: '#4D4D50',
                     marginBottom: '24px',
@@ -1000,7 +1022,7 @@ export const AboutPage: React.FC = () => {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '14px',
+                          fontSize: 'clamp(12px, 2.8vw, 14px)',
                           fontWeight: 700,
                           color: '#FFFFFF',
                           border: '2px solid rgba(255,255,255,0.8)',
@@ -1070,13 +1092,134 @@ export const AboutPage: React.FC = () => {
                   >
                     {activeTeam === dept.name ? 'Hide Team' : `View ${dept.name} Team`}
                   </button>
+
+                  {/* Expanded Team View - ODMAH ISPOD SVOJE KARTICE */}
+                  {activeTeam === dept.name && (
+                    <div style={{
+                      marginTop: '24px',
+                      paddingTop: '24px',
+                      borderTop: `2px solid ${dept.color}20`
+                    }}>
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+                        gap: '20px'
+                      }}>
+                        {dept.members.map((member, memberIndex) => (
+                          <div
+                            key={memberIndex}
+                            style={{
+                              background: 'rgba(255,255,255,0.6)',
+                              borderRadius: 16,
+                              padding: '20px',
+                              border: '1px solid rgba(0,0,0,0.05)',
+                              boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                              transition: 'all 250ms ease'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.transform = 'translateY(-2px)';
+                              e.currentTarget.style.boxShadow = `0 8px 20px ${dept.color}20`;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.transform = 'translateY(0)';
+                              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.03)';
+                            }}
+                          >
+                            {/* Member Avatar */}
+                            <div style={{
+                              width: '60px',
+                              height: '60px',
+                              borderRadius: '50%',
+                              background: `linear-gradient(135deg, ${dept.color}, ${dept.color}dd)`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: 'clamp(16px, 4vw, 20px)',
+                              fontWeight: 700,
+                              color: '#FFFFFF',
+                              marginBottom: '16px',
+                              border: '3px solid rgba(255,255,255,0.9)',
+                              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                            }}>
+                              {typeof member.image === 'string' && member.image.startsWith('/') ? (
+                                <img
+                                  src={member.image}
+                                  alt={member.name}
+                                  style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                />
+                              ) : (
+                                member.image
+                              )}
+                            </div>
+
+                            <h4 style={{
+                              fontSize: 'clamp(14px, 3.2vw, 16px)',
+                              fontWeight: 700,
+                              color: '#1D1D1F',
+                              marginBottom: '4px',
+                              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+                            }}>
+                              {member.name}
+                            </h4>
+
+                            <p style={{
+                              fontSize: 'clamp(12px, 2.8vw, 13px)',
+                              color: dept.color,
+                              fontWeight: 600,
+                              marginBottom: '8px',
+                              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
+                            }}>
+                              {member.role}
+                            </p>
+
+                            {member.bio && (
+                              <p style={{
+                                fontSize: 'clamp(11px, 2.5vw, 12px)',
+                                lineHeight: 1.5,
+                                color: '#6E6E73',
+                                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
+                              }}>
+                                {member.bio}
+                              </p>
+                            )}
+
+                            {(member as any).achievements && (
+                              <div style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                gap: '6px',
+                                marginTop: '12px'
+                              }}>
+                                {(member as any).achievements.map((achievement: string, achIndex: number) => (
+                                  <span
+                                    key={achIndex}
+                                    style={{
+                                      fontSize: 'clamp(9px, 2vw, 10px)',
+                                      padding: '4px 8px',
+                                      borderRadius: '6px',
+                                      background: `${dept.color}15`,
+                                      color: dept.color,
+                                      fontWeight: 600,
+                                      border: `1px solid ${dept.color}25`
+                                    }}
+                                  >
+                                    {achievement}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Expanded Team View */}
-          {activeTeam && (
+          {/* REMOVED OLD EXPANDED TEAM VIEW */}
+          {false && activeTeam && (
             <div style={{
               marginTop: '32px',
               background: 'linear-gradient(145deg, rgba(255,255,255,0.95), rgba(248,250,252,0.95))',
@@ -1120,19 +1263,19 @@ export const AboutPage: React.FC = () => {
                     {activeTeam} Team
                   </h3>
                   <p style={{
-                    fontSize: '16px',
+                    fontSize: 'clamp(14px, 3.2vw, 16px)',
                     color: '#4D4D50',
                     margin: 0,
                     fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
                   }}>
-                    Meet the talented individuals driving innovation in {activeTeam.toLowerCase()}
+                    Meet the talented individuals driving innovation in {activeTeam?.toLowerCase()}
                   </p>
                 </div>
               </div>
 
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
                 gap: '24px'
               }}>
                 {[
@@ -1212,7 +1355,7 @@ export const AboutPage: React.FC = () => {
                       }
                     ]
                   }
-                ].find(dept => dept.name === activeTeam)?.members.map((member, memberIndex) => (
+                ].find(dept => dept.name === (activeTeam || ''))?.members.map((member, memberIndex) => (
                   <div
                     key={memberIndex}
                     style={{
@@ -1254,7 +1397,7 @@ export const AboutPage: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '28px',
+                      fontSize: 'clamp(20px, 5vw, 28px)',
                       fontWeight: 700,
                       color: '#FFFFFF',
                       marginBottom: '16px',
@@ -1273,7 +1416,7 @@ export const AboutPage: React.FC = () => {
                     </div>
 
                     <h4 style={{
-                      fontSize: '18px',
+                      fontSize: 'clamp(15px, 3.5vw, 18px)',
                       fontWeight: 700,
                       color: '#1D1D1F',
                       marginBottom: '4px',
@@ -1335,7 +1478,7 @@ export const AboutPage: React.FC = () => {
 
       {/* CTA Section */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         textAlign: 'center',
         background: '#FFFFFF',
         borderTop: '1px solid rgba(0,113,227,0.08)'
@@ -1388,7 +1531,7 @@ export const AboutPage: React.FC = () => {
 
       {/* Company Culture Section */}
       <section style={{
-        padding: '120px 24px',
+        padding: 'clamp(60px, 12vw, 120px) clamp(16px, 5vw, 24px)',
         background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
         position: 'relative'
       }}>
@@ -1453,21 +1596,22 @@ export const AboutPage: React.FC = () => {
               Where Innovation Meets Excellence
             </h2>
             <p style={{
-              fontSize: '20px',
-              color: '#4D4D50',
+              fontSize: 'clamp(16px, 4vw, 20px)',
+              color: '#6E6E73',
               margin: '0 auto',
               maxWidth: '600px',
               fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-              lineHeight: 1.6
+              lineHeight: 1.6,
+              padding: '0 16px'
             }}>
               Our culture fosters creativity, collaboration, and continuous learning in a supportive environment
             </p>
           </div>
 
-          <div style={{
+          <div className="culture-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '32px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+            gap: 'clamp(16px, 4vw, 32px)'
           }}>
             {[
               {
@@ -1499,8 +1643,8 @@ export const AboutPage: React.FC = () => {
                 key={i}
                 style={{
                   background: 'linear-gradient(145deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9))',
-                  borderRadius: 24,
-                  padding: '32px',
+                  borderRadius: 'clamp(16px, 4vw, 24px)',
+                  padding: 'clamp(20px, 5vw, 32px)',
                   textAlign: 'center',
                   border: '1px solid rgba(255,255,255,0.2)',
                   boxShadow: '0 8px 25px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
@@ -1545,7 +1689,7 @@ export const AboutPage: React.FC = () => {
                     {culture.title}
                   </h3>
                   <p style={{
-                    fontSize: '15px',
+                    fontSize: 'clamp(13px, 3vw, 15px)',
                     lineHeight: 1.6,
                     color: '#4D4D50',
                     margin: 0,
@@ -1562,7 +1706,7 @@ export const AboutPage: React.FC = () => {
 
       {/* Office Locations Section */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 10vw, 100px) clamp(16px, 5vw, 24px)',
         background: '#FFFFFF',
         position: 'relative'
       }}>
@@ -1594,24 +1738,10 @@ export const AboutPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Interactive WebGL Globe */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginBottom: '80px'
-          }}>
-            <GlobeWebGL 
-              size={450} 
-              speed={0.15} 
-              showMeridians={true} 
-              nightMode={false} 
-            />
-          </div>
-
-          <div style={{
+          <div className="locations-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '24px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))',
+            gap: 'clamp(16px, 4vw, 24px)'
           }}>
             {[
               {
@@ -1651,8 +1781,8 @@ export const AboutPage: React.FC = () => {
                 key={i}
                 style={{
                   background: 'linear-gradient(145deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9))',
-                  borderRadius: 20,
-                  padding: '28px',
+                  borderRadius: 'clamp(16px, 4vw, 20px)',
+                  padding: 'clamp(20px, 5vw, 28px)',
                   textAlign: 'center',
                   border: '1px solid rgba(255,255,255,0.2)',
                   boxShadow: '0 8px 25px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
@@ -1688,7 +1818,7 @@ export const AboutPage: React.FC = () => {
                     {location.icon}
                   </div>
                   <h3 style={{
-                    fontSize: '20px',
+                    fontSize: 'clamp(16px, 4vw, 20px)',
                     fontWeight: 700,
                     color: '#1D1D1F',
                     marginBottom: '4px',
@@ -1743,6 +1873,15 @@ export const AboutPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Mobile responsive overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          .team-grid,
+          .culture-grid,
+          .locations-grid { gap: 16px !important; }
+        }
+      `}</style>
     </div>
   );
 };

@@ -1,16 +1,23 @@
 // Email configuration
 export const EMAIL_CONFIG = {
   // EmailJS configuration
-  SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_3892fcn',
-  TEMPLATE_ID: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_kqooxjc',
+  SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_czqok4a', // ✅ Updated service ID
+  
+  // Template IDs - 2 SEPARATE TEMPLATES
+  TEMPLATE_ID: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_kqooxjc', // ⚠️ ADMIN notification template (To: busines.watch.this@gmail.com - FIXED)
+  CONFIRMATION_TEMPLATE_ID: import.meta.env.VITE_EMAILJS_CONFIRMATION_TEMPLATE_ID || 'template_mp22w0v', // ✅ USER confirmation template (To: {{to_email}} - DYNAMIC)
+  
   NEWSLETTER_TEMPLATE_ID: import.meta.env.VITE_EMAILJS_NEWSLETTER_TEMPLATE_ID || 'template_newsletter_confirmation',
   PUBLIC_KEY: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'XQBwyBlw250dxXyjd',
 
-  // Consultation email
+  // Consultation email (Admin)
   CONSULTATION_EMAIL: import.meta.env.VITE_CONSULTATION_EMAIL || 'busines.watch.this@gmail.com',
 
   // Fallback email (if env vars are not set)
-  FALLBACK_EMAIL: 'busines.watch.this@gmail.com'
+  FALLBACK_EMAIL: 'busines.watch.this@gmail.com',
+  
+  // No-reply email
+  NOREPLY_EMAIL: 'noreply@watchthis.com'
 };
 
 // Email template data structure

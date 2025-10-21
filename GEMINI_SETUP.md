@@ -1,173 +1,70 @@
-x# 🚀 Google Gemini AI - Besplatna AI Integracija
+# 🤖 Google Gemini AI Setup (BESPLATNO!)
 
-## ✅ **Najbolja Besplatna Opcija za 2025**
+AI asistent u aplikaciji sada koristi **Google Gemini 2.0 Flash** model koji je **potpuno besplatan**!
 
-**Google Gemini 1.5 Flash** je najbolji besplatni AI model za chat aplikacije!
+## Kako dobiti Gemini API ključ? (2 minuta)
 
----
+### 1. Idi na Google AI Studio
+Otvori: https://aistudio.google.com/app/apikey
 
-## 🎯 Zašto Gemini?
+### 2. Prijavi se sa Google nalogom
+Koristi svoj Google nalog (Gmail)
 
-### **✅ Prednosti:**
-- **BESPLATNO** - 60 zahteva/minutu, 1.5M tokena/mesec
-- **Brz** - 1.5 Flash model je optimizovan za brzinu
-- **Pametan** - razume kontekst i daje prirodne odgovore
-- **Multi-jezik** - odlično radi sa srpskim jezikom
-- **Stabilan** - Google infrastruktura
+### 3. Kreiraj API ključ
+- Klikni na **"Create API key"** dugme
+- Izaberi postojeći Google Cloud projekat ili kreiraj novi
+- Kopiraj API ključ
 
-### **📊 Poređenje:**
-
-| Model | Cena | Besplatan Tier | Kvalitet | Brzina |
-|-------|------|---------------|----------|---------|
-| **Gemini 1.5 Flash** | $0 | ✅ 60/min | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **GPT-3.5-turbo** | $2/1M | ❌ | ⭐⭐⭐ | ⭐⭐⭐ |
-| **GPT-4o-mini** | $0.15/1M | ❌ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-
----
-
-## 🔧 Setup (5 minuta)
-
-### **Korak 1: Kreiraj Google AI Studio Nalog**
-1. **Idi na**: https://aistudio.googxle.com/
-2. **Prijavi se** sa Google nalogom
-3. **Klikni**: "Get started" ili "Create API key"
-
-### **Korak 2: Generiši API Ključ**
-1. **Idi na**: https://aistudio.google.com/app/apikey
-2. **Klikni**: "Create API key"
-3. **Ime**: "WatchThis AI Assistant"
-4. **Copy API key** (počinje sa `AIza...`)
-
-### **Korak 3: Dodaj u .env**
-Otvori: `consultation-booking/consultation-backend/.env`
+### 4. Dodaj u `.env` fajl
+Otvori `.env` fajl u root direktorijumu projekta i dodaj:
 
 ```bash
-# AI Configuration - Besplatni Google Gemini
-GEMINI_API_KEY=AIzaSyDeinStvarni_kljuc_ovde
+GEMINI_API_KEY=tvoj-api-kljuc-ovde
 ```
 
-### **Korak 4: Restart Backend**
+### 5. Restartuj backend
 ```bash
-pkill -f "nx serve consultation-backend"
-cd /Users/radomirpopovic/Documents/projects/WatchThis/consultation-booking
 yarn nx serve consultation-backend
 ```
 
----
+## ✅ Provera
 
-## 🎯 Testiranje
-
-### **API Info:**
-```bash
-curl -X GET http://localhost:3088/api/ai/info
-# {"configured": true, "model": "gemini-1.5-flash", "provider": "Google (Free)"}
+Nakon restartovanja backen-a, trebalo bi da vidiš u konzoli:
+```
+Gemini API key configured successfully
 ```
 
-### **AI Chat:**
-```bash
-# Test na srpskom
-curl -X POST http://localhost:3088/api/ai/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message": "pomozi mi da zakazem konsultacije", "language": "sr"}'
+## 📊 Gemini Besplatni Tier
 
-# Test na engleskom
-curl -X POST http://localhost:3088/api/ai/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message": "i want to book a consultation", "language": "en"}'
-```
+- **60 zahteva po minuti**
+- **1,500 zahteva po danu**
+- **1 milion zahteva po mesecu**
+- **Potpuno BESPLATNO** - bez kreditne kartice!
 
----
+## 🎯 Model koji koristimo
 
-## 💰 Cena i Limiti
+**gemini-2.0-flash-exp**
+- Najnoviji Gemini model
+- Izuzetno brz
+- Odličan za chat botove
+- Podržava sve jezike
 
-### **Besplatni Tier:**
-- **60 zahteva/minutu** (dovoljno za 100+ korisnika)
-- **1.5M tokena/mesec** (dovoljno za 5000+ poruka)
-- **Nema kreditne kartice** - potpuno besplatno
+## 🔧 Troubleshooting
 
-### **Plaćeni Tier (ako trebaš više):**
-- **$0.075/1M tokena** (jeftinije od OpenAI)
-- **300 zahteva/minutu**
-- **Neograničeni tokeni**
+### Greška: "Gemini API key not configured"
+- Proveri da li si dodao `GEMINI_API_KEY` u `.env` fajl
+- Restartuj backend server
 
----
+### Greška: "429 Too Many Requests"
+- Dostigao si limit od 60 zahteva po minuti
+- Sačekaj 1 minut
 
-## 🚀 Šta Dobijaš
+### API ključ ne radi?
+- Proveri da li si kopirao ceo ključ
+- Proveri da nema dodatnih razmaka u `.env`
+- Ključ treba da izgleda ovako: `AIza...`
 
-### **Pravi AI Odgovori:**
-```
-User: "trebam web sajt za restoran, imam budzet od 3000 evra"
-Gemini: "Sa budžetom od 3000 evra možemo napraviti odličan web sajt
-         za vaš restoran sa modernim dizajnom, responsive layout-om,
-         i integracijom sa društvenim mrežama. Kada biste želeli da
-         zakažete konsultaciju da porazgovaramo o detaljima?"
-```
+## 📚 Više informacija
 
-### **Multi-Jezik Podrška:**
-- ✅ **Srpski** - automatski prevodi
-- ✅ **Engleski** - native
-- ✅ **Drugi jezici** - automatski
-
-### **Context Awareness:**
-- ✅ **Pamti razgovor** (conversation memory)
-- ✅ **Razume nameru** (intent detection)
-- ✅ **Ekstraktuje entitete** (budžet, vreme, projekat)
-
----
-
-## 🔄 Fallback Sistem
-
-**Ako Gemini ne radi:**
-1. **Automatski pada** na inteligentni fallback sistem
-2. **Koristi manual translation** za srpski jezik
-3. **Pamti kontekst** razgovora
-4. **Daje relevantne odgovore**
-
----
-
-## 📊 Performanse
-
-### **Brzina:**
-- **Gemini 1.5 Flash**: ~200ms response time
-- **OpenAI GPT-3.5**: ~500ms response time
-- **Fallback sistem**: ~50ms response time
-
-### **Pouzdanost:**
-- **Google infrastruktura** - 99.9% uptime
-- **Besplatan tier** - stabilan i pouzdan
-- **Rate limiting** - graceful handling
-
----
-
-## 🎯 Zaključak
-
-**Google Gemini 1.5 Flash je najbolja besplatna opcija za 2025!**
-
-### **Prednosti:**
-✅ **Besplatno** - 60 zahteva/min, 1.5M tokena/mesec
-✅ **Brzo** - optimizovan za brzinu
-✅ **Pametan** - odlično razume kontekst
-✅ **Stabilno** - Google infrastruktura
-✅ **Multi-jezik** - automatski prevodi
-
-### **Setup:**
-1. Kreiraj Google AI Studio nalog
-2. Generiši API ključ
-3. Dodaj u `.env` fajl
-4. Restartuj backend
-
-**Sistem će automatski koristiti Gemini kada dodaš API ključ!** 🚀
-
----
-
-## 🔗 Korisni Linkovi
-
-- **Google AI Studio**: https://aistudio.google.com/
-- **API Dokumentacija**: https://ai.google.dev/docs
-- **Besplatni Tier Limiti**: https://ai.google.dev/pricing
-- **Rate Limits**: https://ai.google.dev/docs/quotas
-
----
-
-**Spreman za produkciju sa besplatnim AI-jem!** 🎉
-
+- Gemini API Dokumentacija: https://ai.google.dev/docs
+- Google AI Studio: https://aistudio.google.com

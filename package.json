@@ -2,7 +2,11 @@
   "name": "@consultation-booking/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "deploy": "npx nx build consultation-frontend --configuration=production && firebase deploy --only hosting",
+    "deploy:preview": "npx nx build consultation-frontend && firebase hosting:channel:deploy preview",
+    "build:prod": "npx nx build consultation-frontend --configuration=production"
+  },
   "private": true,
   "dependencies": {
     "@firebase/auth": "^1.11.0",
@@ -55,6 +59,7 @@
     "@emailjs/browser": "^4.4.1",
     "@eslint/js": "^9.8.0",
     "@hookform/resolvers": "^5.2.2",
+    "firebase-tools": "^13.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
     "@nx/detox": "21.5.3",

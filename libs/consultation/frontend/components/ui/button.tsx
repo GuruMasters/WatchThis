@@ -143,12 +143,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         boxShadow: '0 2px 6px 0 rgba(0, 113, 227, 0.08)',
       },
       luxury: {
-        backgroundImage: 'linear-gradient(135deg, #0071E3 0%, #0088FF 50%, #0071E3 100%)',
-        backgroundSize: '200% 200%',
-        backgroundPosition: '0% 50%',
+        backgroundImage: 'linear-gradient(135deg, #0071E3 0%, #0088FF 100%)',
         color: '#FFFFFF',
-        boxShadow: '0 8px 24px 0 rgba(0, 113, 227, 0.4), 0 4px 12px 0 rgba(0, 113, 227, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 0 rgba(0, 0, 0, 0.1)',
-        animation: 'shimmer 3s ease-in-out infinite'
+        boxShadow: '0 8px 24px 0 rgba(0, 113, 227, 0.4), 0 4px 12px 0 rgba(0, 113, 227, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 0 rgba(0, 0, 0, 0.1)'
       },
       premium: {
         backgroundImage: 'linear-gradient(135deg, #1D1D1F 0%, #3A3A3C 100%)',
@@ -180,9 +177,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         transform: 'translateY(-1px)',
       },
       luxury: {
-        backgroundImage: 'linear-gradient(135deg, #0088FF 0%, #00A3FF 50%, #0088FF 100%)',
-        backgroundSize: '200% 200%',
-        backgroundPosition: '0% 50%',
+        backgroundImage: 'linear-gradient(135deg, #0088FF 0%, #00A3FF 100%)',
         boxShadow: '0 12px 32px 0 rgba(0, 113, 227, 0.5), 0 6px 16px 0 rgba(0, 113, 227, 0.4), 0 0 24px 0 rgba(0, 136, 255, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 0 rgba(0, 0, 0, 0.1)',
         transform: 'translateY(-3px) scale(1.03)',
       },
@@ -213,9 +208,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         transform: 'translateY(0) scale(0.98)',
       },
       luxury: {
-        backgroundImage: 'linear-gradient(135deg, #0066CC 0%, #0071E3 50%, #0066CC 100%)',
-        backgroundSize: '200% 200%',
-        backgroundPosition: '0% 50%',
+        backgroundImage: 'linear-gradient(135deg, #0066CC 0%, #0071E3 100%)',
         transform: 'translateY(0) scale(0.97)',
       },
       premium: {
@@ -269,20 +262,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {!loading && rightIcon && (
           <span style={{ display: 'flex', alignItems: 'center' }}>{rightIcon}</span>
         )}
-        
-        {/* Premium shimmer overlay */}
-        {!disabled && !loading && (variant === 'luxury' || variant === 'premium') && (
-          <span style={{
-            position: 'absolute',
-            top: 0,
-            left: '-100%',
-            width: '100%',
-            height: '100%',
-            backgroundImage: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
-            animation: 'shimmerSlide 3s ease-in-out infinite',
-            pointerEvents: 'none'
-          }} />
-        )}
       </>
     );
 
@@ -319,16 +298,6 @@ if (typeof document !== 'undefined') {
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
-    }
-    
-    @keyframes shimmer {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    
-    @keyframes shimmerSlide {
-      0% { left: -100%; }
-      50%, 100% { left: 200%; }
     }
   `;
   if (!document.querySelector('style[data-button-animations]')) {

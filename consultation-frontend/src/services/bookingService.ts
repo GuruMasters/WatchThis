@@ -38,19 +38,36 @@ class BookingService {
     }
   }
 
-  // Get booked dates (unique dates that have at least one booking)
+  // Get fully booked dates (dates where ALL time slots are booked)
   getBookedDates(): Date[] {
     const bookings = this.getBookings();
-    const dateMap = new Map<string, Date>();
+    const dateMap = new Map<string, number>();
+    const dateObjects = new Map<string, Date>();
     
+    // Count bookings per date
     bookings.forEach(booking => {
       const dateKey = booking.date.toDateString();
-      if (!dateMap.has(dateKey)) {
-        dateMap.set(dateKey, booking.date);
+      dateMap.set(dateKey, (dateMap.get(dateKey) || 0) + 1);
+      if (!dateObjects.has(dateKey)) {
+        dateObjects.set(dateKey, booking.date);
       }
     });
     
-    return Array.from(dateMap.values());
+    // Total available slots per day (9:00 - 18:00, 30-minute intervals = 19 slots)
+    const TOTAL_SLOTS_PER_DAY = 19;
+    
+    // Return only dates where ALL slots are booked
+    const fullyBookedDates: Date[] = [];
+    dateMap.forEach((count, dateKey) => {
+      if (count >= TOTAL_SLOTS_PER_DAY) {
+        const date = dateObjects.get(dateKey);
+        if (date) {
+          fullyBookedDates.push(date);
+        }
+      }
+    });
+    
+    return fullyBookedDates;
   }
 
   // Get booked times for a specific date

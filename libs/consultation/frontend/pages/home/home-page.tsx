@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
 import { ArrowRight, Check } from 'lucide-react';
-import { Carousel } from '../../components/ui/carousel';
+import { Slideshow } from '../../components/ui/slideshow';
 import { LaptopIcon, ChartIcon, LightbulbIcon, ShieldIcon, SparklesIcon } from '../../components/icons';
 
 /**
@@ -78,39 +78,39 @@ export const HomePage: React.FC = () => {
 
   const caseStudies = [
     {
-      title: 'Fintech Platform Modernization',
-      impact: 'Time-to-market -35%',
-      summary: 'Re-architected legacy monolith into cloud-native services with improved security and speed.',
+      title: 'Custom Software Development',
+      impact: 'Development speed +40%',
+      summary: 'Built scalable web and mobile applications using React, Node.js, and cloud technologies for modern businesses.',
       slug: 'fintech-platform-modernization'
     },
     {
-      title: 'E-commerce Conversion Uplift',
-      impact: 'Conversion rate +28%',
-      summary: 'Introduced A/B testing, performance optimizations, and a streamlined checkout experience.',
+      title: 'Digital Marketing Success',
+      impact: 'Lead generation +150%',
+      summary: 'Implemented SEO strategies, Google Ads campaigns, and content marketing to drive qualified traffic and conversions.',
       slug: 'ecommerce-conversion-uplift'
     },
     {
-      title: 'B2B SaaS Growth Engine',
-      impact: 'Qualified leads +210%',
-      summary: 'Implemented content strategy, SEO, and product-led growth loops to scale acquisition.',
+      title: 'Business Development Growth',
+      impact: 'Revenue growth +85%',
+      summary: 'Developed sales strategies, market expansion plans, and partnership programs to accelerate business growth.',
       slug: 'b2b-saas-growth-engine'
     },
     {
-      title: 'Healthcare Patient Portal',
-      impact: 'Support tickets -42%',
-      summary: 'Accessible design, performance audit, and API hardening reduced friction and raised satisfaction.',
+      title: 'Security & Compliance Solutions',
+      impact: 'Security incidents -90%',
+      summary: 'Implemented comprehensive security measures, GDPR compliance, and data protection protocols for sensitive industries.',
       slug: 'healthcare-patient-portal'
     },
     {
-      title: 'EdTech Mobile Rollout',
-      impact: 'DAU +120%',
-      summary: 'Cross-platform app with offline-first content and analytics pipelines for cohort tracking.',
+      title: 'Mobile App Development',
+      impact: 'User engagement +200%',
+      summary: 'Created cross-platform mobile applications with offline capabilities, push notifications, and real-time analytics.',
       slug: 'edtech-mobile-rollout'
     },
     {
-      title: 'Logistics Ops Automation',
-      impact: 'Operational cost -18%',
-      summary: 'Workflow automation, dashboards, and alerting reduced manual processes across dispatch teams.',
+      title: 'Cloud Infrastructure Setup',
+      impact: 'Operational efficiency +60%',
+      summary: 'Migrated to cloud platforms, automated deployments, and implemented monitoring systems for scalable operations.',
       slug: 'logistics-ops-automation'
     },
   ];
@@ -150,12 +150,16 @@ export const HomePage: React.FC = () => {
   ];
 
   return (
-    <div style={{ backgroundColor: '#FFFFFF' }}>
+    <div style={{ 
+      backgroundColor: '#FFFFFF',
+      maxWidth: '100vw',
+      overflowX: 'hidden'
+    }}>
       {/* ===========================
           HERO SECTION
           =========================== */}
       <section style={{
-        padding: '140px 24px 100px',
+        padding: 'clamp(60px, 15vw, 140px) clamp(16px, 5vw, 24px) clamp(50px, 12vw, 100px)',
         backgroundColor: '#FFFFFF',
         textAlign: 'center',
         position: 'relative'
@@ -169,11 +173,11 @@ export const HomePage: React.FC = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '8px 16px',
+            padding: 'clamp(6px, 2vw, 8px) clamp(12px, 3vw, 16px)',
             backgroundColor: '#F5F5F7',
             borderRadius: '100px',
-            marginBottom: '32px',
-            fontSize: '14px',
+            marginBottom: 'clamp(20px, 5vw, 32px)',
+            fontSize: 'clamp(12px, 3vw, 14px)',
             fontWeight: 500,
             color: '#0071E3'
           }}>
@@ -183,12 +187,12 @@ export const HomePage: React.FC = () => {
 
           {/* Main Headline */}
           <h1 style={{
-            fontSize: 'clamp(48px, 7vw, 80px)',
+            fontSize: 'clamp(32px, 8vw, 80px)',
             fontWeight: 600,
-            lineHeight: 1.05,
+            lineHeight: 1.1,
             letterSpacing: '-0.02em',
             color: '#1D1D1F',
-            marginBottom: '24px',
+            marginBottom: 'clamp(16px, 4vw, 24px)',
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
           }}>
             Transform Your
@@ -205,12 +209,14 @@ export const HomePage: React.FC = () => {
 
           {/* Subheadline */}
           <p style={{
-            fontSize: 'clamp(18px, 2.5vw, 24px)',
+            fontSize: 'clamp(16px, 3.5vw, 24px)',
             lineHeight: 1.6,
             color: '#6E6E73',
             maxWidth: '700px',
-            margin: '0 auto 48px',
-            fontWeight: 400
+            margin: '0 auto',
+            marginBottom: 'clamp(32px, 6vw, 48px)',
+            fontWeight: 400,
+            padding: '0 16px'
           }}>
             Expert consulting, development, and marketing solutions that help modern businesses thrive in the digital world.
           </p>
@@ -218,9 +224,10 @@ export const HomePage: React.FC = () => {
           {/* CTA Buttons */}
           <div style={{
             display: 'flex',
-            gap: '16px',
+            gap: 'clamp(12px, 3vw, 16px)',
             justifyContent: 'center',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            padding: '0 16px'
           }}>
             <Link to="/booking" style={{ textDecoration: 'none' }}>
               <Button 
@@ -243,29 +250,30 @@ export const HomePage: React.FC = () => {
       {/* ===========================
           CASE STUDIES
           =========================== */}
-      <section style={{ padding: '100px 24px', backgroundColor: '#FFFFFF' }}>
+      <section style={{ padding: 'clamp(50px, 12vw, 100px) clamp(16px, 5vw, 24px)', backgroundColor: '#FFFFFF' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(32px, 8vw, 56px)' }}>
             <h2 style={{
-              fontSize: 'clamp(36px, 5vw, 56px)',
+              fontSize: 'clamp(28px, 6vw, 56px)',
               fontWeight: 600,
               lineHeight: 1.1,
               letterSpacing: '-0.015em',
               color: '#1D1D1F',
-              marginBottom: '16px',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+              marginBottom: 'clamp(12px, 3vw, 16px)',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+              padding: '0 16px'
             }}>Recent Case Studies</h2>
-            <p style={{ fontSize: '18px', color: '#6E6E73' }}>Selected outcomes from recent engagements</p>
+            <p style={{ fontSize: 'clamp(16px, 3.5vw, 18px)', color: '#6E6E73', padding: '0 16px' }}>Selected outcomes from recent engagements</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+          <div className="case-studies-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 'clamp(16px, 4vw, 24px)' }}>
             {caseStudies.map((cs, index) => (
               <div
                 key={index}
                 style={{
                   backgroundColor: '#F5F5F7',
-                  borderRadius: '20px',
-                  padding: '28px',
+                  borderRadius: 'clamp(16px, 4vw, 20px)',
+                  padding: 'clamp(20px, 5vw, 28px)',
                   border: '1px solid #E5E7EB',
                   transition: 'transform 0.2s ease, box-shadow 0.2s ease'
                 }}
@@ -278,25 +286,25 @@ export const HomePage: React.FC = () => {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <h3 style={{ fontSize: '20px', fontWeight: 600, color: '#1D1D1F', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>{cs.title}</h3>
-                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#DD5E23' }}>{cs.impact}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '10px' }}>
+                  <h3 style={{ fontSize: 'clamp(17px, 4vw, 20px)', fontWeight: 600, color: '#1D1D1F', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>{cs.title}</h3>
+                  <span style={{ fontSize: 'clamp(13px, 3vw, 14px)', fontWeight: 700, color: '#DD5E23' }}>{cs.impact}</span>
                 </div>
-                <p style={{ fontSize: '15px', lineHeight: 1.6, color: '#6E6E73', marginBottom: '12px' }}>{cs.summary}</p>
+                <p style={{ fontSize: 'clamp(14px, 3.2vw, 15px)', lineHeight: 1.6, color: '#6E6E73', marginBottom: '12px' }}>{cs.summary}</p>
                 <Link
                   to={
                     cs.slug === 'fintech-platform-modernization'
-                      ? '/services/application-development#features'
+                      ? '/services/software-development'
                       : cs.slug === 'edtech-mobile-rollout'
-                      ? '/services/application-development#technologies'
+                      ? '/services/software-development'
                       : cs.slug === 'b2b-saas-growth-engine'
-                      ? '/services/digital-marketing'
+                      ? '/services/business-sales'
                       : cs.slug === 'ecommerce-conversion-uplift'
                       ? '/services/digital-marketing'
                       : cs.slug === 'healthcare-patient-portal'
-                      ? '/services/support-maintenance'
+                      ? '/services/security-compliance'
                       : cs.slug === 'logistics-ops-automation'
-                      ? '/services/support-maintenance'
+                      ? '/services/cloud-infrastructure'
                       : '/services'
                   }
                   style={{
@@ -304,7 +312,7 @@ export const HomePage: React.FC = () => {
                     alignItems: 'center',
                     gap: '6px',
                     color: '#0081C5',
-                    fontSize: '14px',
+                    fontSize: 'clamp(13px, 2.8vw, 14px)',
                     fontWeight: 600,
                     textDecoration: 'none'
                   }}
@@ -321,19 +329,20 @@ export const HomePage: React.FC = () => {
       {/* ===========================
           INSIGHTS & THOUGHT LEADERSHIP
           =========================== */}
-      <section style={{ padding: '80px 24px', backgroundColor: '#FFFFFF' }}>
+      <section style={{ padding: 'clamp(50px, 10vw, 80px) clamp(16px, 5vw, 24px)', backgroundColor: '#FFFFFF' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(24px, 6vw, 40px)' }}>
             <h2 style={{
-              fontSize: 'clamp(28px, 4vw, 40px)',
+              fontSize: 'clamp(24px, 5vw, 40px)',
               fontWeight: 600,
               color: '#1D1D1F',
-              marginBottom: '12px'
+              marginBottom: 'clamp(8px, 2vw, 12px)',
+              padding: '0 16px'
             }}>Insights & Thought Leadership</h2>
-            <p style={{ fontSize: '16px', color: '#6E6E73' }}>Latest trends, strategies, and industry insights</p>
+            <p style={{ fontSize: 'clamp(15px, 3.2vw, 16px)', color: '#6E6E73', padding: '0 16px' }}>Latest trends, strategies, and industry insights</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+          <div className="insights-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: 'clamp(16px, 4vw, 24px)' }}>
             {[
               {
                 title: 'Building Scalable React Applications in 2024',
@@ -364,8 +373,8 @@ export const HomePage: React.FC = () => {
                 key={i}
                 style={{
                   background: post.featured ? 'linear-gradient(135deg, #F5F5F7 0%, #E8E8ED 100%)' : '#F5F5F7',
-                  borderRadius: '20px',
-                  padding: '24px',
+                  borderRadius: 'clamp(16px, 4vw, 20px)',
+                  padding: 'clamp(18px, 4.5vw, 24px)',
                   border: post.featured ? '2px solid #0081C5' : '1px solid #E5E7EB',
                   position: 'relative',
                   transition: 'transform 0.2s ease, box-shadow 0.2s ease'
@@ -388,25 +397,25 @@ export const HomePage: React.FC = () => {
                     backgroundColor: '#0081C5',
                     color: 'white',
                     borderRadius: '12px',
-                    fontSize: '11px',
+                    fontSize: 'clamp(10px, 2.2vw, 11px)',
                     fontWeight: 600
                   }}>Featured</span>
                 )}
 
                 <div style={{ marginBottom: '12px' }}>
                   <span style={{
-                    fontSize: '12px',
+                    fontSize: 'clamp(11px, 2.5vw, 12px)',
                     fontWeight: 600,
                     color: '#0081C5',
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em'
                   }}>{post.category}</span>
-                  <span style={{ fontSize: '12px', color: '#9CA3AF', marginLeft: '8px' }}>•</span>
-                  <span style={{ fontSize: '12px', color: '#9CA3AF', marginLeft: '8px' }}>{post.readTime}</span>
+                  <span style={{ fontSize: 'clamp(11px, 2.5vw, 12px)', color: '#9CA3AF', marginLeft: '8px' }}>•</span>
+                  <span style={{ fontSize: 'clamp(11px, 2.5vw, 12px)', color: '#9CA3AF', marginLeft: '8px' }}>{post.readTime}</span>
                 </div>
 
                 <h3 style={{
-                  fontSize: post.featured ? '20px' : '18px',
+                  fontSize: post.featured ? 'clamp(18px, 4vw, 20px)' : 'clamp(16px, 3.5vw, 18px)',
                   fontWeight: 600,
                   color: '#1D1D1F',
                   marginBottom: '8px',
@@ -414,7 +423,7 @@ export const HomePage: React.FC = () => {
                 }}>{post.title}</h3>
 
                 <p style={{
-                  fontSize: '14px',
+                  fontSize: 'clamp(13px, 2.8vw, 14px)',
                   lineHeight: 1.6,
                   color: '#6E6E73',
                   marginBottom: '12px'
@@ -435,7 +444,7 @@ export const HomePage: React.FC = () => {
                     alignItems: 'center',
                     gap: '6px',
                     color: '#0081C5',
-                    fontSize: '14px',
+                    fontSize: 'clamp(13px, 2.8vw, 14px)',
                     fontWeight: 600,
                     textDecoration: 'none'
                   }}
@@ -452,19 +461,20 @@ export const HomePage: React.FC = () => {
       {/* ===========================
           ENGAGEMENT MODELS
           =========================== */}
-      <section style={{ padding: '100px 24px', background: '#F5F5F7' }}>
+      <section style={{ padding: 'clamp(50px, 12vw, 100px) clamp(16px, 5vw, 24px)', background: '#111111' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(24px, 6vw, 40px)' }}>
             <h2 style={{
-              fontSize: 'clamp(28px, 4vw, 40px)',
+              fontSize: 'clamp(24px, 5vw, 40px)',
               fontWeight: 600,
-              color: '#1D1D1F',
-              marginBottom: '12px'
+              color: '#FFFFFF',
+              marginBottom: 'clamp(8px, 2vw, 12px)',
+              padding: '0 16px'
             }}>Engagement Models</h2>
-            <p style={{ fontSize: '16px', color: '#6E6E73' }}>Flexible collaboration to fit your goals</p>
+            <p style={{ fontSize: 'clamp(15px, 3.2vw, 16px)', color: '#A1A1A6', padding: '0 16px' }}>Flexible collaboration to fit your goals</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+          <div className="engagement-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 'clamp(16px, 4vw, 24px)' }}>
             {[
               {
                 title: 'Project-Based',
@@ -479,9 +489,9 @@ export const HomePage: React.FC = () => {
                 text: 'Architecture reviews, performance tuning, and strategic consulting.',
               },
             ].map((card, idx) => (
-              <div key={idx} style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '18px', padding: '24px' }}>
-                <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1D1D1F', marginBottom: '8px' }}>{card.title}</h3>
-                <p style={{ fontSize: '15px', color: '#6E6E73', lineHeight: 1.6 }}>{card.text}</p>
+              <div key={idx} style={{ background: '#1C1C1E', border: '1px solid #2C2C2E', borderRadius: 'clamp(16px, 4vw, 18px)', padding: 'clamp(18px, 4.5vw, 24px)' }}>
+                <h3 style={{ fontSize: 'clamp(16px, 3.5vw, 18px)', fontWeight: 600, color: '#FFFFFF', marginBottom: '8px' }}>{card.title}</h3>
+                <p style={{ fontSize: 'clamp(14px, 3.2vw, 15px)', color: '#A1A1A6', lineHeight: 1.6 }}>{card.text}</p>
               </div>
             ))}
           </div>
@@ -491,44 +501,51 @@ export const HomePage: React.FC = () => {
       {/* ===========================
           OUR PROCESS
           =========================== */}
-      <section style={{ padding: '100px 24px', background: '#F5F5F7', borderTop: '1px solid #E5E7EB', borderBottom: '1px solid #E5E7EB' }}>
+      <section style={{ padding: 'clamp(50px, 12vw, 100px) clamp(16px, 5vw, 24px)', background: '#111111', borderTop: '1px solid #2C2C2E', borderBottom: '1px solid #2C2C2E' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(32px, 8vw, 56px)' }}>
             <h2 style={{
-              fontSize: 'clamp(36px, 5vw, 56px)',
+              fontSize: 'clamp(28px, 6vw, 56px)',
               fontWeight: 600,
               lineHeight: 1.1,
               letterSpacing: '-0.015em',
-              color: '#1D1D1F',
-              marginBottom: '16px',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+              background: 'linear-gradient(135deg, #0071E3 0%, #34C759 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              marginBottom: 'clamp(12px, 3vw, 16px)',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+              padding: '0 16px'
             }}>Our Process</h2>
-            <p style={{ fontSize: '18px', color: '#6E6E73' }}>A proven, measurable delivery model</p>
+            <p style={{ fontSize: 'clamp(16px, 3.5vw, 18px)', color: 'rgba(255, 255, 255, 0.9)', padding: '0 16px', textShadow: '0 1px 5px rgba(0, 0, 0, 0.2)' }}>A proven, measurable delivery model</p>
           </div>
 
-          <div style={{
+          <div className="process-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '20px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))',
+            gap: 'clamp(16px, 4vw, 20px)'
           }}>
             {processSteps.map((ps, index) => (
-              <div key={index} style={{
-                background: '#FFFFFF',
-                borderRadius: '18px',
-                padding: '24px',
-                border: '1px solid #E5E7EB'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-                  <span style={{
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    color: '#0081C5',
-                    letterSpacing: '0.08em'
-                  }}>{ps.step}</span>
-                  <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1D1D1F' }}>{ps.title}</h3>
+                <div key={index} style={{
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  borderRadius: 'clamp(16px, 4vw, 18px)',
+                  padding: 'clamp(18px, 4.5vw, 24px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(10px)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+                }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '10px' }}>
+                    <span style={{
+                      fontSize: 'clamp(14px, 3.2vw, 16px)',
+                      fontWeight: 700,
+                      color: '#FFFFFF',
+                      letterSpacing: '0.08em',
+                      textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)'
+                    }}>{ps.step}</span>
+                    <h3 style={{ fontSize: 'clamp(16px, 3.5vw, 18px)', fontWeight: 600, color: '#FFFFFF', textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)' }}>{ps.title}</h3>
+                  </div>
+                  <p style={{ fontSize: 'clamp(14px, 3.2vw, 15px)', color: 'rgba(255, 255, 255, 0.9)', lineHeight: 1.6, textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)' }}>{ps.text}</p>
                 </div>
-                <p style={{ fontSize: '15px', color: '#6E6E73', lineHeight: 1.6 }}>{ps.text}</p>
-              </div>
             ))}
           </div>
         </div>
@@ -537,37 +554,121 @@ export const HomePage: React.FC = () => {
       {/* ===========================
           CAPABILITIES
           =========================== */}
-      <section style={{ padding: '100px 24px', background: '#FFFFFF' }}>
+      <section style={{ padding: 'clamp(50px, 12vw, 100px) clamp(16px, 5vw, 24px)', background: '#F5F5F7' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(32px, 8vw, 56px)' }}>
             <h2 style={{
-              fontSize: 'clamp(36px, 5vw, 56px)',
+              fontSize: 'clamp(28px, 6vw, 56px)',
               fontWeight: 600,
               lineHeight: 1.1,
               letterSpacing: '-0.015em',
               color: '#1D1D1F',
-              marginBottom: '16px',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+              marginBottom: 'clamp(12px, 3vw, 16px)',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+              padding: '0 16px'
             }}>Capabilities</h2>
-            <p style={{ fontSize: '18px', color: '#6E6E73' }}>End-to-end services for modern teams</p>
+            <p style={{ fontSize: 'clamp(16px, 3.5vw, 18px)', color: '#6E6E73', padding: '0 16px' }}>End-to-end services for modern teams</p>
           </div>
 
+          {/* Zanimljiv dizajn sa tekstom */}
           <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '12px',
-            justifyContent: 'center'
+            position: 'relative',
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%)',
+            borderRadius: 'clamp(20px, 5vw, 32px)',
+            padding: 'clamp(40px, 8vw, 60px)',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04)',
+            border: '1px solid rgba(0, 0, 0, 0.05)',
+            overflow: 'hidden'
+          }}>
+            {/* Dekorativni elementi */}
+            <div style={{
+              position: 'absolute',
+              top: '-50px',
+              right: '-50px',
+              width: '200px',
+              height: '200px',
+              background: 'linear-gradient(135deg, rgba(0, 113, 227, 0.1) 0%, rgba(0, 136, 255, 0.05) 100%)',
+              borderRadius: '50%',
+              filter: 'blur(40px)'
+            }} />
+            <div style={{
+              position: 'absolute',
+              bottom: '-80px',
+              left: '-80px',
+              width: '300px',
+              height: '300px',
+              background: 'linear-gradient(135deg, rgba(251, 195, 20, 0.08) 0%, rgba(255, 204, 0, 0.04) 100%)',
+              borderRadius: '50%',
+              filter: 'blur(60px)'
+            }} />
+
+            {/* Glavni sadržaj */}
+            <div style={{ position: 'relative', zIndex: 2 }}>
+              <div style={{ textAlign: 'center', marginBottom: 'clamp(32px, 6vw, 48px)' }}>
+                <h3 style={{
+                  fontSize: 'clamp(24px, 5vw, 36px)',
+                  fontWeight: 600,
+                  color: '#1D1D1F',
+                  marginBottom: 'clamp(16px, 3vw, 24px)',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+                }}>
+                  From Strategy to Scale
+                </h3>
+                <p style={{
+                  fontSize: 'clamp(16px, 3.5vw, 20px)',
+                  color: '#6E6E73',
+                  lineHeight: 1.6,
+                  maxWidth: '800px',
+                  margin: '0 auto'
+                }}>
+                  We don't just build software—we architect digital experiences that drive business growth. 
+                  Our comprehensive approach combines cutting-edge technology with strategic thinking, 
+                  delivering solutions that are both technically excellent and commercially viable.
+                </p>
+              </div>
+
+              {/* Capabilities grid sa zanimljivim dizajnom */}
+              <div className="capabilities-grid" style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
+                gap: 'clamp(16px, 4vw, 24px)',
+                marginTop: 'clamp(24px, 6vw, 40px)'
           }}>
             {capabilities.map((cap, index) => (
-              <span key={index} style={{
-                padding: '12px 16px',
-                borderRadius: '9999px',
-                background: 'linear-gradient(135deg, #F5F5F7 0%, #E8E8ED 100%)',
+                  <div key={index} style={{
+                    position: 'relative',
+                    padding: 'clamp(20px, 4vw, 28px)',
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    borderRadius: 'clamp(12px, 3vw, 16px)',
+                    border: '1px solid rgba(0, 0, 0, 0.06)',
+                    backdropFilter: 'blur(10px)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.12)';
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.95)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.8)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: 'clamp(14px, 3.2vw, 16px)',
+                      fontWeight: 600,
                 color: '#1D1D1F',
-                fontSize: '14px',
-                border: '1px solid #E5E7EB'
-              }}>{cap}</span>
-            ))}
+                      textAlign: 'center',
+                      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
+                    }}>
+                      {cap}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -575,7 +676,11 @@ export const HomePage: React.FC = () => {
       {/* ===========================
           IMAGE CAROUSEL
           =========================== */}
-      <section style={{ padding: '80px 24px', background: '#F5F5F7' }}>
+      <section className="slideshow-section" style={{ 
+        padding: '80px 24px', 
+        background: '#111111',
+        minHeight: 'clamp(700px, 100vh, 1000px)'
+      }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
             <h2 style={{
@@ -583,16 +688,19 @@ export const HomePage: React.FC = () => {
               fontWeight: 600,
               lineHeight: 1.1,
               letterSpacing: '-0.015em',
-              color: '#1D1D1F',
+              background: 'linear-gradient(135deg, #0071E3 0%, #34C759 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
               marginBottom: '12px',
               fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
             }}>
               Highlights
             </h2>
-            <p style={{ fontSize: '18px', color: '#6E6E73' }}>A glimpse into our visual identity</p>
+            <p style={{ fontSize: 'clamp(16px, 3.5vw, 18px)', color: '#A1A1A6' }}>A glimpse into our visual identity</p>
           </div>
 
-          <Carousel
+          <Slideshow
             items={[
               {
                 id: 'ninja-hero',
@@ -608,13 +716,13 @@ export const HomePage: React.FC = () => {
                     border: '2px solid rgba(251, 195, 20, 0.4)',
                     backdropFilter: 'blur(10px)',
                     color: '#FBC314',
-                    fontSize: '16px',
+                    fontSize: 'clamp(16px, 3.5vw, 18px)',
                     fontWeight: 700,
                     textAlign: 'center',
                     textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
                     transform: 'translateZ(15px)',
                   }}>
-                    🥷 Elite Development Services
+                    Elite Development Services
                   </div>
                 )
               },
@@ -632,13 +740,13 @@ export const HomePage: React.FC = () => {
                     border: '2px solid rgba(0, 113, 227, 0.5)',
                     backdropFilter: 'blur(10px)',
                     color: '#0071E3',
-                    fontSize: '16px',
+                    fontSize: 'clamp(16px, 3.5vw, 18px)',
                     fontWeight: 700,
                     textAlign: 'center',
                     textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
                     transform: 'translateZ(15px)',
                   }}>
-                    🚀 Strategic Business Solutions
+                    Strategic Business Solutions
                   </div>
                 )
               },
@@ -655,14 +763,14 @@ export const HomePage: React.FC = () => {
                     padding: '24px',
                     border: '2px solid rgba(29, 29, 31, 0.7)',
                     backdropFilter: 'blur(10px)',
-                    color: '#1D1D1F',
-                    fontSize: '16px',
+                    color: '#FFFFFF',
+                    fontSize: 'clamp(16px, 3.5vw, 18px)',
                     fontWeight: 700,
                     textAlign: 'center',
-                    textShadow: '0 2px 4px rgba(255, 255, 255, 0.3)',
+                    textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
                     transform: 'translateZ(15px)',
                   }}>
-                    💼 Premium Consultation Services
+                    Premium Consultation Services
                   </div>
                 )
               },
@@ -680,13 +788,13 @@ export const HomePage: React.FC = () => {
                     border: '2px solid rgba(251, 195, 20, 0.4)',
                     backdropFilter: 'blur(10px)',
                     color: '#FBC314',
-                    fontSize: '16px',
+                    fontSize: 'clamp(16px, 3.5vw, 18px)',
                     fontWeight: 700,
                     textAlign: 'center',
                     textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
                     transform: 'translateZ(15px)',
                   }}>
-                    👥 Expert Team of Professionals
+                    Expert Team of Professionals
                   </div>
                 )
               },
@@ -704,22 +812,18 @@ export const HomePage: React.FC = () => {
                     border: '2px solid rgba(0, 113, 227, 0.5)',
                     backdropFilter: 'blur(10px)',
                     color: '#0071E3',
-                    fontSize: '16px',
+                    fontSize: 'clamp(16px, 3.5vw, 18px)',
                     fontWeight: 700,
                     textAlign: 'center',
                     textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
                     transform: 'translateZ(15px)',
                   }}>
-                    🏆 Award-Winning Innovation
+                    Award-Winning Innovation
                   </div>
                 )
               }
             ]}
-            autoPlay={true}
             autoPlayInterval={5000}
-            showDots={true}
-            showArrows={true}
-            infinite={true}
           />
         </div>
       </section>
@@ -737,16 +841,16 @@ export const HomePage: React.FC = () => {
           maxWidth: '1200px',
           margin: '0 auto'
         }}>
-          <div style={{
+          <div className="stats-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
             gap: '60px',
             textAlign: 'center'
           }}>
             {stats.map((stat, index) => (
               <div key={index}>
                 <div style={{
-                  fontSize: '64px',
+                  fontSize: 'clamp(36px, 10vw, 64px)',
                   fontWeight: 700,
                   color: '#0071E3',
                   marginBottom: '8px',
@@ -755,7 +859,7 @@ export const HomePage: React.FC = () => {
                   {stat.value}
                 </div>
                 <div style={{
-                  fontSize: '18px',
+                  fontSize: 'clamp(15px, 3.5vw, 18px)',
                   color: '#6E6E73',
                   fontWeight: 500
                 }}>
@@ -795,7 +899,7 @@ export const HomePage: React.FC = () => {
               Why Choose WatchThis
             </h2>
             <p style={{
-              fontSize: '20px',
+              fontSize: 'clamp(16px, 4vw, 20px)',
               lineHeight: 1.6,
               color: '#6E6E73',
               maxWidth: '600px',
@@ -806,9 +910,9 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Features Grid */}
-          <div style={{
+          <div className="features-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
             gap: '32px'
           }}>
             {features.map((feature, index) => (
@@ -821,7 +925,7 @@ export const HomePage: React.FC = () => {
               >
                 {/* Checkmark */}
                 <div style={{
-                  width: '56px',
+                  width: 'clamp(48px, 10vw, 56px)',
                   height: '56px',
                   borderRadius: '50%',
                   background: '#0071E3',
@@ -835,7 +939,7 @@ export const HomePage: React.FC = () => {
 
                 {/* Title */}
                 <h3 style={{
-                  fontSize: '22px',
+                  fontSize: 'clamp(18px, 4.5vw, 22px)',
                   fontWeight: 600,
                   color: '#1D1D1F',
                   marginBottom: '12px',
@@ -846,7 +950,7 @@ export const HomePage: React.FC = () => {
 
                 {/* Description */}
                 <p style={{
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   lineHeight: 1.6,
                   color: '#6E6E73'
                 }}>
@@ -858,11 +962,26 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
+      {/* Mobile overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          .slideshow-section { min-height: 60vh !important; padding: 48px 16px !important; }
+          .case-studies-grid,
+          .insights-grid,
+          .engagement-grid,
+          .process-grid,
+          .capabilities-grid,
+          .features-grid,
+          .stats-grid { gap: 16px !important; }
+          .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+        }
+      `}</style>
+
       {/* ===========================
           FINAL CTA
           =========================== */}
       <section style={{
-        padding: '100px 24px',
+        padding: 'clamp(50px, 12vw, 100px) clamp(16px, 5vw, 24px)',
         background: '#FFFFFF',
         textAlign: 'center'
       }}>
@@ -871,31 +990,34 @@ export const HomePage: React.FC = () => {
           margin: '0 auto'
         }}>
           <h2 style={{
-            fontSize: 'clamp(36px, 5vw, 56px)',
+            fontSize: 'clamp(28px, 6vw, 56px)',
             fontWeight: 600,
             lineHeight: 1.1,
             letterSpacing: '-0.015em',
             color: '#1D1D1F',
-            marginBottom: '24px',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+            marginBottom: 'clamp(16px, 4vw, 24px)',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+            padding: '0 16px'
           }}>
             Ready to Get Started?
           </h2>
 
           <p style={{
-            fontSize: '20px',
+            fontSize: 'clamp(16px, 3.5vw, 20px)',
             lineHeight: 1.6,
             color: '#6E6E73',
-            marginBottom: '48px'
+            marginBottom: 'clamp(32px, 6vw, 48px)',
+            padding: '0 16px'
           }}>
             Let's discuss how we can help transform your business with our expert services.
           </p>
 
           <div style={{
             display: 'flex',
-            gap: '16px',
+            gap: 'clamp(12px, 3vw, 16px)',
             justifyContent: 'center',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            padding: '0 16px'
           }}>
             <Link to="/booking" style={{ textDecoration: 'none' }}>
               <Button 

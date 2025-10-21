@@ -28,6 +28,7 @@ export const BookingPage: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [validationError, setValidationError] = useState<string>('');
 
   // Custom Calendar & Time Picker State
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -55,6 +56,8 @@ export const BookingPage: React.FC = () => {
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
     setSelectedTime(null); // Reset time when date changes
+    setValidationError(''); // Clear validation error when user selects date
+    setSubmitStatus('idle'); // Reset submit status
     setFormData(prev => ({
       ...prev,
       preferredDate: date.toISOString().split('T')[0]
@@ -64,6 +67,8 @@ export const BookingPage: React.FC = () => {
   // Handle time selection
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
+    setValidationError(''); // Clear validation error when user selects time
+    setSubmitStatus('idle'); // Reset submit status
     setFormData(prev => ({
       ...prev,
       preferredTime: time
@@ -75,26 +80,71 @@ export const BookingPage: React.FC = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isAITyping, setIsAITyping] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [messages, setMessages] = useState([
+  const [isTranslating, setIsTranslating] = useState(false);
+  
+  // Store original English messages for translation
+  const [originalMessages, setOriginalMessages] = useState([
     {
       id: 1,
       type: 'ai',
       content: "Hi! I'm your AI assistant. I can help you book a consultation. Just tell me what you need and I'll handle everything for you!",
+      originalContent: "Hi! I'm your AI assistant. I can help you book a consultation. Just tell me what you need and I'll handle everything for you!",
       timestamp: new Date()
     }
   ]);
+  
+  const [messages, setMessages] = useState(originalMessages);
 
-  // Update initial message when language changes
+  // Translate all messages when language changes
   React.useEffect(() => {
-    const baseMessage = "Hi! I'm your AI assistant. I can help you book a consultation. Just tell me what you need and I'll handle everything for you!";
-    
-    setMessages([{
-      id: 1,
-      type: 'ai',
-      content: baseMessage,
-      timestamp: new Date()
-    }]);
-  }, [selectedLanguage]);
+    const translateMessages = async () => {
+      if (selectedLanguage === 'en') {
+        // If English, just use original messages
+        setMessages(originalMessages);
+        return;
+      }
+
+      setIsTranslating(true);
+
+      try {
+        const translatedMessages = await Promise.all(
+          originalMessages.map(async (msg) => {
+            try {
+              const response = await fetch('http://localhost:3088/api/translation/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  text: msg.originalContent || msg.content,
+                  targetLanguage: selectedLanguage,
+                  sourceLanguage: 'en'
+                })
+              });
+
+              if (response.ok) {
+                const result = await response.json();
+                return {
+                  ...msg,
+                  content: result.data?.translatedText || result.translatedText || msg.content,
+                  originalContent: msg.originalContent || msg.content
+                };
+              }
+            } catch (error) {
+              console.error('Translation failed for message:', error);
+            }
+            return msg;
+          })
+        );
+
+        setMessages(translatedMessages);
+      } catch (error) {
+        console.error('Failed to translate messages:', error);
+      } finally {
+        setIsTranslating(false);
+      }
+    };
+
+    translateMessages();
+  }, [selectedLanguage, originalMessages]);
 
   const handleAIChatToggle = () => {
     setIsAIChatExpanded(!isAIChatExpanded);
@@ -108,21 +158,32 @@ export const BookingPage: React.FC = () => {
       id: messages.length + 1,
       type: 'user',
       content: newMessage,
+      originalContent: newMessage, // Store for translation
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
+    setOriginalMessages(prev => [...prev, userMessage]);
     const currentMessage = newMessage;
     setNewMessage('');
     setIsAITyping(true);
 
     try {
+      // Pripremi conversation history - isključi inicijalnu AI poruku
+      const conversationHistory = messages
+        .slice(1) // Skip first AI greeting message
+        .map(msg => ({
+          role: msg.type === 'user' ? 'user' as const : 'ai' as const,
+          content: msg.content
+        }));
+
       const response = await fetch('http://localhost:3088/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: currentMessage,
-          language: selectedLanguage
+          language: selectedLanguage,
+          conversationHistory: conversationHistory // 🧠 Conversation Memory!
         })
       });
 
@@ -140,10 +201,17 @@ export const BookingPage: React.FC = () => {
         id: messages.length + 2,
         type: 'ai',
         content: result.data.response,
+        originalContent: result.data.originalResponse || result.data.response, // Store English version
         timestamp: new Date()
       };
 
+      // Update both messages and originalMessages
       setMessages(prev => [...prev, aiMessage]);
+      setOriginalMessages(prev => [...prev, {
+        ...aiMessage,
+        content: result.data.originalResponse || result.data.response,
+        originalContent: result.data.originalResponse || result.data.response
+      }]);
 
       // AI-Assisted Form Submission
       if (result.data.structuredData && result.data.structuredData.readyToSubmit) {
@@ -166,9 +234,11 @@ export const BookingPage: React.FC = () => {
               id: messages.length + 3,
               type: 'ai',
               content: `Your booking request has been submitted successfully!\n\nConfirmation has been sent to ${aiFormData.email}`,
+              originalContent: `Your booking request has been submitted successfully!\n\nConfirmation has been sent to ${aiFormData.email}`,
               timestamp: new Date()
             };
             setMessages(prev => [...prev, confirmationMessage]);
+            setOriginalMessages(prev => [...prev, confirmationMessage]);
           } else {
             throw new Error(submitResult.error || 'Submission failed');
           }
@@ -178,9 +248,11 @@ export const BookingPage: React.FC = () => {
             id: messages.length + 3,
             type: 'ai',
             content: `I've collected your information, but there was an issue submitting it automatically. Please use the booking form below to submit your request manually. Thank you!`,
+            originalContent: `I've collected your information, but there was an issue submitting it automatically. Please use the booking form below to submit your request manually. Thank you!`,
             timestamp: new Date()
           };
           setMessages(prev => [...prev, errorMessage]);
+          setOriginalMessages(prev => [...prev, errorMessage]);
         } finally {
           setIsAITyping(false);
         }
@@ -192,9 +264,11 @@ export const BookingPage: React.FC = () => {
         id: messages.length + 2,
         type: 'ai',
         content: "I'm sorry, I'm having trouble connecting right now. Please try again or use the booking form below.",
+        originalContent: "I'm sorry, I'm having trouble connecting right now. Please try again or use the booking form below.",
         timestamp: new Date()
       };
       setMessages(prev => [...prev, aiMessage]);
+      setOriginalMessages(prev => [...prev, aiMessage]);
     } finally {
       setIsAITyping(false);
     }
@@ -203,38 +277,89 @@ export const BookingPage: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear validation error and submit status when user starts typing
+    if (validationError) {
+      setValidationError('');
+    }
+    if (submitStatus === 'error') {
+      setSubmitStatus('idle');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // IMPORTANT: Validate ALL fields BEFORE setting isSubmitting to prevent race conditions
+    const errors: string[] = [];
+    
+    // Check required fields
+    if (!formData.firstName || formData.firstName.trim() === '') {
+      errors.push('First name is required');
+    }
+    if (!formData.lastName || formData.lastName.trim() === '') {
+      errors.push('Last name is required');
+    }
+    if (!formData.email || formData.email.trim() === '') {
+      errors.push('Email is required');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.push('Please enter a valid email address');
+    }
+    if (!formData.service || formData.service === '') {
+      errors.push('Please select a service');
+    }
+    if (!formData.message || formData.message.trim() === '') {
+      errors.push('Project description is required');
+    }
+    if (!selectedDate) {
+      errors.push('Please select a date');
+    }
+    if (!selectedTime) {
+      errors.push('Please select a time slot');
+    }
+    
+    // If there are validation errors, display them and stop
+    if (errors.length > 0) {
+      setValidationError(errors.join('. '));
+      // Don't set submitStatus to 'error' here - only show validation message
+      // Scroll to top of form to see error
+      const formSection = document.querySelector('.form-section');
+      if (formSection) {
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return; // Exit early without setting isSubmitting
+    }
+
+    // Clear validation errors if all checks pass
+    setValidationError('');
+    
+    // Only set isSubmitting AFTER validation passes
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
     try {
-      // Check if date and time are selected
-      if (!selectedDate || !selectedTime) {
-        alert('Please select both date and time for your consultation.');
-        setIsSubmitting(false);
-        return;
-      }
-
       // Try to book the slot
       const bookingSuccess = bookingService.addBooking(
-        selectedDate,
-        selectedTime,
+        selectedDate!,
+        selectedTime!,
         formData.email,
         `${formData.firstName} ${formData.lastName}`
       );
 
       if (!bookingSuccess) {
-        alert('This time slot is already booked. Please select another time.');
+        setValidationError('This time slot is already booked. Please select another time.');
         setIsSubmitting(false);
+        // Scroll to time picker
+        const timePickerSection = document.querySelector('.calendar-time-grid');
+        if (timePickerSection) {
+          timePickerSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         return;
       }
 
       // Send email confirmation
       await emailService.sendConsultationEmail(formData);
       setSubmitStatus('success');
+      setValidationError(''); // Clear any validation errors on success
       
       // Reset form
       setFormData({
@@ -260,6 +385,7 @@ export const BookingPage: React.FC = () => {
       setBookedDates(dates);
     } catch (error) {
       setSubmitStatus('error');
+      setValidationError('There was an error submitting your booking. Please try again.');
       console.error('Booking submission error:', error);
     } finally {
       setIsSubmitting(false);
@@ -272,7 +398,7 @@ export const BookingPage: React.FC = () => {
     padding: '16px',
     border: '2px solid #E5E7EB',
     borderRadius: '14px',
-    fontSize: '16px',
+    fontSize: 'clamp(14px, 3.2vw, 16px)',
     outline: 'none',
     transition: 'all 0.2s ease',
     backgroundColor: '#FAFAFA',
@@ -293,7 +419,7 @@ export const BookingPage: React.FC = () => {
 
   const labelStyle: React.CSSProperties = {
     display: 'block',
-    fontSize: '13px',
+    fontSize: 'clamp(11px, 2.7vw, 13px)',
     fontWeight: 600,
     color: '#1D1D1F',
     marginBottom: '8px',
@@ -302,8 +428,14 @@ export const BookingPage: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#F5F5F7', minHeight: '100vh', padding: '40px 24px' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <div style={{ 
+      backgroundColor: '#F5F5F7', 
+      minHeight: '100vh', 
+      padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 24px)',
+      maxWidth: '100vw',
+      overflowX: 'hidden'
+    }}>
+      <div style={{ maxWidth: '100%', margin: '0 auto', padding: '0 clamp(8px, 2vw, 16px)' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h1 style={{
@@ -318,7 +450,7 @@ export const BookingPage: React.FC = () => {
             Book Your Consultation
           </h1>
           <p style={{
-            fontSize: '16px',
+            fontSize: 'clamp(14px, 3.2vw, 16px)',
             lineHeight: 1.5,
             color: '#6E6E73',
             margin: 0
@@ -328,19 +460,19 @@ export const BookingPage: React.FC = () => {
         </div>
 
         {/* Booking Form */}
-        <form onSubmit={handleSubmit} style={{
+        <form onSubmit={handleSubmit} noValidate className="form-section" style={{
           backgroundColor: '#FFFFFF',
           borderRadius: '16px',
-          padding: '32px',
+          padding: 'clamp(16px, 4vw, 32px)',
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
           border: '1px solid rgba(0, 0, 0, 0.06)'
         }}>
           {/* Two Column Layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px 32px' }}>
+          <div className="booking-form-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))', gap: 'clamp(16px, 4vw, 24px) clamp(16px, 4vw, 32px)' }}>
             {/* Left Column - Contact */}
             <div style={{ gridColumn: '1 / -1' }}>
               <h3 style={{
-                fontSize: '16px',
+                fontSize: 'clamp(14px, 3.2vw, 16px)',
                 fontWeight: 600,
                 color: '#1D1D1F',
                 marginBottom: '16px',
@@ -433,7 +565,7 @@ export const BookingPage: React.FC = () => {
             {/* Project Details */}
             <div style={{ gridColumn: '1 / -1', marginTop: '8px' }}>
               <h3 style={{
-                fontSize: '16px',
+                fontSize: 'clamp(14px, 3.2vw, 16px)',
                 fontWeight: 600,
                 color: '#1D1D1F',
                 marginBottom: '16px',
@@ -508,7 +640,7 @@ export const BookingPage: React.FC = () => {
             {/* Date & Time Selection - Full Width */}
             <div style={{ gridColumn: '1 / -1' }}>
               <h3 style={{
-                fontSize: '16px',
+                fontSize: 'clamp(14px, 3.2vw, 16px)',
                 fontWeight: 600,
                 color: '#1D1D1F',
                 marginBottom: '16px',
@@ -521,7 +653,7 @@ export const BookingPage: React.FC = () => {
             </div>
 
             {/* Calendar & Time Picker Side by Side */}
-            <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+            <div className="calendar-time-grid" style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 'clamp(16px, 4vw, 24px)' }}>
               <CustomCalendar
                 selectedDate={selectedDate}
                 onSelectDate={handleDateSelect}
@@ -537,19 +669,67 @@ export const BookingPage: React.FC = () => {
 
             {/* Message - Full Width */}
             <div style={{ gridColumn: '1 / -1' }}>
-              <label htmlFor="message" style={labelStyle}>Project Description</label>
+              <label htmlFor="message" style={labelStyle}>Project Description *</label>
                   <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                rows={3}
-                style={{ ...inputBaseStyle, resize: 'vertical', lineHeight: 1.5 }}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                placeholder="Tell us about your project..."
+                    required
+                    rows={3}
+                    style={{ ...inputBaseStyle, resize: 'vertical', lineHeight: 1.5 }}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    placeholder="Tell us about your project..."
                   />
                 </div>
+
+            {/* Validation Error Display */}
+            {validationError && (
+              <div style={{ 
+                gridColumn: '1 / -1', 
+                backgroundColor: '#FEE2E2',
+                border: '2px solid #EF4444',
+                borderRadius: '12px',
+                padding: '16px',
+                marginTop: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                animation: 'shake 0.3s ease-in-out'
+              }}>
+                <span style={{ fontSize: '24px' }}>⚠️</span>
+                <div style={{ flex: 1 }}>
+                  <p style={{ 
+                    color: '#DC2626', 
+                    fontWeight: 600, 
+                    fontSize: 'clamp(14px, 3.2vw, 16px)',
+                    margin: 0,
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+                  }}>
+                    {validationError}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setValidationError('')}
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    color: '#DC2626',
+                    fontSize: '20px',
+                    cursor: 'pointer',
+                    padding: '4px 8px',
+                    borderRadius: '6px',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FCA5A5'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  ×
+                </button>
+              </div>
+            )}
 
             {/* Submit - Full Width */}
             <div style={{ gridColumn: '1 / -1', textAlign: 'center', marginTop: '8px' }}>
@@ -561,7 +741,7 @@ export const BookingPage: React.FC = () => {
                 style={{
                   minWidth: '200px',
                   padding: '14px 40px',
-                  fontSize: '16px',
+                  fontSize: 'clamp(14px, 3.2vw, 16px)',
                   fontWeight: 600
                 }}
               >
@@ -576,7 +756,7 @@ export const BookingPage: React.FC = () => {
                   border: '1px solid #10B981',
                   borderRadius: '12px',
                   color: '#065F46',
-                  fontSize: '14px',
+                  fontSize: 'clamp(12px, 2.8vw, 14px)',
                   fontWeight: 600
                 }}>
                   Request sent! We'll get back to you within 24 hours.
@@ -591,7 +771,7 @@ export const BookingPage: React.FC = () => {
                   border: '1px solid #EF4444',
                   borderRadius: '12px',
                   color: '#991B1B',
-                  fontSize: '14px',
+                  fontSize: 'clamp(12px, 2.8vw, 14px)',
                   fontWeight: 600
                 }}>
                   Failed to send. Please try again or email us directly.
@@ -611,12 +791,13 @@ export const BookingPage: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: isAIChatExpanded ? 'linear-gradient(135deg, #8B5CF6, #7C3AED)' : 'rgba(139, 92, 246, 0.1)',
+              backgroundImage: isAIChatExpanded ? 'linear-gradient(135deg, #8B5CF6, #7C3AED)' : 'none',
+              backgroundColor: isAIChatExpanded ? 'transparent' : 'rgba(139, 92, 246, 0.1)',
               color: isAIChatExpanded ? '#FFFFFF' : '#8B5CF6',
               border: '2px solid rgba(139, 92, 246, 0.3)',
               borderRadius: '12px',
               padding: '12px 20px',
-              fontSize: '15px',
+              fontSize: 'clamp(13px, 3vw, 15px)',
               fontWeight: 600,
               transition: 'all 0.3s ease',
               boxShadow: isAIChatExpanded ? '0 8px 25px rgba(139, 92, 246, 0.3)' : '0 4px 12px rgba(139, 92, 246, 0.1)'
@@ -654,7 +835,7 @@ export const BookingPage: React.FC = () => {
               </div>
 
               {/* Chat Window */}
-              <div style={{
+              <div className="ai-chat-container" style={{
                 width: '380px',
                 height: '500px',
                 backgroundColor: '#FFFFFF',
@@ -666,7 +847,7 @@ export const BookingPage: React.FC = () => {
               }}>
               {/* Chat Header */}
               <div style={{
-                padding: '20px 24px',
+                padding: 'clamp(16px, 3.5vw, 20px) clamp(16px, 4vw, 24px)',
                 borderBottom: '1px solid #F5F5F7',
                 backgroundImage: 'linear-gradient(135deg, #8B5CF6, #7C3AED)'
               }}>
@@ -697,7 +878,7 @@ export const BookingPage: React.FC = () => {
                     </div>
                     <div>
                       <h3 style={{
-                        fontSize: '16px',
+                        fontSize: 'clamp(14px, 3.2vw, 16px)',
                         fontWeight: 600,
                         color: '#FFFFFF',
                         margin: 0,
@@ -706,7 +887,7 @@ export const BookingPage: React.FC = () => {
                         AI Assistant
                       </h3>
                       <p style={{
-                        fontSize: '13px',
+                        fontSize: 'clamp(11px, 2.7vw, 13px)',
                         color: 'rgba(255, 255, 255, 0.8)',
                         margin: 0
                       }}>
@@ -729,9 +910,9 @@ export const BookingPage: React.FC = () => {
                         padding: '8px 12px',
                         borderRadius: '8px',
                         border: '1px solid rgba(255, 255, 255, 0.3)',
-                        background: 'rgba(255, 255, 255, 0.1)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
                         color: '#FFFFFF',
-                        fontSize: '13px',
+                        fontSize: 'clamp(11px, 2.7vw, 13px)',
                         fontWeight: 500,
                         cursor: 'pointer',
                         outline: 'none',
@@ -766,7 +947,7 @@ export const BookingPage: React.FC = () => {
                         backgroundColor: 'rgba(255, 255, 255, 0.2)',
                         border: '1px solid rgba(255, 255, 255, 0.3)',
                         color: '#FFFFFF',
-                        fontSize: '16px',
+                        fontSize: 'clamp(14px, 3.2vw, 16px)',
                         fontWeight: 600,
                         cursor: 'pointer',
                         display: 'flex',
@@ -819,7 +1000,7 @@ export const BookingPage: React.FC = () => {
                         ? 'transparent'
                         : '#F8F9FA',
                       color: message.type === 'user' ? '#FFFFFF' : '#1D1D1F',
-                      fontSize: '14px',
+                      fontSize: 'clamp(12px, 2.8vw, 14px)',
                       lineHeight: 1.5,
                       whiteSpace: 'pre-wrap',
                       wordBreak: 'break-word'
@@ -867,7 +1048,7 @@ export const BookingPage: React.FC = () => {
 
               {/* Input */}
               <form onSubmit={handleSendMessage} style={{
-                padding: '20px 24px',
+                padding: 'clamp(16px, 3.5vw, 20px) clamp(16px, 4vw, 24px)',
                 borderTop: '1px solid #F5F5F7',
                 backgroundColor: '#FAFAFA'
               }}>
@@ -886,7 +1067,7 @@ export const BookingPage: React.FC = () => {
                       padding: '12px 16px',
                       border: '2px solid #E5E5E7',
                       borderRadius: '12px',
-                      fontSize: '15px',
+                      fontSize: 'clamp(13px, 3vw, 15px)',
                       outline: 'none',
                       backgroundColor: '#FFFFFF',
                       transition: 'border-color 0.2s'
@@ -906,7 +1087,7 @@ export const BookingPage: React.FC = () => {
                       backgroundColor: 'transparent',
                       border: 'none',
                       color: '#FFFFFF',
-                      fontSize: '14px',
+                      fontSize: 'clamp(12px, 2.8vw, 14px)',
                       fontWeight: 600,
                       cursor: newMessage.trim() ? 'pointer' : 'not-allowed',
                       opacity: newMessage.trim() ? 1 : 0.6
@@ -928,6 +1109,32 @@ export const BookingPage: React.FC = () => {
               }
               40% {
                 transform: scale(1);
+              }
+            }
+
+            /* Mobile responsive overrides */
+            @media (max-width: 768px) {
+              /* Ensure single column layout on mobile */
+              .booking-form-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+              }
+              
+              /* Optimize AI chat on mobile */
+              .ai-chat-container {
+                width: 100% !important;
+                max-width: calc(100vw - 32px) !important;
+              }
+              
+              /* Better spacing on mobile */
+              .form-section {
+                padding: 16px !important;
+              }
+              
+              /* Adjust calendar and time picker for mobile */
+              .calendar-time-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
               }
             }
           `}</style>

@@ -35,7 +35,7 @@ export const ApplicationDevelopmentPage: React.FC = () => {
     <div style={{ background: '#FFFFFF' }}>
       {/* Hero */}
       <section style={{
-        padding: '120px 24px 60px',
+        padding: 'clamp(60px, 15vw, 120px) clamp(16px, 5vw, 24px) clamp(40px, 8vw, 60px)',
         textAlign: 'center',
         borderBottom: '1px solid #D2D2D7'
       }}>
@@ -56,9 +56,10 @@ export const ApplicationDevelopmentPage: React.FC = () => {
           </h1>
           
           <p style={{
-            fontSize: 'clamp(18px, 2vw, 21px)',
+            fontSize: 'clamp(16px, 3.5vw, 21px)',
             lineHeight: 1.6,
-            color: '#6E6E73'
+            color: '#6E6E73',
+            padding: '0 16px'
           }}>
             Professional software solutions tailored to your business needs. We build scalable, performant applications that drive results.
             </p>
@@ -67,7 +68,7 @@ export const ApplicationDevelopmentPage: React.FC = () => {
 
       {/* Features */}
       <section id="features" style={{
-        padding: '80px 24px',
+        padding: 'clamp(50px, 10vw, 80px) clamp(16px, 5vw, 24px)',
         background: '#FFFFFF'
       }}>
         <div style={{
@@ -75,32 +76,33 @@ export const ApplicationDevelopmentPage: React.FC = () => {
           margin: '0 auto'
         }}>
           <h2 style={{
-            fontSize: 'clamp(32px, 4vw, 48px)',
+            fontSize: 'clamp(28px, 6vw, 48px)',
             fontWeight: 600,
             lineHeight: 1.2,
             letterSpacing: '-0.01em',
             color: '#1D1D1F',
             textAlign: 'center',
-            marginBottom: '64px',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+            marginBottom: 'clamp(40px, 8vw, 64px)',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+            padding: '0 16px'
           }}>
             What We Offer
           </h2>
 
-          <div style={{
+          <div className="features-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '32px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+            gap: 'clamp(20px, 4vw, 32px)'
           }}>
             {features.map((feature, index) => (
               <div key={index} style={{
                 background: '#F5F5F7',
-                borderRadius: '18px',
-                padding: '32px',
+                borderRadius: 'clamp(12px, 3vw, 18px)',
+                padding: 'clamp(20px, 5vw, 32px)',
                 border: '1px solid #D2D2D7'
               }}>
                 <h3 style={{
-                  fontSize: '24px',
+                  fontSize: 'clamp(18px, 4.5vw, 24px)',
                   fontWeight: 600,
                   color: '#1D1D1F',
                   marginBottom: '12px',
@@ -109,7 +111,7 @@ export const ApplicationDevelopmentPage: React.FC = () => {
                   {feature.title}
                 </h3>
                 <p style={{
-                  fontSize: '17px',
+                  fontSize: 'clamp(14px, 3.2vw, 17px)',
                   lineHeight: 1.6,
                   color: '#6E6E73'
                 }}>
@@ -123,7 +125,7 @@ export const ApplicationDevelopmentPage: React.FC = () => {
 
       {/* Technologies */}
       <section id="technologies" style={{
-        padding: '80px 24px',
+        padding: 'clamp(50px, 10vw, 80px) clamp(16px, 5vw, 24px)',
         background: '#F5F5F7'
       }}>
         <div style={{
@@ -132,29 +134,30 @@ export const ApplicationDevelopmentPage: React.FC = () => {
           textAlign: 'center'
         }}>
           <h2 style={{
-            fontSize: 'clamp(32px, 4vw, 48px)',
+            fontSize: 'clamp(28px, 6vw, 48px)',
             fontWeight: 600,
             lineHeight: 1.2,
             letterSpacing: '-0.01em',
             color: '#1D1D1F',
-            marginBottom: '48px',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+            marginBottom: 'clamp(32px, 6vw, 48px)',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+            padding: '0 16px'
           }}>
             Technologies We Use
               </h2>
 
-          <div style={{
+          <div className="tech-badges" style={{
             display: 'flex',
             flexWrap: 'wrap',
-            gap: '16px',
+            gap: 'clamp(12px, 3vw, 16px)',
             justifyContent: 'center'
           }}>
             {technologies.map((tech, index) => (
               <div key={index} style={{
-                padding: '12px 24px',
+                padding: 'clamp(10px, 2.5vw, 12px) clamp(16px, 4vw, 24px)',
                 background: '#FFFFFF',
                 borderRadius: '8px',
-                fontSize: '17px',
+                fontSize: 'clamp(14px, 3.2vw, 17px)',
                 color: '#1D1D1F',
                 fontWeight: 500,
                 border: '1px solid #D2D2D7'
@@ -168,7 +171,7 @@ export const ApplicationDevelopmentPage: React.FC = () => {
 
       {/* CTA */}
       <section style={{
-        padding: '80px 24px',
+        padding: 'clamp(50px, 10vw, 80px) clamp(16px, 5vw, 24px)',
         background: '#FFFFFF',
         textAlign: 'center'
       }}>
@@ -177,31 +180,34 @@ export const ApplicationDevelopmentPage: React.FC = () => {
           margin: '0 auto'
         }}>
           <h2 style={{
-            fontSize: 'clamp(32px, 4vw, 48px)',
+            fontSize: 'clamp(28px, 6vw, 48px)',
             fontWeight: 600,
             lineHeight: 1.2,
             letterSpacing: '-0.01em',
             color: '#1D1D1F',
-            marginBottom: '24px',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+            marginBottom: 'clamp(16px, 4vw, 24px)',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+            padding: '0 16px'
           }}>
             Ready to Start Your Project?
             </h2>
           
           <p style={{
-            fontSize: '18px',
+            fontSize: 'clamp(15px, 3.5vw, 18px)',
             lineHeight: 1.6,
             color: '#6E6E73',
-            marginBottom: '40px'
+            marginBottom: 'clamp(32px, 6vw, 40px)',
+            padding: '0 16px'
           }}>
             Let's discuss your requirements and build something amazing together.
           </p>
 
           <div style={{
             display: 'flex',
-            gap: '16px',
+            gap: 'clamp(12px, 3vw, 16px)',
             justifyContent: 'center',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            padding: '0 16px'
           }}>
             <Link to="/booking" style={{ textDecoration: 'none' }}>
               <Button variant="primary" size="lg">
@@ -216,6 +222,22 @@ export const ApplicationDevelopmentPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Mobile responsive overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          /* Features grid - single column on mobile */
+          .features-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          
+          /* Tech badges - better wrapping */
+          .tech-badges {
+            gap: 12px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

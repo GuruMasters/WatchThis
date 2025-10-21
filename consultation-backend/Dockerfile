@@ -43,8 +43,7 @@ RUN yarn install --frozen-lockfile --production
 COPY --from=builder /app/dist/consultation-backend ./dist/consultation-backend
 
 # Copy Firebase service account key (if exists)
-# Note: Add your Firebase service account JSON to project root before building
-# COPY watchthis-b1602-firebase-adminsdk-fbsvc-93cbf24913.json ./ || true
+COPY watchthis-*.json ./ 2>/dev/null || true
 
 # Expose port
 EXPOSE 3088
